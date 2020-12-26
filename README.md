@@ -4,9 +4,9 @@
 [link to task description](https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md)
 
 ## Development stack
-+js/ts
-+html/scss
-+babylon
++ul js/ts
++ul html/scss
++ul babylon
 
 
 ## Developers
