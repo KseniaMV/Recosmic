@@ -11,6 +11,6 @@
 
 
 ## Developers
-+[kseniaMV](https://github.com/KseniaMV);
-+[archylex](https://github.com/archylex);
++ [kseniaMV](https://github.com/KseniaMV);
++ [archylex](https://github.com/archylex);
 
