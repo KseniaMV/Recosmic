@@ -4,12 +4,13 @@
     box-sizing: border-box;
 }
 body {
-    width: 100%;
-    height: 100%;
-    background-image: url('src/assets/images/backgrounds/sample.jpg');
+    width: 100vw;
+    height: 100vh;
 }
 
-#renderCanvas{
+.renderCanvas{
     width: 100%;
     height: 100%;
+    background-color: aqua;
 }
+

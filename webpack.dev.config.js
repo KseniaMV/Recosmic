@@ -9,32 +9,32 @@ module.exports = {
     entry: {
         main: path.resolve(__dirname, './src/index.ts'),
     },
+    resolve: {
+        extensions: ['.tsx','.ts', '.js'],
+    },
     devServer: {
         historyApiFallback: true,
-        contentBase: path.resolve(__dirname, './dist'),
+        contentBase: path.resolve(__dirname, 'dist'),
         open: true,
         compress: true,
         hot: true,
         port: 8080
-      },
+    },
     devtool: 'inline-source-map',
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: '[name].bundle.js',
+    },
+    resolve: {
+        extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
     },
     module:{
         rules: [
             {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                exclude: /node_modules/,
+            test: /\.(js|jsx|tsx|ts)$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader'
             },
-            ],
-        rules: [
-            {
-                test: /\.js$/,
-            },
-            
             {
             test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
             issuer: /\.css$/,
@@ -90,7 +90,7 @@ module.exports = {
     },
     plugins: [
         new HTMLWebpackPlugin({
-            title: 'English for kids',
+            title: 'Game',
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html', 
         }),
@@ -99,8 +99,8 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, 'src/'),
-                    to: path.resolve(__dirname, 'dist/src/')
+                    from: path.resolve(__dirname, 'src/assets'),
+                    to: path.resolve(__dirname, 'dist/src/assets')
                 }
             ]
         })
