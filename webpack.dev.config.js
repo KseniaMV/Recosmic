@@ -33,8 +33,6 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
-                use: ['babel-loader'],
             },
             
             {
@@ -44,8 +42,6 @@ module.exports = {
                 {
                 loader: 'file-loader',
                     options: {
-                        outputPath: 'src/assets/images/',
-                        publicPath: 'src/assets/images',
                         name: '[name].[ext]'
                     },
                 },
@@ -58,8 +54,6 @@ module.exports = {
                     {
                     loader: 'file-loader',
                         options: {
-                            outputPath: 'src/assets/fonts/',
-                            publicPath: 'src/assets/fonts',
                             name: '[name].[ext]'
                         },
                     },
@@ -72,8 +66,6 @@ module.exports = {
                     {
                     loader: 'file-loader',
                         options: {
-                            outputPath: 'src/assets/sounds/',
-                            publicPath: 'src/assets/sounds',
                             name: '[name].[ext]'
                         },
                     },
@@ -106,8 +98,8 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 {
-                    from: path.resolve(__dirname, 'src/assets/'),
-                    to: path.resolve(__dirname, 'dist/src/assets/')
+                    from: path.resolve(__dirname, 'src/'),
+                    to: path.resolve(__dirname, 'dist/src/')
                 }
             ]
         })
