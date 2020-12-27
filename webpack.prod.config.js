@@ -39,6 +39,7 @@ module.exports = {
             
             {
                 test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+                issuer: /\.css$/,
                 type: 'asset/resource',
                 use: [
                     {
