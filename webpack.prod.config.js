@@ -22,21 +22,16 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         filename: '[name].bundle.js',
     },
+    resolve: {
+        extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
+    },
     module:{
         rules: [
             {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
+                test: /\.(js|jsx|tsx|ts)$/,
                 exclude: /node_modules/,
+                loader: 'babel-loader'
             },
-            ],
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: ['babel-loader'],
-            },
-            
             {
                 test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
                 issuer: /\.css$/,
