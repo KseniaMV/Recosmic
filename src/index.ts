@@ -1,7 +1,6 @@
 import './styles/main.scss';
-import Game from './classes/Game';
+import { App } from './App';
 
 
-const game = new Game();
-game.initGame();
-
+const game = new App();
+// game.initGame();

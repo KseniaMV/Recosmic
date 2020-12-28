@@ -10,6 +10,9 @@ module.exports = {
     entry: {
         main: path.resolve(__dirname, './src/index.ts'),
     },
+    performance: {
+      hints: false
+    },
     devServer: {
         historyApiFallback: true,
         contentBase: path.resolve(__dirname, './dist'),
@@ -77,7 +80,7 @@ module.exports = {
                         options:{
                             publicPath: '../',
                         }
-                    }, 
+                    },
                     {
                         loader: 'css-loader',
                         options:{
@@ -93,7 +96,7 @@ module.exports = {
         new HTMLWebpackPlugin({
             title: 'Game',
             template: path.resolve(__dirname, './src/index.html'),
-            filename: 'index.html', 
+            filename: 'index.html',
         }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
@@ -103,7 +106,7 @@ module.exports = {
             patterns: [
                 {
                     from: path.resolve(__dirname, 'src/assets'),
-                    to: path.resolve(__dirname, 'dist/src/assets')
+                    to: path.resolve(__dirname, 'dist/assets')
                 }
             ]
         }),
