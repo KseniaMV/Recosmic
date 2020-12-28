@@ -1,5 +1,5 @@
-import { Engine, Scene, Vector3, Mesh, Color3, Color4, ShadowGenerator, GlowLayer, PointLight, FreeCamera, CubeTexture, Sound, PostProcess, Effect, SceneLoader, Matrix, MeshBuilder, Quaternion, AssetsManager } from "@babylonjs/core";
-import { AdvancedDynamicTexture, StackPanel, Button, TextBlock, Rectangle, Control, Image } from "@babylonjs/gui";
+import { Engine, Scene, Vector3, Mesh, Color4, FreeCamera, Sound, PostProcess, Effect, AssetsManager } from "@babylonjs/core";
+import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 
 export class MainMenu {
   private _scene: Scene;
@@ -75,6 +75,7 @@ export class MainMenu {
       this._transition = true;
 
       sfxClick.play();
+      music.stop();
 
       this._scene.detachControl();
     });

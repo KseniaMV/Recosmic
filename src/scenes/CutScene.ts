@@ -1,5 +1,5 @@
-import { Engine, Scene, Vector3, Mesh, Color3, Color4, ShadowGenerator, GlowLayer, HemisphericLight, ArcRotateCamera, CubeTexture, Sound, PostProcess, Effect, SceneLoader, Matrix, MeshBuilder, Quaternion, AssetsManager } from "@babylonjs/core";
-import { AdvancedDynamicTexture, StackPanel, Button, TextBlock, Rectangle, Control, Image } from "@babylonjs/gui";
+import { Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Effect, MeshBuilder, AssetsManager } from "@babylonjs/core";
+import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 
 export class CutScene {
   private _scene: Scene;
