@@ -28,6 +28,9 @@ module.exports = {
     resolve: {
         extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
     },
+    performance: {
+      hints: false
+    },
     module:{
         rules: [
             {
@@ -81,7 +84,7 @@ module.exports = {
                         options:{
                             url: false
                         }
-                    }, 
+                    },
                     'postcss-loader', 'sass-loader'
                 ],
             },
@@ -92,7 +95,7 @@ module.exports = {
         new HTMLWebpackPlugin({
             title: 'Game',
             template: path.resolve(__dirname, './src/index.html'),
-            filename: 'index.html', 
+            filename: 'index.html',
         }),
         new CleanWebpackPlugin(),
         new webpack.HotModuleReplacementPlugin(),
@@ -100,7 +103,7 @@ module.exports = {
             patterns: [
                 {
                     from: path.resolve(__dirname, 'src/assets'),
-                    to: path.resolve(__dirname, 'dist/src/assets')
+                    to: path.resolve(__dirname, 'dist/assets')
                 }
             ]
         })
