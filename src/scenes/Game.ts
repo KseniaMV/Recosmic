@@ -1,5 +1,6 @@
 import { Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Effect, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
+import { Player } from '../classes/Player';
 
 export class Game {
   private _scene: Scene;
@@ -7,6 +8,7 @@ export class Game {
   private _transition: boolean;
   private _callback;
   private _fadeLevel: number = 1.0;
+  private _player;
 
   constructor(engine: Engine, callback) {
     this._callback = callback;
@@ -15,7 +17,7 @@ export class Game {
     this._camera = new ArcRotateCamera("camera", Math.PI / 3, Math.PI / 3, 3, new Vector3(0, 0, 0), this._scene);
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), this._scene);
 
-    SceneLoader.ImportMesh("", "./assets/models/", "test-fox.glb", this._scene, this._setTestModel.bind(this));
+    this._player = new Player(this._scene);
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
@@ -41,14 +43,6 @@ export class Game {
         }
       }
     });
-  }
-
-  _setTestModel (newMeshes, particleSystems, skeletons, animationGroups) {
-    const testFox = newMeshes[0];
-    testFox.scaling.scaleInPlace(0.2);
-
-    const tailAnim = this._scene.getAnimationGroupByName("SwimTale");
-    tailAnim.start(true, 1.0, tailAnim.from, tailAnim.to, false);
   }
 
   getScene() {
