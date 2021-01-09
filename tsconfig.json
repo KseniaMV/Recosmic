@@ -12,5 +12,10 @@
         "es6"
     ],
     "rootDir": "src"
-  }
+  },
+  "types": [
+    "babylonjs",
+    "babylonjs-loaders",
+    ""
+  ],
 }

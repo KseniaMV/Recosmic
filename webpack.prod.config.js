@@ -15,14 +15,14 @@ module.exports = {
     },
     devServer: {
         historyApiFallback: true,
-        contentBase: path.resolve(__dirname, './dist'),
+        contentBase: path.resolve(__dirname, 'dist'),
         open: true,
         compress: true,
         hot: true,
         port: 8080
     },
     output: {
-        path: path.resolve(__dirname, './dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: '[name].bundle.js',
     },
     resolve: {

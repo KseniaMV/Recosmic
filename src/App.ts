@@ -71,8 +71,9 @@ export class App {
     await this._goToScene(State.CUTSCENE, scene);
   }
 
-  private async _goToGameScene(): Promise<void> {
-    const scene = new Game(this._engine, null).getScene();
+  private async _goToGameScene(): Promise<void> { 
+    const scene = new Game(this._engine, null, this._canvas).getScene();
     await this._goToScene(State.GAME, scene);
   }
 }
+

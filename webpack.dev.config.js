@@ -10,7 +10,7 @@ module.exports = {
         main: path.resolve(__dirname, './src/index.ts'),
     },
     resolve: {
-        extensions: ['.tsx','.ts', '.js'],
+        extensions: ['.tsx','.ts', '.js']
     },
     devServer: {
         historyApiFallback: true,
@@ -36,7 +36,7 @@ module.exports = {
             {
             test: /\.(js|jsx|tsx|ts)$/,
             exclude: /node_modules/,
-            loader: 'babel-loader'
+            loader: 'babel-loader',
             },
             {
             test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
@@ -50,6 +50,19 @@ module.exports = {
                     },
                 },
             ],
+            },
+            {
+            test: /\.babylon$/,
+            exclude: /node_modules/,
+            use:[
+                {
+                    loader: 'babylon-file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        useRelativePath: process.env.NODE_ENV === "dev"
+                      }
+                }
+            ]
             },
             {
                 test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
@@ -104,8 +117,13 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, 'src/assets'),
                     to: path.resolve(__dirname, 'dist/assets')
-                }
+                },
+                {
+                    from: path.resolve(__dirname, 'src/scenes'),
+                    to: path.resolve(__dirname, 'dist/scenes')
+                },
             ]
+            
         })
     ]
 
