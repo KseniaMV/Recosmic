@@ -1,5 +1,6 @@
-import { Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Effect, MeshBuilder, AssetsManager } from "@babylonjs/core";
-import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
+import { Engine, Scene, Vector3, Mesh, Color3, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Animation, BezierCurveEase, CubeTexture, Texture, BackgroundMaterial} from "@babylonjs/core";
+import { AdvancedDynamicTexture, Button, Rectangle, Control} from "@babylonjs/gui";
+import { Planet } from "../classes/Planet";
 
 export class CutScene {
   private _scene: Scene;
@@ -13,41 +14,74 @@ export class CutScene {
     this._scene = new Scene(engine);
     this._scene.clearColor = new Color4(0, 0, 0, 1);
 
-    this._camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 3, new Vector3(0, 0, 0), this._scene);
-    const light = new HemisphericLight("light", new Vector3(0, 1, 0), this._scene);
+    this._camera = new ArcRotateCamera("camera", 100, 0.8, 100, Vector3.Zero(), this._scene);
+    const light = new HemisphericLight("hemiLight", new Vector3(-40, -80, 10), this._scene);
+    light.diffuse = new Color3(1, 1, 1);
 
+    const skybox = Mesh.CreateBox("BackgroundSkybox", 720, this._scene, undefined, Mesh.BACKSIDE);
+    
+    // Create and tweak the background material.
+    const backgroundMaterial = new BackgroundMaterial("backgroundMaterial", this._scene);
+    backgroundMaterial.reflectionTexture = new CubeTexture("./assets/images/backgrounds/stars", this._scene);
+    backgroundMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
+    skybox.material = backgroundMaterial;
+    
     // test models
-    const box = MeshBuilder.CreateBox("box", {}, this._scene);
-    box.position.y = 0.5;
-    box.position.x = 0.5;
-    const box2 = MeshBuilder.CreateSphere("box2", {}, this._scene);
-    box2.position.y = -0.5;
-    box2.position.x = -0.5;
+    const ship = Mesh.CreateTorus("torus", 8, 2, 32, this._scene, false);
+    ship.position = new Vector3(-100, 10, -20);
 
+    //create planet
+    //argumets: scene, url texture, coordinates
+    const planet = new Planet(this._scene, "./assets/images/backgrounds/texture.jpg", new Vector3(50, -15, 30));
+    planet.createPlanet();
+
+    // Create the ship animation
+    const animateShip = new Animation("animationShip", "position", 30, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CONSTANT);
+    let keysBezierShip = [];
+
+    keysBezierShip.push({ frame: 0, value: ship.position });
+      keysBezierShip.push({ 
+          frame: 150, 
+          value: ship.position.add(new Vector3(170, 10, 50)) 
+          });
+    animateShip.setKeys(keysBezierShip);
+    const bezierEase = new BezierCurveEase(0.32, -0.73, 0.69, 1.59);
+    animateShip.setEasingFunction(bezierEase);
+    ship.animations.push(animateShip);
+    this._scene.beginAnimation(ship, 0, 150, true, 0.7);
+
+
+    //GUI
     const guiMenu = AdvancedDynamicTexture.CreateFullscreenUI("UI");
     guiMenu.idealHeight = 720;
 
-    const imageRectBg = new Rectangle("mainMenuBackground");
+    const imageRectBg = new Rectangle("CutSceneBackground");
     imageRectBg.width = 1;
     imageRectBg.thickness = 0;
     guiMenu.addControl(imageRectBg);
 
-    const skipBtn = Button.CreateSimpleButton("skip", "SKIP");
-    skipBtn.fontFamily = "Arial";
-    skipBtn.width = "45px";
-    skipBtn.left = "-14px";
-    skipBtn.height = "40px";
-    skipBtn.color = "white";
-    skipBtn.top = "14px";
-    skipBtn.thickness = 0;
-    skipBtn.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
-    skipBtn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
-    imageRectBg.addControl(skipBtn);
+    const playBtn = Button.CreateImageWithCenterTextButton(
+      "play",
+      "PLAY",
+      "./assets/images/gui/button.png"
+    );
+    playBtn.fontFamily = "Arial";
+    playBtn.width = 0.2
+    playBtn.height = "70px";
+    playBtn.color = "white";
+    playBtn.top = "-25%";
+    playBtn.thickness = 0;
+    playBtn.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
 
-    skipBtn.onPointerDownObservable.add(() => {
+    setTimeout(() => {
+      imageRectBg.addControl(playBtn);
+    }, 5000);
+
+    playBtn.onPointerDownObservable.add(() => {
       this.closeScene();
     });
 
+    //sound
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
       loop: true,
@@ -55,6 +89,7 @@ export class CutScene {
     });
 
     this._scene.registerBeforeRender(() => {
+      planet._rotatePlanet();               //add planet rotation
       if (this._transition) {
         this._fadeLevel -= .05;
         if (this._fadeLevel <= 0) {
@@ -78,3 +113,4 @@ export class CutScene {
     this._scene.detachControl();
   }
 }
+
