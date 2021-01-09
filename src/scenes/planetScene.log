@@ -1,0 +1,145 @@
+Exporter version: 2.80.0, Blender version: 2.91.0
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Courses\RSCLONE\rsclone\src\scenes\
+	Python World class constructor completed
+	processing begun of mesh:  tree
+		WARNING: No materials have been assigned: 
+		num positions      :  22597
+		num normals        :  22597
+		num tangents       :  0
+		num uvs            :  45194
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  29232
+	processing begun of mesh:  tree.001
+		WARNING: No materials have been assigned: 
+		num positions      :  22597
+		num normals        :  22597
+		num tangents       :  0
+		num uvs            :  45194
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  29232
+	processing begun of mesh:  tree.002
+		WARNING: No materials have been assigned: 
+		num positions      :  22597
+		num normals        :  22597
+		num tangents       :  0
+		num uvs            :  45194
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  29232
+	processing begun of mesh:  tree.003
+		WARNING: No materials have been assigned: 
+		num positions      :  22597
+		num normals        :  22597
+		num tangents       :  0
+		num uvs            :  45194
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  29232
+	processing begun of mesh:  tree.004
+		WARNING: No materials have been assigned: 
+		num positions      :  22597
+		num normals        :  22597
+		num tangents       :  0
+		num uvs            :  45194
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  29232
+	processing begun of mesh:  tree.005
+		WARNING: No materials have been assigned: 
+		num positions      :  22597
+		num normals        :  22597
+		num tangents       :  0
+		num uvs            :  45194
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  29232
+	processing begun of mesh:  Torus
+		processing begun of material:  ship
+		num positions      :  2909
+		num normals        :  2909
+		num tangents       :  0
+		num uvs            :  5818
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  1152
+	processing begun of mesh:  Cube
+		processing begun of material:  lab
+		num positions      :  32
+		num normals        :  32
+		num tangents       :  0
+		num uvs            :  64
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  20
+	processing begun of mesh:  Cube.001
+		WARNING: No materials have been assigned: 
+		num positions      :  17
+		num normals        :  17
+		num tangents       :  0
+		num uvs            :  34
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  12
+	processing begun of mesh:  Cylinder
+		WARNING: No materials have been assigned: 
+		num positions      :  309
+		num normals        :  309
+		num tangents       :  0
+		num uvs            :  618
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  124
+	processing begun of mesh:  Plane.001
+		processing begun of material:  lab
+		processing begun of material:  Material.002
+		registered as also a user of material:  lab
+		processing begun of multimaterial:  planetScene.Multimaterial#0
+		num positions      :  16
+		num normals        :  16
+		num tangents       :  0
+		num uvs            :  32
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  24
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  Plane
+		processing begun of material:  grass.001
+		processing begun of material:  roud.001
+		processing begun of multimaterial:  planetScene.Multimaterial#1
+		num positions      :  10636
+		num normals        :  10636
+		num tangents       :  0
+		num uvs            :  21272
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  20402
+	processing begun of light (HEMI FROM AREA):  Area
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  tree
+	writing mesh:  tree.001
+	writing mesh:  tree.002
+	writing mesh:  tree.003
+	writing mesh:  tree.004
+	writing mesh:  tree.005
+	writing mesh:  Torus
+	writing mesh:  Cube
+	writing mesh:  Cube.001
+	writing mesh:  Cylinder
+	writing mesh:  Plane.001
+	writing mesh:  Plane
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 30.5782 secs

@@ -1,48 +1,61 @@
-import { Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Effect, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
+import { Engine, Scene, Vector3, Mesh, HemisphericLight, Sound, PostProcess, MeshBuilder,  Animation, SceneLoader, CannonJSPlugin, ArcRotateCamera, PhysicsImpostor} from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 import { Player } from '../classes/Player';
+import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 
 export class Game {
   private _scene: Scene;
+  private _newScene: Scene;
+  private _engine: Engine;
   private _camera: ArcRotateCamera;
   private _transition: boolean;
   private _callback;
   private _fadeLevel: number = 1.0;
   private _player;
+  private _light: HemisphericLight;
+  private _canvas: any;
 
-  constructor(engine: Engine, callback) {
+  constructor(engine: Engine, callback: any, canvas: any) {
     this._callback = callback;
+    this._engine = engine;
+    this._canvas = canvas;
     this._scene = new Scene(engine);
-    this._scene.clearColor = new Color4(0, 0, 0, 1);
-    this._camera = new ArcRotateCamera("camera", Math.PI / 3, Math.PI / 3, 3, new Vector3(0, 0, 0), this._scene);
-    const light = new HemisphericLight("light", new Vector3(0, 1, 0), this._scene);
+    this._scene.gravity = new Vector3(0, -0.15, 0);
+    this._scene.collisionsEnabled = true;
 
-    this._player = new Player(this._scene);
+
+    this._camera = new ArcRotateCamera("Camera", 0, 0, 10, new Vector3(0, 0, 0), this._scene);
+    this._camera.setPosition(new Vector3(0, 12, -10));
+    this._camera.setTarget(Vector3.Zero());
+    this._camera.attachControl(this._canvas);
+    this._camera.checkCollisions = true;
+    this._camera.collisionRadius = new Vector3(1.5, 1.5, 1.5);
+
+    this._light = new HemisphericLight("light", new Vector3(-3, 10, 50), this._scene);
+    //this._player = new Player(this._scene);
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
       loop: true,
       autoplay: true
     });
+    this.loadScene(this._scene);
+    this.loadPhisics(this._scene);
+    this._addBox();
+    this._createSkyBox();
+  }
 
-    const guiMenu = AdvancedDynamicTexture.CreateFullscreenUI("UI");
-    guiMenu.idealHeight = 720;
-
-    const imageRectBg = new Rectangle("mainMenuBackground");
-    imageRectBg.width = 1;
-    imageRectBg.thickness = 0;
-    guiMenu.addControl(imageRectBg);
-
-    this._transition = false;
-    this._scene.registerBeforeRender(() => {
-      if (this._transition) {
-        this._fadeLevel -= .05;
-        if (this._fadeLevel <= 0) {
-          this._transition = false;
-          this._callback();
-        }
-      }
+  loadScene(scene: Scene) {
+    SceneLoader.Append("scenes/", "planet.babylon", scene, function (meshes) {
+        //scene.createDefaultCameraOrLight(true, true, true);
+        //scene.createDefaultEnvironment();       
     });
+  }
+
+  loadPhisics(scene: Scene) {
+      var gravityVector = new Vector3(0, 0, 0);
+      var physicsPlugin = new CannonJSPlugin();
+      scene.enablePhysics(gravityVector, physicsPlugin);
   }
 
   getScene() {
@@ -57,4 +70,23 @@ export class Game {
     this._transition = true;
     this._scene.detachControl();
   }
+
+  private _addBox() {
+    const box = MeshBuilder.CreateBox("box", {});    //add box for checking the movement of camera
+    box.position.x = -15;
+    box.position.y = 0.5;
+    box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, this._scene);
+    box.checkCollisions = true;
+    document.addEventListener("click", ()=>{
+      Animation.CreateAndStartAnimation("anim", box, "position", 100, 100, box.position, box.position.add(new Vector3(3, 0, 0)), 0);
+    });
+    this._camera.lockedTarget = box;
+  }
+
+  private _createSkyBox() {
+    var skyboxMaterial = new SkyMaterial("skyMaterial", this._scene);
+      skyboxMaterial.backFaceCulling = false;
+      var skybox = Mesh.CreateBox("skyBox", 1000.0, this._scene);
+      skybox.material = skyboxMaterial;		
+    }
 }
