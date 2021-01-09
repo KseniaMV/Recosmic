@@ -1,4 +1,4 @@
-import { Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, Sound, PostProcess, MeshBuilder,  StandardMaterial, FollowCamera, Animation, Texture, SceneLoader, CannonJSPlugin, ArcRotateCamera, PhysicsImpostor, UniversalCamera} from "@babylonjs/core";
+import { Engine, Scene, Vector3, Mesh, HemisphericLight, Sound, PostProcess, MeshBuilder,  Animation, SceneLoader, CannonJSPlugin, ArcRotateCamera, PhysicsImpostor} from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 import { Player } from '../classes/Player';
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
@@ -26,13 +26,12 @@ export class Game {
 
     this._camera = new ArcRotateCamera("Camera", 0, 0, 10, new Vector3(0, 0, 0), this._scene);
     this._camera.setPosition(new Vector3(0, 12, -10));
-
-    this._light = new HemisphericLight("light", new Vector3(-3, 10, 50), this._scene);
     this._camera.setTarget(Vector3.Zero());
     this._camera.attachControl(this._canvas);
     this._camera.checkCollisions = true;
     this._camera.collisionRadius = new Vector3(1.5, 1.5, 1.5);
 
+    this._light = new HemisphericLight("light", new Vector3(-3, 10, 50), this._scene);
     //this._player = new Player(this._scene);
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
@@ -42,7 +41,7 @@ export class Game {
     });
     this.loadScene(this._scene);
     this.loadPhisics(this._scene);
-    this._setCamera();
+    this._addBox();
     this._createSkyBox();
   }
 
@@ -72,7 +71,7 @@ export class Game {
     this._scene.detachControl();
   }
 
-  private _setCamera() {
+  private _addBox() {
     const box = MeshBuilder.CreateBox("box", {});    //add box for checking the movement of camera
     box.position.x = -15;
     box.position.y = 0.5;
