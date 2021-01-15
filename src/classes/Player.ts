@@ -14,6 +14,7 @@ export class Player {
   private _walkingAnim;
   private _currentAnim;
   private _allMeshes: any;
+  private _isChangedAnim = false;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
@@ -100,10 +101,14 @@ export class Player {
       const quaternion = Quaternion.RotationAxis(axis, angle);
       this._model.rotationQuaternion = quaternion;
 
-      this._currentAnim.stop();
-      this._currentAnim = this._walkingAnim;
-      this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
+      if (!this._isChangedAnim) {
+        this._currentAnim.stop();
+        this._currentAnim = this._walkingAnim;
+        this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
+        this._isChangedAnim = true;
+      }
     } else {
+      this._isChangedAnim = false;
       this._currentAnim.stop();
       this._currentAnim = this._idleAnim;
       this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
