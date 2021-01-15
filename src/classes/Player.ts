@@ -49,7 +49,7 @@ export class Player {
   }
 
   public async loadPlayer() {
-    const result = await SceneLoader.ImportMeshAsync("", "../assets/models/", "alien1.glb", this._scene);
+    const result = await SceneLoader.ImportMeshAsync("", "../assets/models/", "alien.glb", this._scene);
     console.log(result.meshes[0]);
     return result.meshes[0];
 }

@@ -71,7 +71,7 @@ export class CharacterController extends TransformNode {
         })
         //this._setUpAnimations();
         this._input = input;
-        this._animatePlayer();
+        //this._animatePlayer();
     }
 
     private _updateFromControls(): void {
