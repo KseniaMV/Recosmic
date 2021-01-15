@@ -8,7 +8,7 @@ export class Player {
   private _horizontal;
   private _vertical;
   private _shadowGenerator;
-  private _VELOCITY: number = 0.1;
+  private _VELOCITY: number = 0.05;
   private _lookAtAngle: number;
   private _idleAnim;
   private _walkingAnim;
@@ -124,7 +124,7 @@ export class Player {
   }
 
   raycastCollisions() {
-    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube');
+    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree');
     const length = 0.75;
     let forward = new Vector3(0, 0, 1);
     const stopWalking = (hit) => this._speed  = -this._VELOCITY;
