@@ -49,6 +49,12 @@ export class Environment {
         this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
       }
 
+      if (mesh.name.includes('tree')) {
+        mesh.isPickable = true;
+        if (mesh.name.includes('active')) {
+          mesh.isActiveItem = true;
+        }
+      }
 
       mesh.checkCollisions = true;
       mesh.isPickable = true;
