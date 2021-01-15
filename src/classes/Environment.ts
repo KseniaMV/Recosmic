@@ -1,65 +1,113 @@
-import { Scene, SceneLoader} from "@babylonjs/core";
+import { Scene, ShadowGenerator,Quaternion, Vector3,PBRMaterial, Mesh,StandardMaterial, Texture, Color4, Color3, CubeTexture, Sound, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
+
+export class Environment {
+  private _scene: Scene;
+  private _shadowGenerator;
+  private _env;
+  private _ground;
+  private _allMeshes;
+  private _playerPoint;
+
+  constructor(scene: Scene, shadow: ShadowGenerator) {
+    this._scene = scene;
+    this._shadowGenerator = shadow;
+
+    SceneLoader.ImportMesh("", "./assets/models/", "firstLevel.glb", this._scene, this._setEnvironment.bind(this));
+  }
+
+  private _setEnvironment (newMeshes, particleSystems, skeletons, animationGroups) {
+    this._env = newMeshes[0];
+    this._env.position.y = 0;
+
+    /*const axis = new Vector3(0, 1, 0);
+    const angle = -Math.PI / 4;
+    const quaternion = new Quaternion.RotationAxis(axis, angle);
+    this._env.rotationQuaternion = quaternion;*/
+
+    //this._env.checkCollisions = true;
+
+    this._allMeshes = this._env.getChildMeshes();
+
+    //this._env.checkCollisions = true;
+    //this._env.isPickable = true;
+    this._env.receiveShadows = true;
+
+    this._allMeshes.forEach(mesh => {
+      mesh.receiveShadows = true;
+
+      if (mesh.name === 'Plane') {
+          this._ground = mesh;
+      }
+
+      if (mesh.name === 'player') {
+        console.log('p');
+        this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
+      }
+
+      if (mesh.name === 'player22') {
+        console.log('p22');
+        this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
+      }
 
 
-export default class Environment {
-    private _scene: Scene;
-    private _urlFolder: string;
-    private _urlAsset: string;
-    private _assetName: string;
+      mesh.checkCollisions = true;
+      mesh.isPickable = true;
 
-    constructor(scene: Scene, urlFolder: string, urlAsset: string, assetName: string) {
-        this._scene = scene;
-        this._urlFolder = urlFolder;
-        this._urlAsset = urlAsset;
-        this._assetName = assetName;
-    }
+      if (mesh.name.includes('wall'))  {
+        mesh.isVisible = false;
+        mesh.isPickable = true;
 
-    public async load(type: string) {
-        if(type === "ground"){
-            SceneLoader.Append(this._urlFolder, this._urlAsset, this._scene, function(scene){ 
-                scene.meshes.forEach((mesh) => this._checkCollision(mesh, scene));
-            });
-        }else{
-            const assets = await this.loadAsset();
-            assets.allMeshes.forEach(mesh =>  this._checkCollision (mesh))
-        }
-    }
+      }
+      if(mesh.name.includes("Cube")) {
+        mesh.isPickable = true;
+      }
 
-    private _checkCollision (mesh: any, scene?: Scene): void {
-        mesh.receiveShadows = true;
-        mesh.checkCollisions = true;
-        if (mesh.name.includes("tree")) {
-            mesh.checkCollisions = false;
-            mesh.isPickable = false;
-        }
-          //collision meshes
-        if (mesh.name.includes("collision")) {
-            mesh.isVisible = false;
-            mesh.isPickable = true;
-        }
-          //trigger meshes
-        if (mesh.name.includes("Trigger")) {
-            mesh.isVisible = false;
-            mesh.isPickable = false;
-            mesh.checkCollisions = false;
-        }
-        if (mesh.name.includes("Cube")) {
-            mesh.isPickable = true;
-            mesh.checkCollisions = true;
-        }
-    }
+      if (mesh.name === 'roud') {
+        /*var materialSphere1 = new StandardMaterial("texture1", this._scene);
+        materialSphere1.wireframe = true;
+        mesh.material = materialSphere1;*/
 
-    //Load all necessary meshes for the environment
-    public async loadAsset() {
-        //loads game environment
-        const result = await SceneLoader.ImportMeshAsync(this._assetName, this._urlFolder, this._urlAsset, this._scene);
-        let env = result.meshes[0];
-        let allMeshes = env.getChildMeshes();
-        return {
-            env: env,
-            allMeshes: allMeshes,
-        }
-    }
+      }
 
-    
+
+      if (mesh.name === 'Plane' || mesh.name === 'ground' || mesh.name === 'roud') {
+          mesh.isPickable = false;
+      }
+
+      if (mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('Stone')) {
+        this._shadowGenerator.getShadowMap().renderList.push(mesh);
+        mesh.receiveShadows = false;
+      }
+
+
+      if (mesh.name.includes('grass')) {
+        const mat = new StandardMaterial("grass", this._scene);
+        mat.diffuseTexture = new Texture("./assets/textures/grass.png", this._scene);
+        mat.diffuseColor = new Color3(1,1,1);
+        mat.diffuseTexture.hasAlpha = true;
+        mat.backFaceCulling = false;
+        mesh.material = mat;
+        mesh.receiveShadows = false;
+        mesh.checkCollisions = false;
+        mesh.isPickable = false;
+      }
+    });
+
+  }
+
+  public getMesh() {
+    return this._env;
+  }
+
+  public getAllMeshes() {
+    return this._allMeshes;
+  }
+
+  public getGround() {
+    return this._ground;
+  }
+
+  public getPlayerPoint() {
+    return this._playerPoint;
+  }
 }

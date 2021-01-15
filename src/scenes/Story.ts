@@ -6,9 +6,14 @@ export class Story {
     video.setAttribute('height', "480");
     video.play();
     document.body.appendChild(video);
+
     video.addEventListener('ended', () => {
       video.style.display = "none";
       callback();
     });
+
+    window.addEventListener('click', () => {
+      video.currentTime = 999999999999999;
+    })
   }
 }

@@ -20,6 +20,7 @@ export class App {
     this._canvas.classList.add('renderCanvas');
     document.body.appendChild(this._canvas);
     this._engine = new Engine(this._canvas, true);
+    this._engine.loadingUIText = "Loading...";
     this._scene = new Scene(this._engine);
 
     Effect.RegisterShader("fade",
@@ -37,8 +38,7 @@ export class App {
   }
 
   private async _main(): Promise<void> {
-    //await this._goToStart();
-    await this._goToGameScene()
+    await this._goToStart();
     this._engine.runRenderLoop(() => {
       this._scene.render();
     });
@@ -72,9 +72,8 @@ export class App {
     await this._goToScene(State.CUTSCENE, scene);
   }
 
-  private async _goToGameScene(): Promise<void> { 
-    const scene = new Game(this._engine, null, this._canvas).getScene();
+  private async _goToGameScene(): Promise<void> {
+    const scene = new Game(this._engine, null).getScene();
     await this._goToScene(State.GAME, scene);
   }
 }
-

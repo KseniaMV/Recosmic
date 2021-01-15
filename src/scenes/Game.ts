@@ -1,48 +1,55 @@
-import { Engine, Scene, Vector3, Mesh, Sound, PostProcess, ArcRotateCamera, Color3, ShadowGenerator, PointLight, HemisphericLight} from "@babylonjs/core";
-import { Player } from '../classes/Player';
+import { Ray, ShadowGenerator, PointLight, RayHelper, DirectionalLight, Color3, Matrix, Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Effect, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
+import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
-import  Environment from '../classes/Environment';
+import { Player } from '../classes/Player';
+import { Environment } from '../classes/Environment';
 
 export class Game {
   private _scene: Scene;
-  private _newScene: Scene;
-  private _engine: Engine;
   private _camera: ArcRotateCamera;
   private _transition: boolean;
   private _callback;
   private _fadeLevel: number = 1.0;
   private _player;
-  private _light: HemisphericLight;
-  private _canvas: any;
-  public model;
-  private _ground;
-  private _shadowGenerator: ShadowGenerator;
+  private _environment;
+  private _shadowGenerator;
 
-  constructor(engine: Engine, callback: any, canvas: any) {
+  constructor(engine: Engine, callback) {
     this._callback = callback;
-    this._engine = engine;
-    this._canvas = canvas;
     this._scene = new Scene(engine);
-    this._scene.collisionsEnabled = true;
-    this._scene.gravity = new Vector3(0, -0.98, 0);
+    this._scene.clearColor = new Color4(0, 0, 0, 1);
+    this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(0, 0, 0), this._scene);
+    //const light = new HemisphericLight("light", new Vector3(0, 1, 0), this._scene);
 
-    this._camera = new ArcRotateCamera("Camera", 0, 0.8, 200, Vector3.Zero(), this._scene);
-    this._camera.setPosition(new Vector3(0, 8, -10));
-    this._camera.setTarget(Vector3.Zero());
-    this._camera.attachControl(this._canvas);
-    this._camera.checkCollisions = true;
-    this._camera.collisionRadius = new Vector3(1.5, 1.5, 1.5);
-    this._camera.lowerBetaLimit = 0.1;
-    this._camera.upperBetaLimit = (Math.PI / 2) * 0.8;
-    this._camera.lowerRadiusLimit = 5;
-    this._camera.upperRadiusLimit = 18.5;
-    this._light = new HemisphericLight("light", new Vector3(-3, 10, 50), this._scene);
-   /* this._light = new PointLight("sparklight", new Vector3(0, 20, 0), this._scene);
-    this._light.diffuse = new Color3(0.08627450980392157, 0.10980392156862745, 0.15294117647058825);
-    this._light.intensity = 35;
-    this._light.radius = 30;*/
-    
-    this._player = new Player(this._scene, new Vector3(0, 0, 0), this._camera);
+    this._createSkyBox();
+
+
+    const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
+    sun.diffuse = new Color3(1, 1, 1);
+    sun.specular = new Color3(1, 1, 1);
+
+
+    // shadow
+    var light2 = new DirectionalLight("dir01", new Vector3(0, -1, -1), this._scene);
+    light2.position = new Vector3(0, 20, 30);
+
+    light2.diffuse = new Color3(1, 1, 1);
+	   light2.specular = new Color3(1, 1, 1);
+     //light2.intensity = 10;
+
+    this._shadowGenerator = new ShadowGenerator(512, light2);
+    this._shadowGenerator.usePoissonSampling = true;
+
+
+    this._scene.gravity = new Vector3(0, -0.15, 0);
+    this._scene.collisionsEnabled = true;
+
+    this._environment = new Environment(this._scene, this._shadowGenerator);
+
+    this._player = new Player(this._scene, this._shadowGenerator);
+
+    setTimeout(this.slowpoke.bind(this), 1500);
+
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
@@ -50,16 +57,42 @@ export class Game {
       autoplay: true
     });
 
-    this.loadScene(this._scene);
-    this._createSkyBox();
-    /*this._shadowGenerator = new ShadowGenerator(1024, this._light);
-    this._shadowGenerator.darkness = 0.4;*/
+    const guiMenu = AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    guiMenu.idealHeight = 720;
+
+    const imageRectBg = new Rectangle("mainMenuBackground");
+    imageRectBg.width = 1;
+    imageRectBg.thickness = 0;
+    guiMenu.addControl(imageRectBg);
+
+    this._transition = false;
+
+    this._scene.registerBeforeRender(() => {
+      if (this._transition) {
+        this._fadeLevel -= .05;
+        if (this._fadeLevel <= 0) {
+          this._transition = false;
+          this._callback();
+        }
+      }
+
+      this._player.update();
+
+    });
   }
 
-  loadScene(scene: Scene) {
-    const gameScene = new Environment(scene, "../assets/models/", "firstLevel1.glb", "ground");
-    gameScene.load("ground");      //ground || asset   
+  slowpoke() {
+    this._player.setOriginPosition(this._environment.getPlayerPoint());
   }
+
+
+  private _createSkyBox() {
+    var skyboxMaterial = new SkyMaterial("skyMaterial", this._scene);
+      skyboxMaterial.backFaceCulling = false;
+      var skybox = Mesh.CreateBox("skyBox", 1000.0, this._scene);
+      skybox.material = skyboxMaterial;
+    }
+
 
   getScene() {
     return this._scene;
@@ -74,13 +107,4 @@ export class Game {
     this._scene.detachControl();
   }
 
-  private _createSkyBox() {
-    var skyboxMaterial = new SkyMaterial("skyMaterial", this._scene);
-      skyboxMaterial.backFaceCulling = false;
-      var skybox = Mesh.CreateBox("skyBox", 1000.0, this._scene);
-      skybox.material = skyboxMaterial;		
-    }
-
 }
-
-
