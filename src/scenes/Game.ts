@@ -18,7 +18,7 @@ export class Game {
     this._callback = callback;
     this._scene = new Scene(engine);
     this._scene.clearColor = new Color4(0, 0, 0, 1);
-    this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(0, 0, 0), this._scene);
+    this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(9, 7, 0), this._scene);
     //const light = new HemisphericLight("light", new Vector3(0, 1, 0), this._scene);
 
     this._createSkyBox();

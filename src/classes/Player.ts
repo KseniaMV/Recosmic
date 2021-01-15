@@ -13,6 +13,7 @@ export class Player {
   private _idleAnim;
   private _walkingAnim;
   private _currentAnim;
+  private _allMeshes: any;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
@@ -38,19 +39,19 @@ export class Player {
       this._horizontal = 0;
       this._vertical = 0;
 
-      if (inputMap["38"] || inputMap["87"]) {
+      if (inputMap["39"] || inputMap["68"]) {    //  d
         this._horizontal = 1;
       }
 
-      if (inputMap["39"] || inputMap["68"]) {
+      if (inputMap["38"] || inputMap["87"]) { //   w
         this._vertical = -1;
       }
 
-      if (inputMap["40"] || inputMap["83"]) {
+      if (inputMap["37"] || inputMap["65"]) {   //a
         this._horizontal = -1;
       }
 
-      if (inputMap["37"] || inputMap["65"]) {
+      if (inputMap["40"] || inputMap["83"]) {   //s
         this._vertical = 1;
       }
     });
@@ -96,7 +97,7 @@ export class Player {
     if (this._horizontal !== 0 || this._vertical !== 0) {
       const axis = new Vector3(0, 1, 0);
       const angle = Math.atan2(-this._vertical, -this._horizontal);
-      const quaternion = new Quaternion.RotationAxis(axis, angle);
+      const quaternion = Quaternion.RotationAxis(axis, angle);
       this._model.rotationQuaternion = quaternion;
 
       this._currentAnim.stop();
@@ -153,3 +154,20 @@ export class Player {
   }
 
 }
+
+
+/*if (inputMap["38"] || inputMap["87"]) {
+  this._horizontal = 1;
+}
+
+if (inputMap["40"] || inputMap["83"]) {
+  this._horizontal = -1;
+}
+
+if (inputMap["39"] || inputMap["68"]) {
+  this._vertical = -1;
+}
+
+if (inputMap["37"] || inputMap["65"]) {
+  this._vertical = 1;
+}*/
