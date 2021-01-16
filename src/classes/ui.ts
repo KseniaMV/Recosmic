@@ -39,7 +39,7 @@ export class Hud {
     public hint;
 
     //Mobile
-    public isMobile: false; ///заменить на boolean 
+    public isMobile: boolean; ///заменить на boolean 
     public jumpBtn: Button;
     public dashBtn: Button;
     public leftBtn: Button;
