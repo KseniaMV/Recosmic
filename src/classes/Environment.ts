@@ -41,11 +41,7 @@ export class Environment {
 
       if (mesh.name === 'player') {
         console.log('p');
-        this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
-      }
-
-      if (mesh.name === 'player22') {
-        console.log('p22');
+        mesh.isVisible = false;
         this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
       }
 

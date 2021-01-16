@@ -15,6 +15,7 @@ export class Player {
   private _currentAnim;
   private _allMeshes: any;
   private _isChangedAnim = false;
+  private _collisionCallback: Function;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
@@ -27,6 +28,17 @@ export class Player {
   }
 
   public setKeys() {
+    const KEY = {
+      UP: '38',
+      W: '87',
+      LEFT: '37',
+      A: '65',
+      DOWN: '40',
+      S: '83',
+      RIGHT: '39',
+      D: '68'
+    }
+
     const inputMap = {};
     this._scene.actionManager = new ActionManager(this._scene);
     this._scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, function (evt) {
@@ -40,19 +52,19 @@ export class Player {
       this._horizontal = 0;
       this._vertical = 0;
 
-      if (inputMap["39"] || inputMap["68"]) {    //  d
+      if (inputMap[KEY.RIGHT] || inputMap[KEY.D]) {    //  d
         this._horizontal = 1;
       }
 
-      if (inputMap["38"] || inputMap["87"]) { //   w
+      if (inputMap[KEY.UP] || inputMap[KEY.W]) { //   w
         this._vertical = -1;
       }
 
-      if (inputMap["37"] || inputMap["65"]) {   //a
+      if (inputMap[KEY.LEFT] || inputMap[KEY.A]) {   //a
         this._horizontal = -1;
       }
 
-      if (inputMap["40"] || inputMap["83"]) {   //s
+      if (inputMap[KEY.DOWN] || inputMap[KEY.S]) {   //s
         this._vertical = 1;
       }
     });
@@ -83,9 +95,11 @@ export class Player {
   }
 
   public setOriginPosition(position) {
-    this._model.position.x = position.x;
-    this._model.position.y = position.y;
-    this._model.position.z = position.z;
+    this._model.position = position;
+  }
+
+  public setCollisionCallback(callback: Function) {
+    this._collisionCallback = callback;
   }
 
   public update() {
@@ -125,9 +139,10 @@ export class Player {
 
   raycastCollisions() {
     const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree');
-    const length = 0.75;
+    const length = 1.5;
     let forward = new Vector3(0, 0, 1);
-    const stopWalking = (hit) => this._speed  = -this._VELOCITY;
+    //const stopWalking = (hit) => this._speed  = -this._VELOCITY;
+    const stopWalking = (hit) => this._speed = 0;
     this.createRaycast(forward, length, predicate, stopWalking);
   }
 
@@ -149,8 +164,8 @@ export class Player {
     const hit = this._scene.pickWithRay(ray, predicate);
 
     if (hit.pickedMesh) {
-      console.log(hit.pickedMesh.name);
       callback(hit);
+      this._collisionCallback(hit.pickedMesh.name);
     }
   }
 

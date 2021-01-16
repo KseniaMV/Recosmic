@@ -3,6 +3,7 @@ import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@baby
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 import { Player } from '../classes/Player';
 import { Environment } from '../classes/Environment';
+import { ChoiseBox } from '../ui/ChoiseBox';
 
 export class Game {
   private _scene: Scene;
@@ -13,6 +14,7 @@ export class Game {
   private _player;
   private _environment;
   private _shadowGenerator;
+  private _choiseBox;
 
   constructor(engine: Engine, callback) {
     this._callback = callback;
@@ -21,8 +23,9 @@ export class Game {
     this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(9, 7, 0), this._scene);
     //const light = new HemisphericLight("light", new Vector3(0, 1, 0), this._scene);
 
-    this._createSkyBox();
+    this._choiseBox = new ChoiseBox(this._scene, this._actionAfterChose.bind(this));
 
+    this._createSkyBox();
 
     const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
     sun.diffuse = new Color3(1, 1, 1);
@@ -31,7 +34,7 @@ export class Game {
 
     // shadow
     var light2 = new DirectionalLight("dir01", new Vector3(0, -1, -1), this._scene);
-    light2.position = new Vector3(0, 20, 30);
+    light2.position = new Vector3(0, 50, 30);
 
     light2.diffuse = new Color3(1, 1, 1);
 	   light2.specular = new Color3(1, 1, 1);
@@ -47,6 +50,7 @@ export class Game {
     this._environment = new Environment(this._scene, this._shadowGenerator);
 
     this._player = new Player(this._scene, this._shadowGenerator);
+    this._player.setCollisionCallback(this._checkCollisions.bind(this));
 
     setTimeout(this.slowpoke.bind(this), 1500);
 
@@ -79,6 +83,24 @@ export class Game {
       this._player.update();
 
     });
+  }
+
+  private _actionAfterChose(object: string, action: string) {
+    console.log(`${object} --- ${action}`);
+  }
+
+  private _checkCollisions(name) {
+    console.log(name);
+    if (!this._choiseBox.getIsChose() && name.includes('active_tree')) {
+      this._choiseBox.setShow(true, name);
+    } else {
+      this._choiseBox.setShow(false);
+      if (this._choiseBox.getIsChose()) {
+        setTimeout(() => {
+            this._choiseBox.setIsChose(false);
+        }, 5000);
+      }
+    }
   }
 
   slowpoke() {

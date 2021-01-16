@@ -1,4 +1,4 @@
-import { Engine, Scene, Vector3, Mesh, Color3, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Animation, BezierCurveEase, CubeTexture, Texture, BackgroundMaterial} from "@babylonjs/core";
+import { Engine, Scene, SceneLoader, Vector3, Mesh, Color3, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Animation, BezierCurveEase, CubeTexture, Texture, BackgroundMaterial} from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control} from "@babylonjs/gui";
 import { Planet } from "../classes/Planet";
 
@@ -6,7 +6,7 @@ export class CutScene {
   private _scene: Scene;
   private _camera: ArcRotateCamera;
   private _transition: boolean = false;
-  private _callback;
+  private _callback: Function;
   private _fadeLevel: number = 1.0;
 
   constructor(engine: Engine, callback) {
@@ -19,16 +19,22 @@ export class CutScene {
     light.diffuse = new Color3(1, 1, 1);
 
     const skybox = Mesh.CreateBox("BackgroundSkybox", 720, this._scene, undefined, Mesh.BACKSIDE);
-    
+
     // Create and tweak the background material.
     const backgroundMaterial = new BackgroundMaterial("backgroundMaterial", this._scene);
     backgroundMaterial.reflectionTexture = new CubeTexture("./assets/images/backgrounds/stars", this._scene);
     backgroundMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
     skybox.material = backgroundMaterial;
-    
+
     // test models
     const ship = Mesh.CreateTorus("torus", 8, 2, 32, this._scene, false);
     ship.position = new Vector3(-100, 10, -20);
+    // hide ship
+    ship.isVisible = false;
+
+    // ship model
+    SceneLoader.ImportMesh("", "./assets/models/", "ship.glb", this._scene, this._setModel.bind(this));
+
 
     //create planet
     //argumets: scene, url texture, coordinates
@@ -40,9 +46,9 @@ export class CutScene {
     let keysBezierShip = [];
 
     keysBezierShip.push({ frame: 0, value: ship.position });
-      keysBezierShip.push({ 
-          frame: 150, 
-          value: ship.position.add(new Vector3(170, 10, 50)) 
+      keysBezierShip.push({
+          frame: 150,
+          value: ship.position.add(new Vector3(170, 10, 50))
           });
     animateShip.setKeys(keysBezierShip);
     const bezierEase = new BezierCurveEase(0.32, -0.73, 0.69, 1.59);
@@ -100,6 +106,27 @@ export class CutScene {
     });
   }
 
+  private _setModel (newMeshes, particleSystems, skeletons, animationGroups) {
+    const ship = newMeshes[0];
+    ship.scaling.scaleInPlace(2);
+    ship.position = new Vector3(-100, 10, -20);
+
+    // Create the ship animation
+    const animateShip = new Animation("animationShip", "position", 30, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CONSTANT);
+    let keysBezierShip = [];
+
+    keysBezierShip.push({ frame: 0, value: ship.position });
+      keysBezierShip.push({
+          frame: 150,
+          value: ship.position.add(new Vector3(170, 10, 50))
+          });
+    animateShip.setKeys(keysBezierShip);
+    const bezierEase = new BezierCurveEase(0.32, -0.73, 0.69, 1.59);
+    animateShip.setEasingFunction(bezierEase);
+    ship.animations.push(animateShip);
+    this._scene.beginAnimation(ship, 0, 150, true, 0.7);
+  }
+
   getScene() {
     return this._scene;
   }
@@ -113,4 +140,3 @@ export class CutScene {
     this._scene.detachControl();
   }
 }
-
