@@ -8,7 +8,7 @@ export class Player {
   private _horizontal;
   private _vertical;
   private _shadowGenerator;
-  private _VELOCITY: number = 0.05;
+  private _VELOCITY: number = 0.1;
   private _lookAtAngle: number;
   private _idleAnim;
   private _walkingAnim;
@@ -60,7 +60,7 @@ export class Player {
 
   private _setTestModel (newMeshes, particleSystems, skeletons, animationGroups) {
     this._model = newMeshes[0];
-    this._model.scaling.scaleInPlace(0.2);
+    this._model.scaling.scaleInPlace(0.5);
     this._model.position.y = 1;
     this._model.position.z = 2;
     this._model.isPickable = false;
@@ -159,20 +159,3 @@ export class Player {
   }
 
 }
-
-
-/*if (inputMap["38"] || inputMap["87"]) {
-  this._horizontal = 1;
-}
-
-if (inputMap["40"] || inputMap["83"]) {
-  this._horizontal = -1;
-}
-
-if (inputMap["39"] || inputMap["68"]) {
-  this._vertical = -1;
-}
-
-if (inputMap["37"] || inputMap["65"]) {
-  this._vertical = 1;
-}*/
