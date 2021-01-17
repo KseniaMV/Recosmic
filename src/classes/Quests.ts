@@ -22,12 +22,14 @@ export class Quests {
         const questData = this.getQuestsData()
         .then((result) => {
             this.quests = result;
-            this.getCurrentQuest(result);
+            setTimeout(() => {
+                this.getCurrentQuest(result);
+            }, 5000);
         })
         .then(()=> {
             setTimeout(() => {
                 this._questsGui.removeControl(this._questConteiner);
-            }, 15000);
+            }, 10000);
             this.addCurrentQuestsToTablet();
         });
     }
