@@ -1,4 +1,4 @@
-import { Mesh, Space, StandardMaterial, Texture } from '@babylonjs/core';
+import { Space, StandardMaterial, Texture } from '@babylonjs/core';
 import { MeshBuilder, Scene, Vector3 } from '@babylonjs/core';
 
 export class Planet {

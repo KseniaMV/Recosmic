@@ -1,4 +1,4 @@
-import { Engine, Scene, Vector3, Mesh, Color4, FreeCamera, Sound, PostProcess, Effect, AssetsManager } from "@babylonjs/core";
+import { Engine, Scene, Vector3, Color4, FreeCamera, Sound, PostProcess } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 
 export class MainMenu {

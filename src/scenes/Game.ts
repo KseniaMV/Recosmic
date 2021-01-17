@@ -1,6 +1,6 @@
 import { Quests } from './../classes/Quests';
-import { Ray, ShadowGenerator, PointLight, RayHelper, DirectionalLight, Color3, Matrix, Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Effect, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
-import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
+import { Ray, ShadowGenerator, PointLight, DirectionalLight, Color3, Engine, Scene, Vector3, Mesh, Color4, ArcRotateCamera, Sound, PostProcess } from "@babylonjs/core";
+import { AdvancedDynamicTexture, Rectangle} from "@babylonjs/gui";
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 import { Player } from '../classes/Player';
 import { Environment } from '../classes/Environment';
