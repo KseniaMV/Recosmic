@@ -7,12 +7,17 @@ export class Environment {
   private _ground;
   private _allMeshes;
   private _playerPoint;
+  private _runAfterLoaded: Function;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
     this._shadowGenerator = shadow;
 
     SceneLoader.ImportMesh("", "./assets/models/", "firstLevel.glb", this._scene, this._setEnvironment.bind(this));
+  }
+
+  public setActionAfterLoaded(func: Function) {
+    this._runAfterLoaded = func;
   }
 
   private _setEnvironment (newMeshes, particleSystems, skeletons, animationGroups) {
@@ -41,11 +46,7 @@ export class Environment {
 
       if (mesh.name === 'player') {
         console.log('p');
-        this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
-      }
-
-      if (mesh.name === 'player22') {
-        console.log('p22');
+        mesh.isVisible = false;
         this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
       }
 
@@ -98,6 +99,8 @@ export class Environment {
         mesh.isPickable = false;
       }
     });
+
+    this._runAfterLoaded();
 
   }
 

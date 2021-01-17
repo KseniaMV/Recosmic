@@ -4,6 +4,7 @@ import { AdvancedDynamicTexture, Rectangle} from "@babylonjs/gui";
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 import { Player } from '../classes/Player';
 import { Environment } from '../classes/Environment';
+import { ChoiseBox } from '../ui/ChoiseBox';
 import Inventory from '../classes/Inventory';
 import Tablet from "../classes/Tablet";
 import { CharacterState } from '../classes/CharacterState';
@@ -30,6 +31,8 @@ export class Game {
     this._scene.clearColor = new Color4(0, 0, 0, 1);
     this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(10, 10, 0), this._scene);
 
+    this._choiseBox = new ChoiseBox(this._scene, this._actionAfterChose.bind(this));
+
     this._createSkyBox();
 
     const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
@@ -52,16 +55,22 @@ export class Game {
     this._scene.collisionsEnabled = true;
 
     this._environment = new Environment(this._scene, this._shadowGenerator);
+    this._environment.setActionAfterLoaded(this.setToStartPosition.bind(this));
 
     this._player = new Player(this._scene, this._shadowGenerator);
-    
+    this._player.setCollisionCallback(this._checkCollisions.bind(this));
+
     //GUI
     this._inventory = new Inventory(this._scene, this._canvas);
     this._tablet = new Tablet(this._scene, this._canvas);
     this.quests = new Quests(this._scene, this._canvas);
     this._characterState = new CharacterState(this._scene);
+    // CharacterState test
+    window.addEventListener('click',(function(){
+      this._characterState.downHP();
+      this._characterState.upCarma();
+    }).bind(this));
 
-    setTimeout(this.slowpoke.bind(this), 1500);
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
@@ -93,7 +102,25 @@ export class Game {
     });
   }
 
-  slowpoke() {
+  private _actionAfterChose(object: string, action: string) {
+    console.log(`${object} --- ${action}`);
+  }
+
+  private _checkCollisions(name) {
+    //console.log(name);
+    if (!this._choiseBox.getIsChose() && name.includes('active_tree')) {
+      this._choiseBox.setShow(true, name);
+    } else {
+      this._choiseBox.setShow(false);
+      if (this._choiseBox.getIsChose()) {
+        setTimeout(() => {
+            this._choiseBox.setIsChose(false);
+        }, 5000);
+      }
+    }
+  }
+
+  setToStartPosition() {
     this._player.setOriginPosition(this._environment.getPlayerPoint());
   }
 

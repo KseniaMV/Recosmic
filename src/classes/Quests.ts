@@ -64,14 +64,24 @@ export class Quests {
         const quest = new TextBlock();
         this._questConteiner = quest;
         quest.name = "currentQuest";
-        quest.textHorizontalAlignment = TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
-        quest.textHorizontalAlignment = TextBlock.VERTICAL_ALIGNMENT_BOTTOM;
+        //quest.textHorizontalAlignment = TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
+        quest.textHorizontalAlignment = TextBlock.HORIZONTAL_ALIGNMENT_CENTER;
+        //quest.textVerticalAlignment = TextBlock.VERTICAL_ALIGNMENT_BOTTOM;
+        quest.textVerticalAlignment = TextBlock.VERTICAL_ALIGNMENT_CENTER;
         quest.fontSize = "36px";
         quest.color = "white";
+        quest.outlineWidth = 2;
+        quest.outlineColor = "red";
+        quest.shadowColor = "black";
+        quest.shadowOffsetX = 5;
+        quest.shadowOffsetY = 5;
         quest.text = currentQuest.description;
         quest.resizeToFit = true;
-        quest.height = "150px";
-        quest.width = "350px";
+        quest.textWrapping = true;
+        //quest.height = "150px";
+        quest.height = 0.5;
+        // quest.width = "350px";
+        quest.width = 0.5;
         quest.fontFamily = "Arial";
         this._questsGui.addControl(quest);
     }

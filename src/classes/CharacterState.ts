@@ -26,7 +26,7 @@ export class CharacterState {
     createCharacterStateGUI () {
         const stateGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._stateGUI  = stateGUI;
-        
+
 
     }
 
@@ -36,15 +36,17 @@ export class CharacterState {
         health.height = "100px";
         health.cellId = 0;
         health.cellHeight = 100;
-        health.cellWidth = 90;
-        health.sourceWidth = 90;
+        //health.cellWidth = 90;
+        health.cellWidth = 85;
+        //health.sourceWidth = 90;
+        health.sourceWidth = 85;
         health.sourceHeight = 100;
         health.horizontalAlignment = 0;
         health.verticalAlignment = 0;
         health.left = "60px";
         health.top = "40px";
         this._stateGUI.addControl(health);
-        this._health = health; 
+        this._health = health;
         this._health.onPointerEnterObservable.add(()=>{
             this.effectOnHover(this._health);
         });
@@ -54,13 +56,16 @@ export class CharacterState {
     }
 
     createKarma () {
-        const karma =  new Image("karma", "../assets/sprites2/carma_sprite2.png");
+        //const karma =  new Image("karma", "../assets/sprites2/carma_sprite2.png");
+        const karma =  new Image("karma", "../assets/sprites2/carma_sprite_new.png");
         karma.width = "100px";
         karma.height = "100px";
         karma.cellId = 0;
         karma.cellHeight = 100;
-        karma.cellWidth = 90;
-        karma.sourceWidth = 90;
+        //karma.cellWidth = 90;
+        karma.cellWidth = 78;
+        //karma.sourceWidth = 90;
+        karma.sourceWidth = 78;
         karma.sourceHeight = 100;
         karma.horizontalAlignment = 0;
         karma.verticalAlignment = 0;
@@ -98,7 +103,7 @@ export class CharacterState {
         this._effect1.onPointerOutObservable.add(()=>{
             this._effectGui.removeControl(this._effectButton);
         });
-        
+
         const effect2 =  new Image("effect2", "../assets/sprites2/effect2.png");
         effect2.width = "50px";
         effect2.height = "50px";
@@ -160,23 +165,31 @@ export class CharacterState {
         effectButton.thickness = 0;
         effectButton.color = "white";
         this._effectGui.addControl(effectButton)
-        this._effectButton = effectButton; 
+        this._effectButton = effectButton;
     }
 
     upHP () {
-
+      if (this._health.cellId > 0) {
+        this._health.cellId--;
+      }
     }
 
     downHP () {
-
+      if (this._health.cellId < 20) {
+        this._health.cellId++;
+      }
     }
 
     upCarma () {
-
+      if (this._carma.cellId < 20) {
+        this._carma.cellId++;
+      }
     }
 
     downCarma () {
-
+      if (this._carma.cellId > 0) {
+        this._carma.cellId--;
+      }
     }
 
     setEffect (effect) {
