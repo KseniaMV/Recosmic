@@ -1,8 +1,12 @@
+import { Quests } from './../classes/Quests';
 import { Ray, ShadowGenerator, PointLight, RayHelper, DirectionalLight, Color3, Matrix, Engine, Scene, Vector3, Mesh, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Effect, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 import { Player } from '../classes/Player';
 import { Environment } from '../classes/Environment';
+import Inventory from '../classes/Inventory';
+import Tablet from "../classes/Tablet";
+import { CharacterState } from '../classes/CharacterState';
 
 export class Game {
   private _scene: Scene;
@@ -13,21 +17,24 @@ export class Game {
   private _player;
   private _environment;
   private _shadowGenerator;
+  private _canvas: any;
+  private _inventory;
+  private _tablet: Tablet;
+  public quests: Quests;
+  private _characterState: CharacterState;
 
-  constructor(engine: Engine, callback) {
+  constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
     this._scene = new Scene(engine);
+    this._canvas = canvas;
     this._scene.clearColor = new Color4(0, 0, 0, 1);
-    this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(9, 7, 0), this._scene);
-    //const light = new HemisphericLight("light", new Vector3(0, 1, 0), this._scene);
+    this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(10, 10, 0), this._scene);
 
     this._createSkyBox();
-
 
     const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
     sun.diffuse = new Color3(1, 1, 1);
     sun.specular = new Color3(1, 1, 1);
-
 
     // shadow
     var light2 = new DirectionalLight("dir01", new Vector3(0, -1, -1), this._scene);
@@ -47,9 +54,14 @@ export class Game {
     this._environment = new Environment(this._scene, this._shadowGenerator);
 
     this._player = new Player(this._scene, this._shadowGenerator);
+    
+    //GUI
+    this._inventory = new Inventory(this._scene, this._canvas);
+    this._tablet = new Tablet(this._scene, this._canvas);
+    this.quests = new Quests(this._scene, this._canvas);
+    this._characterState = new CharacterState(this._scene);
 
     setTimeout(this.slowpoke.bind(this), 1500);
-
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,

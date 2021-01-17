@@ -38,7 +38,8 @@ export class App {
   }
 
   private async _main(): Promise<void> {
-    await this._goToStart();
+    //await this._goToStart();
+    await this._goToGameScene();
     this._engine.runRenderLoop(() => {
       this._scene.render();
     });
@@ -73,7 +74,7 @@ export class App {
   }
 
   private async _goToGameScene(): Promise<void> {
-    const scene = new Game(this._engine, null).getScene();
+    const scene = new Game(this._engine, null, this._canvas).getScene();
     await this._goToScene(State.GAME, scene);
   }
 }
