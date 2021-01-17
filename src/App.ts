@@ -1,7 +1,7 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import "@babylonjs/loaders/glTF";
-import { Engine, Scene, Vector3, Mesh, Color3, Color4, ShadowGenerator, GlowLayer, PointLight, FreeCamera, CubeTexture, Sound, PostProcess, Effect, SceneLoader, Matrix, MeshBuilder, Quaternion, AssetsManager } from "@babylonjs/core";
+import { Engine, Scene, Effect } from "@babylonjs/core";
 import { MainMenu } from "./scenes/MainMenu";
 import { CutScene } from "./scenes/CutScene";
 import { Game } from "./scenes/Game";

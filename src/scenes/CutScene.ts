@@ -63,12 +63,13 @@ export class CutScene {
     const playBtn = Button.CreateImageWithCenterTextButton(
       "play",
       "PLAY",
-      "./assets/images/gui/button.png"
+      "./assets/images/gui/button2.png"
     );
     playBtn.fontFamily = "Arial";
     playBtn.width = 0.2
     playBtn.height = "70px";
-    playBtn.color = "white";
+    playBtn.fontWeight = "bold";
+    playBtn.color = "rgb(19, 55, 90)";
     playBtn.top = "-25%";
     playBtn.thickness = 0;
     playBtn.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;

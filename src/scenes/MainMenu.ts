@@ -1,4 +1,4 @@
-import { Engine, Scene, Vector3, Mesh, Color4, FreeCamera, Sound, PostProcess, Effect, AssetsManager } from "@babylonjs/core";
+import { Engine, Scene, Vector3, Color4, FreeCamera, Sound, PostProcess } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
 
 export class MainMenu {
@@ -36,22 +36,25 @@ export class MainMenu {
     const logo = new Image("logo", "./assets/images/gui/logo.png");
     logo.width = 0.5;
     logo.height = 0.3;
-    logo.top = "-20%";
+    logo.top = "10%";
+    logo.left = "-25%";
     imageRectBg.addControl(logo);
 
     const startBtn = Button.CreateImageWithCenterTextButton(
       "start",
       "START GAME",
-      "./assets/images/gui/button.png"
+      "./assets/images/gui/button2.png"
     );
-
     startBtn.fontFamily = "Arial";
-    startBtn.width = 0.2
-    startBtn.height = "70px";
-    startBtn.color = "white";
-    startBtn.top = "-25%";
+    startBtn.width = "250px"
+    startBtn.height = "70px"; 
+    startBtn.color = "rgb(19, 55, 90)";
+    startBtn.fontWeight = "bold";
+    startBtn.top = "80%";
+    startBtn.left = "-25%";
     startBtn.thickness = 0;
     startBtn.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+    startBtn.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
     imageRectBg.addControl(startBtn);
 
     let fadeLevel = 1.0;

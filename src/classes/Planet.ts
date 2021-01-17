@@ -1,4 +1,4 @@
-import { Mesh, Space, StandardMaterial, Texture } from '@babylonjs/core';
+import { Space, StandardMaterial, Texture } from '@babylonjs/core';
 import { MeshBuilder, Scene, Vector3 } from '@babylonjs/core';
 
 export class Planet {
@@ -24,6 +24,7 @@ export class Planet {
         const planetTexture = new StandardMaterial("planetTexture", this._scene);
         const texture = new Texture(this._texture, this._scene);
         planetTexture.diffuseTexture = texture;
+        planetTexture.bumpTexture = new Texture("../assets/images/backgrounds/bump.jpg", this._scene);
         this._planet.material = planetTexture;
     }
 
