@@ -9,6 +9,8 @@ export default class Tablet {
     private _canvas: any;
     public encyclopedia: Array<object>;
     public quests: Array<object>;
+    private _callback: Function; // callback
+    private _isOpened: boolean = false;
 
 
     constructor(scene: Scene, canvas){
@@ -21,6 +23,10 @@ export default class Tablet {
         this.encyclopedia = [];
         this.quests = [];
 
+    }
+
+    setCallback(callback: Function) {
+      this._callback = callback;
     }
 
     createGUI () {
@@ -42,20 +48,33 @@ export default class Tablet {
         tabletButton.height = "100px";
         tabletButton.thickness = 0;
         this._tabletGui.addControl(tabletButton);
-        this._tabletButton = tabletButton; 
+        this._tabletButton = tabletButton;
     }
 
     openTablet () {
         this._tabletButton.onPointerDownObservable.add(() => {
+          if (this._isOpened) {
+            console.log("close tablet");
+            if (this._callback) {
+              this._callback('close');
+            }
+            this._isOpened = false;
+          } else {
             console.log("tablet open");
+            if (this._callback) {
+              this._callback('open');
+            }
+            this._isOpened = true;
+          }
         });
     }
 
-    closeTablet () {
+    /*closeTablet () {
         this._canvas.addEventListener("click", () =>{
             console.log("close tablet");
+            this._callback('open');
         })
-    }
+    }*/
 
 
     //settings section
@@ -98,7 +117,7 @@ export default class Tablet {
 
     }
 
-    //quest section 
+    //quest section
 
     createQuestsSection () {
 
@@ -119,6 +138,6 @@ export default class Tablet {
     }
 
     setQuestStatus () {
-        
+
     }
 }

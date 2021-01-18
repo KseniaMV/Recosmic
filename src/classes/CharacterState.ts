@@ -13,6 +13,7 @@ export class CharacterState {
     private _effectGui: AdvancedDynamicTexture;
     private _effectName: TextBlock;
     private _effectButton: Button;
+    private _isBlocked: boolean = false;
 
     constructor (scene: Scene) {
         this._scene = scene;
@@ -26,8 +27,10 @@ export class CharacterState {
     createCharacterStateGUI () {
         const stateGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._stateGUI  = stateGUI;
+    }
 
-
+    public block (flag: boolean) {
+      this._isBlocked = flag;
     }
 
     createHealth () {
@@ -48,7 +51,7 @@ export class CharacterState {
         this._stateGUI.addControl(health);
         this._health = health;
         this._health.onPointerEnterObservable.add(()=>{
-          this.effectOnHover(this._health);          
+          this.effectOnHover(this._health);
         });
         this._health.onPointerOutObservable.add(()=>{
             this._effectGui.removeControl(this._effectButton);
@@ -98,7 +101,7 @@ export class CharacterState {
         this._stateGUI.addControl(effect1);
         this._effect1 = effect1;
         this._effect1.onPointerEnterObservable.add(()=>{
-            this.effectOnHover(this._effect1);
+          this.effectOnHover(this._effect1);
         });
         this._effect1.onPointerOutObservable.add(()=>{
             this._effectGui.removeControl(this._effectButton);
@@ -149,6 +152,7 @@ export class CharacterState {
 
 
     effectOnHover (effect) {
+      if (!this._isBlocked) {
         const effectGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._effectGui = effectGUI;
         const effectButton = Button.CreateImageWithCenterTextButton(
@@ -166,6 +170,7 @@ export class CharacterState {
         effectButton.color = "white";
         this._effectGui.addControl(effectButton)
         this._effectButton = effectButton;
+      }
     }
 
     upHP () {
@@ -181,7 +186,7 @@ export class CharacterState {
     }
 
     setHP (hp: number) {
-      const id = 21 - Math.ceil(21 / 100 * hp);
+      const id = 21 - Math.floor(20 / 100 * hp);
       this._health.cellId = id;
     }
 
@@ -198,7 +203,7 @@ export class CharacterState {
     }
 
     setCarma (carma: number) {
-      const id = Math.ceil(21 / 100 * carma);
+      const id = Math.floor(20 / 100 * carma);
       this._carma.cellId = id;
     }
 

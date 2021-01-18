@@ -1,4 +1,4 @@
-import { Scene, ShadowGenerator, GlowLayer, ParticleSystem, Quaternion, Vector3,PBRMaterial, Mesh,StandardMaterial, Texture, Color4, Color3, CubeTexture, Sound, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
+import { Scene, ShadowGenerator, GlowLayer, HighlightLayer, ParticleSystem, Quaternion, Vector3,PBRMaterial, Mesh,StandardMaterial, Texture, Color4, Color3, CubeTexture, Sound, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
 
 export class Environment {
   private _scene: Scene;
@@ -9,10 +9,12 @@ export class Environment {
   private _playerPoint;
   private _runAfterLoaded: Function;
   private _saveParticleSystem;
+  private _highlightLayer;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
     this._shadowGenerator = shadow;
+    this._highlightLayer = new HighlightLayer("highlightEnv", this._scene);
 
     SceneLoader.ImportMesh("", "./assets/models/", "firstLevel.glb", this._scene, this._setEnvironment.bind(this));
   }
@@ -46,7 +48,7 @@ export class Environment {
       }
 
       if (mesh.name === 'player') {
-        console.log('p');
+        console.log('Player point was found');
         mesh.isVisible = false;
         this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
       }
@@ -84,6 +86,7 @@ export class Environment {
           const glowStation = new GlowLayer("glowStation", this._scene, { mainTextureSamples: 2 });
           this._createSaveStationParticles(mesh);
         }
+
       }
 
 
@@ -169,5 +172,14 @@ export class Environment {
     setTimeout(() => {
       this._saveParticleSystem.stop();
     }, 500);
+  }
+
+  public addMeshToHighlight(meshName) {
+    const mesh = this._scene.getMeshByName(meshName);
+    this._highlightLayer.addMesh(mesh, Color3.Green());
+  }
+
+  public removeMeshToHighlight(meshName) {
+    this._highlightLayer.removeAllMeshes();
   }
 }

@@ -76,6 +76,10 @@ export class Game {
     this._tablet = new Tablet(this._scene, this._canvas);
     this.quests = new Quests(this._scene, this._canvas);
     this._characterState = new CharacterState(this._scene);
+
+    // set callback to tablet
+    this._tablet.setCallback(this._funcForTablet.bind(this));
+
     // CharacterState test
     window.addEventListener('click',(function(){
       this._player.setHealth(this._player.getHealth() - 5);
@@ -112,23 +116,15 @@ export class Game {
       this._player.update();
 
     });
+  }
 
-
-    // test autosave
-    /*setTimeout(() => {
-      const info = new PlayerInfo();
-      info.setMap('firstLevel');
-      info.setPosition(JSON.stringify([
-        this._player.getMesh().position.x,
-        this._player.getMesh().position.y,
-        this._player.getMesh().position.z
-      ]));
-      info.setHealth(this._player.getHealth());
-      info.setKarma(this._player.getKarma());
-      info.setLookAtAngle(this._player.getLookAtAngle());
-      LoadGame.save(info);
-    }, 15000);*/
-
+  private _funcForTablet(str: string) {
+    if (str === 'open') {
+      this._characterState.block(true);
+    } else {
+      this._characterState.block(false);
+    }
+    console.log('This is from Tablet: ' + str);
   }
 
   public setSavedGame(info: PlayerInfo) {
@@ -146,7 +142,6 @@ export class Game {
   private _updateState() {
     this._characterState.setHP(this._player.getHealth());
     this._characterState.setCarma(this._player.getKarma());
-    console.log(this._player.getKarma());
   }
 
   private _actionAfterChose(object: string, action: string) {
@@ -157,7 +152,9 @@ export class Game {
     //console.log(name);
     if (!this._choiseBox.getIsChose() && name.includes('active_tree')) {
       this._choiseBox.setShow(true, name);
+      this._environment.addMeshToHighlight(name);
     } else {
+      this._environment.removeMeshToHighlight(name);
       this._choiseBox.setShow(false);
       if (this._choiseBox.getIsChose()) {
         setTimeout(() => {
@@ -165,6 +162,12 @@ export class Game {
         }, 5000);
       }
     }
+
+    /*if (name.includes('active')) {
+      this._environment.addMeshToHighlight(name);
+    } else {
+      this._environment.removeMeshToHighlight(name);
+    }*/
 
     if (name.includes('savestation')) {
       this._environment.startSaveParticles();
