@@ -54,7 +54,9 @@ export class CharacterState {
           this.effectOnHover(this._health);
         });
         this._health.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+          if (this._effectGui) {
+            this.removeHover();
+          }
         });
     }
 
@@ -80,7 +82,7 @@ export class CharacterState {
             this.effectOnHover(this._carma);
         });
         this._carma.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
 
     }
@@ -104,7 +106,7 @@ export class CharacterState {
           this.effectOnHover(this._effect1);
         });
         this._effect1.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
 
         const effect2 =  new Image("effect2", "../assets/sprites2/effect2.png");
@@ -125,7 +127,7 @@ export class CharacterState {
             this.effectOnHover(this._effect2);
         });
         this._effect2.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
 
         const effect3 =  new Image("effect3", "../assets/sprites2/effect3.png");
@@ -146,10 +148,15 @@ export class CharacterState {
             this.effectOnHover(this._effect3);
         });
         this._effect3.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
     }
 
+    removeHover() {
+      if (this._effectGui) {
+        this._effectGui.removeControl(this._effectButton);
+      }
+    }
 
     effectOnHover (effect) {
       if (!this._isBlocked) {
