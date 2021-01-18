@@ -180,6 +180,11 @@ export class CharacterState {
       }
     }
 
+    setHP (hp: number) {
+      const id = 21 - Math.ceil(21 / 100 * hp);
+      this._health.cellId = id;
+    }
+
     upCarma () {
       if (this._carma.cellId < 20) {
         this._carma.cellId++;
@@ -190,6 +195,11 @@ export class CharacterState {
       if (this._carma.cellId > 0) {
         this._carma.cellId--;
       }
+    }
+
+    setCarma (carma: number) {
+      const id = Math.ceil(21 / 100 * carma);
+      this._carma.cellId = id;
     }
 
     setEffect (effect) {

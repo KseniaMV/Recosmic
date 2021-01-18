@@ -1,13 +1,19 @@
 import { Engine, Scene, Vector3, Color4, FreeCamera, Sound, PostProcess } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control, Image } from "@babylonjs/gui";
+import { PlayerInfo } from "../classes/PlayerInfo";
+import { LoadGame } from "../classes/LoadGame";
 
 export class MainMenu {
   private _scene: Scene;
   private _transition: boolean;
   private _callback;
+  private _callback2;
+  private _currentCallback;
+  private _info;
 
-  constructor(engine: Engine, callback) {
+  constructor(engine: Engine, callback, callback2) {
     this._callback = callback;
+    this._callback2 = callback2;
     this._scene = new Scene(engine);
     this._scene.clearColor = new Color4(0, 0, 0, 1);
 
@@ -47,7 +53,7 @@ export class MainMenu {
     );
     startBtn.fontFamily = "Arial";
     startBtn.width = "250px"
-    startBtn.height = "70px"; 
+    startBtn.height = "70px";
     startBtn.color = "rgb(19, 55, 90)";
     startBtn.fontWeight = "bold";
     startBtn.top = "80%";
@@ -57,6 +63,25 @@ export class MainMenu {
     startBtn.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
     imageRectBg.addControl(startBtn);
 
+    // load game
+    const loadBtn = Button.CreateImageWithCenterTextButton(
+      "load",
+      "LOAD GAME",
+      "./assets/images/gui/button2.png"
+    );
+    loadBtn.fontFamily = "Arial";
+    loadBtn.width = "250px"
+    loadBtn.height = "70px";
+    loadBtn.color = "rgb(19, 55, 90)";
+    loadBtn.fontWeight = "bold";
+    loadBtn.top = "60%";
+    loadBtn.left = "-25%";
+    loadBtn.thickness = 0;
+    loadBtn.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+    loadBtn.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+    imageRectBg.addControl(loadBtn);
+
+
     let fadeLevel = 1.0;
     this._transition = false;
     this._scene.registerBeforeRender(() => {
@@ -64,12 +89,20 @@ export class MainMenu {
         fadeLevel -= .05;
         if (fadeLevel <= 0) {
           this._transition = false;
-          this._callback();
+
+          if (this._info) {
+            this._currentCallback(this._info);
+          } else {
+            this._currentCallback();
+          }
+
         }
       }
     });
 
     startBtn.onPointerDownObservable.add(() => {
+      this._currentCallback = callback2;
+
       const postProcess = new PostProcess("Fade", "fade", ["fadeLevel"], null, 1.0, camera);
       postProcess.onApply = (effect) => {
         effect.setFloat("fadeLevel", fadeLevel);
@@ -81,6 +114,26 @@ export class MainMenu {
       music.stop();
 
       this._scene.detachControl();
+    });
+
+    loadBtn.onPointerDownObservable.add(() => {
+      if (localStorage.getItem("health")) {
+        this._info = LoadGame.load();
+
+        this._currentCallback = callback2;
+
+        const postProcess = new PostProcess("Fade", "fade", ["fadeLevel"], null, 1.0, camera);
+        postProcess.onApply = (effect) => {
+          effect.setFloat("fadeLevel", fadeLevel);
+        };
+
+        this._transition = true;
+
+        sfxClick.play();
+        music.stop();
+
+        this._scene.detachControl();
+      }
     });
   }
 

@@ -69,16 +69,10 @@ export class Environment {
         mesh.isPickable = true;
       }
 
-      if (mesh.name === 'roud') {
-        /*var materialSphere1 = new StandardMaterial("texture1", this._scene);
-        materialSphere1.wireframe = true;
-        mesh.material = materialSphere1;*/
-
-      }
-
 
       if (mesh.name === 'Plane' || mesh.name === 'ground' || mesh.name === 'roud') {
           mesh.isPickable = false;
+          mesh.checkCollisions = true;
       }
 
       if (mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('Stone')) {

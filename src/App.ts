@@ -6,6 +6,7 @@ import { MainMenu } from "./scenes/MainMenu";
 import { CutScene } from "./scenes/CutScene";
 import { Game } from "./scenes/Game";
 import { Story } from "./scenes/Story";
+import { PlayerInfo } from "./classes/PlayerInfo";
 
 enum State { START = 0, GAME = 1, CUTSCENE = 3, STORY = 4 };
 
@@ -64,7 +65,7 @@ export class App {
   }
 
   private async _goToStart(): Promise<void> {
-    const scene = new MainMenu(this._engine, this._goToStory.bind(this)).getScene();
+    const scene = new MainMenu(this._engine, this._goToStory.bind(this), this._goToGameScene.bind(this)).getScene();
     await this._goToScene(State.START, scene);
   }
 
@@ -73,8 +74,10 @@ export class App {
     await this._goToScene(State.CUTSCENE, scene);
   }
 
-  private async _goToGameScene(): Promise<void> {
-    const scene = new Game(this._engine, null, this._canvas).getScene();
+  private async _goToGameScene(info: PlayerInfo): Promise<void> {
+    const game = new Game(this._engine, null, this._canvas);
+    const scene = game.getScene();
     await this._goToScene(State.GAME, scene);
+    game.setSavedGame(info);
   }
 }

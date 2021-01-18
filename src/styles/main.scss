@@ -28,6 +28,14 @@ video {
     transform: translate(-50%, -50%);
 }
 
+.skipButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 100px;
+    height: 50px;
+}
+
 .inventoryButton{
     width: 80px;
     height: 50px;
@@ -41,4 +49,3 @@ video {
     border: none;
     cursor: pointer;
 }
-
