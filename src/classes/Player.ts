@@ -152,7 +152,7 @@ export class Player {
   }
 
   raycastCollisions() {
-    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree');
+    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('savestation');
     const length = 1.5;
     let forward = new Vector3(0, 0, 1);
     //const stopWalking = (hit) => this._speed  = -this._VELOCITY;

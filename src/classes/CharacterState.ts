@@ -48,7 +48,7 @@ export class CharacterState {
         this._stateGUI.addControl(health);
         this._health = health;
         this._health.onPointerEnterObservable.add(()=>{
-            this.effectOnHover(this._health);
+          this.effectOnHover(this._health);          
         });
         this._health.onPointerOutObservable.add(()=>{
             this._effectGui.removeControl(this._effectButton);

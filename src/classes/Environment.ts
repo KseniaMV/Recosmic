@@ -1,4 +1,4 @@
-import { Scene, ShadowGenerator,Quaternion, Vector3,PBRMaterial, Mesh,StandardMaterial, Texture, Color4, Color3, CubeTexture, Sound, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
+import { Scene, ShadowGenerator, GlowLayer, ParticleSystem, Quaternion, Vector3,PBRMaterial, Mesh,StandardMaterial, Texture, Color4, Color3, CubeTexture, Sound, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
 
 export class Environment {
   private _scene: Scene;
@@ -8,6 +8,7 @@ export class Environment {
   private _allMeshes;
   private _playerPoint;
   private _runAfterLoaded: Function;
+  private _saveParticleSystem;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
@@ -75,9 +76,14 @@ export class Environment {
           mesh.checkCollisions = true;
       }
 
-      if (mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('Stone')) {
+      if (mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('Stone') || mesh.name.includes('savestation')) {
         this._shadowGenerator.getShadowMap().renderList.push(mesh);
         mesh.receiveShadows = false;
+
+        if (mesh.name.includes('savestation')) {
+          const glowStation = new GlowLayer("glowStation", this._scene, { mainTextureSamples: 2 });
+          this._createSaveStationParticles(mesh);
+        }
       }
 
 
@@ -112,5 +118,56 @@ export class Environment {
 
   public getPlayerPoint() {
     return this._playerPoint;
+  }
+
+
+
+  private _createSaveStationParticles(mesh) {
+    this._saveParticleSystem = new ParticleSystem("save_particles", 2000, this._scene);
+    this._saveParticleSystem.particleTexture = new Texture("../assets/textures/flare.png", this._scene);
+    this._saveParticleSystem.emitter = mesh;
+    this._saveParticleSystem.minEmitBox = new Vector3(-1, 0, 0);
+    this._saveParticleSystem.maxEmitBox = new Vector3(1, 0, 0);
+
+    this._saveParticleSystem.color1 = new Color4(0.7, 0.8, 1.0, 1.0);
+    this._saveParticleSystem.color2 = new Color4(0.2, 0.5, 1.0, 1.0);
+    this._saveParticleSystem.colorDead = new Color4(0, 0, 0.2, 0.0);
+
+    // Size of each particle (random between...
+    this._saveParticleSystem.minSize = 0.1;
+    this._saveParticleSystem.maxSize = 0.5;
+
+    // Life time of each particle (random between...
+    this._saveParticleSystem.minLifeTime = 0.3;
+    this._saveParticleSystem.maxLifeTime = 1.5;
+
+    // Emission rate
+    this._saveParticleSystem.emitRate = 1500;
+
+    // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
+    this._saveParticleSystem.blendMode = ParticleSystem.BLENDMODE_ONEONE;
+
+    // Set the gravity of all particles
+    this._saveParticleSystem.gravity = new Vector3(0, -9.81, 0);
+
+    // Direction of each particle after it has been emitted
+    this._saveParticleSystem.direction1 = new Vector3(-7, 8, 3);
+    this._saveParticleSystem.direction2 = new Vector3(7, 8, -3);
+
+    // Angular speed, in radians
+    this._saveParticleSystem.minAngularSpeed = 0;
+    this._saveParticleSystem.maxAngularSpeed = Math.PI;
+
+    // Speed
+    this._saveParticleSystem.minEmitPower = 1;
+    this._saveParticleSystem.maxEmitPower = 3;
+    this._saveParticleSystem.updateSpeed = 0.005;
+  }
+
+  public startSaveParticles() {
+    this._saveParticleSystem.start();
+    setTimeout(() => {
+      this._saveParticleSystem.stop();
+    }, 500);
   }
 }

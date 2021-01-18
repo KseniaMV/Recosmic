@@ -115,7 +115,7 @@ export class Game {
 
 
     // test autosave
-    setTimeout(() => {
+    /*setTimeout(() => {
       const info = new PlayerInfo();
       info.setMap('firstLevel');
       info.setPosition(JSON.stringify([
@@ -127,7 +127,7 @@ export class Game {
       info.setKarma(this._player.getKarma());
       info.setLookAtAngle(this._player.getLookAtAngle());
       LoadGame.save(info);
-    }, 15000);
+    }, 15000);*/
 
   }
 
@@ -164,6 +164,22 @@ export class Game {
             this._choiseBox.setIsChose(false);
         }, 5000);
       }
+    }
+
+    if (name.includes('savestation')) {
+      this._environment.startSaveParticles();
+
+      const info = new PlayerInfo();
+      info.setMap('firstLevel');
+      info.setPosition(JSON.stringify([
+        this._player.getMesh().position.x,
+        this._player.getMesh().position.y,
+        this._player.getMesh().position.z
+      ]));
+      info.setHealth(this._player.getHealth());
+      info.setKarma(this._player.getKarma());
+      info.setLookAtAngle(this._player.getLookAtAngle());
+      LoadGame.save(info);
     }
   }
 
