@@ -48,11 +48,16 @@ export class Game {
     light2.position = new Vector3(0, 50, 30);
 
     light2.diffuse = new Color3(1, 1, 1);
-	   light2.specular = new Color3(0.7, 0.7, 0.9);
-     //light2.intensity = 10;
+	   light2.specular = new Color3(0.9, 0.7, 0.9);
+     light2.intensity = 3.5;
 
     this._shadowGenerator = new ShadowGenerator(1024, light2);
     this._shadowGenerator.usePoissonSampling = true;
+    this._shadowGenerator.useBlurExponentialShadowMap = true;
+    this._shadowGenerator.blurKernel = 32;
+    this._shadowGenerator.blurBoxOffset = 1;
+    this._shadowGenerator.blurScale = 1.0;
+    this._shadowGenerator.setDarkness(0.3);
 
     // for fps camera
     this._scene.gravity = new Vector3(0, -0.9, 0);
@@ -149,7 +154,7 @@ export class Game {
     console.log('creating animals...');
     const animalPositions = this._environment.getAnimals();
     animalPositions.forEach(item => {
-      const animal = new Animal(item.name, this._scene, this._shadowGenerator);
+      const animal = new Animal(item.name, this._scene, this._shadowGenerator);      
       animal.setOriginPosition(item.position);
     });
   }

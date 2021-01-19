@@ -18,6 +18,7 @@ export class Animal {
 
   private _setModel (newMeshes, particleSystems, skeletons, animationGroups) {
     this._model = newMeshes[0];
+    this._model.scaling.scaleInPlace(0.7);
     this._model.name = this._name;
     //this._model.scaling.scaleInPlace(0.5);
 
