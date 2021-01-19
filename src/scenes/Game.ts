@@ -20,9 +20,10 @@ export class Game {
   private _shadowGenerator;
   private _canvas: any;
   private _inventory;
-  private _tablet: Tablet;
+  public   tablet: Tablet;
   public quests: Quests;
-  private _characterState: CharacterState;
+  public characterState: CharacterState;
+  private _choiseBox: any;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -60,11 +61,6 @@ export class Game {
     this._player = new Player(this._scene, this._shadowGenerator);
     this._player.setCollisionCallback(this._checkCollisions.bind(this));
 
-    //GUI
-    this._inventory = new Inventory(this._scene, this._canvas);
-    this._tablet = new Tablet(this._scene, this._canvas);
-    this.quests = new Quests(this._scene, this._canvas);
-    this._characterState = new CharacterState(this._scene);
     // CharacterState test
     window.addEventListener('click',(function(){
       this._characterState.downHP();
@@ -100,6 +96,14 @@ export class Game {
       this._player.update();
 
     });
+    this.createUI();
+  }
+
+  private createUI () {
+    this._inventory = new Inventory(this._scene, this._canvas);
+    this.quests = new Quests(this._scene, this._canvas);
+    this.tablet = new Tablet(this._scene, this._canvas, this.checkOpenUI);
+    this.characterState = new CharacterState(this._scene);
   }
 
   private _actionAfterChose(object: string, action: string) {
@@ -132,7 +136,6 @@ export class Game {
       skybox.material = skyboxMaterial;
     }
 
-
   getScene() {
     return this._scene;
   }
@@ -144,6 +147,12 @@ export class Game {
     };
     this._transition = true;
     this._scene.detachControl();
+  }
+
+  public checkOpenUI(flag:boolean) {
+    if(flag === true ) {
+      this.characterState.removeHoverEffect();
+    }
   }
 
 }

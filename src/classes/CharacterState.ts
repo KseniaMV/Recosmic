@@ -1,5 +1,6 @@
 import { Scene } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Control, Image, TextBlock } from "@babylonjs/gui";
+import Tablet from "./Tablet";
 
 export class CharacterState {
     private _stateGUI: AdvancedDynamicTexture;
@@ -14,20 +15,18 @@ export class CharacterState {
     private _effectName: TextBlock;
     private _effectButton: Button;
 
+   
     constructor (scene: Scene) {
         this._scene = scene;
         this.createCharacterStateGUI();
         this.createHealth();
         this.createKarma();
         this.createEffect();
-
     }
 
     createCharacterStateGUI () {
         const stateGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._stateGUI  = stateGUI;
-
-
     }
 
     createHealth () {
@@ -82,6 +81,10 @@ export class CharacterState {
 
     }
 
+   public removeHoverEffect () {
+        this._effectGui.removeControl(this._effectButton);
+    }
+
     createEffect () {
         const effect1 =  new Image("effect1", "../assets/sprites2/effect1.png");
         effect1.width = "50px";
@@ -103,6 +106,8 @@ export class CharacterState {
         this._effect1.onPointerOutObservable.add(()=>{
             this._effectGui.removeControl(this._effectButton);
         });
+
+
 
         const effect2 =  new Image("effect2", "../assets/sprites2/effect2.png");
         effect2.width = "50px";
@@ -167,6 +172,7 @@ export class CharacterState {
         this._effectGui.addControl(effectButton)
         this._effectButton = effectButton;
     }
+
 
     upHP () {
       if (this._health.cellId > 0) {

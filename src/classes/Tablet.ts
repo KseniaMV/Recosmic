@@ -1,5 +1,5 @@
-import { Scene } from "@babylonjs/core";
-import { AdvancedDynamicTexture, Button, Rectangle, Control, Image, StackPanel } from "@babylonjs/gui";
+import { DivideBlock, Scene, TransformNode } from "@babylonjs/core";
+import { AdvancedDynamicTexture, Button, Rectangle, Control, Image, StackPanel, PlanePanel, HolographicButton, GUI3DManager } from "@babylonjs/gui";
 
 export default class Tablet {
     private _scene: any;
@@ -9,18 +9,18 @@ export default class Tablet {
     private _canvas: any;
     public encyclopedia: Array<object>;
     public quests: Array<object>;
+    public isTabletOpen: boolean;
+    callback: Function;
 
-
-    constructor(scene: Scene, canvas){
+    constructor(scene: Scene, canvas, callback){
         this._scene = scene;
         this._canvas = canvas;
-
         this.createGUI();
         this.createTabletButton();
         this.openTablet();
         this.encyclopedia = [];
         this.quests = [];
-
+        this.isTabletOpen = false;
     }
 
     createGUI () {
@@ -45,9 +45,35 @@ export default class Tablet {
         this._tabletButton = tabletButton; 
     }
 
-    openTablet () {
+    createTablet () {
+        const tabletBG = new Rectangle("tabletBackground");
+            tabletBG.width = 1;
+            tabletBG.thickness = 0;
+            this._tabletGui.addControl(tabletBG);
+                const bgImage = new Image("bgImage", "./assets/images/backgrounds/tabletBg.png");
+                tabletBG.addControl(bgImage);
+
+                const settingsButton = Button.CreateImageWithCenterTextButton(
+                    "settings",
+                    "",
+                    "./assets/images/gui/settings.svg"
+                );
+                settingsButton.width = "80px"
+                settingsButton.height = "80px"; 
+                settingsButton.color = "rgb(255,255,255)";
+                settingsButton.top = "-35%";
+                settingsButton.left = "-40%";
+                settingsButton.thickness = 0;
+                tabletBG.addControl(settingsButton);
+                tabletBG.isVisible = true; 
+    }
+
+    openTablet (){
         this._tabletButton.onPointerDownObservable.add(() => {
-            console.log("tablet open");
+            this.isTabletOpen = true;
+            const fn = this.callback;
+            fn(this.isTabletOpen);
+            this.createTablet();
         });
     }
 
