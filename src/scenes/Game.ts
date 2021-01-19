@@ -139,9 +139,9 @@ export class Game {
     this._player.setHealth(Number.parseInt(info.getHealth()));
     this._player.setKarma(Number.parseInt(info.getKarma()));
     this._player.setLookAtAngle(Number.parseFloat(info.getLookAtAngle()));
-    const x = info.getPosition().x;
-    const y = info.getPosition().y;
-    const z = info.getPosition().z;
+    const x = info.getPosition()[0];
+    const y = info.getPosition()[1];
+    const z = info.getPosition()[2];
     this._player.setOriginPosition(new Vector3(x, y, z));
     this._updateState();
   }

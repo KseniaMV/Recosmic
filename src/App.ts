@@ -78,6 +78,7 @@ export class App {
     const game = new Game(this._engine, null, this._canvas);
     const scene = game.getScene();
     await this._goToScene(State.GAME, scene);
+    console.log(info)
     game.setSavedGame(info);
   }
 }
