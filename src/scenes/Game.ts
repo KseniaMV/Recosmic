@@ -10,6 +10,7 @@ import Tablet from "../classes/Tablet";
 import { CharacterState } from '../classes/CharacterState';
 import { PlayerInfo } from '../classes/PlayerInfo';
 import { LoadGame } from '../classes/LoadGame';
+import { Animal } from '../classes/Animal';
 
 export class Game {
   private _scene: Scene;
@@ -144,8 +145,17 @@ export class Game {
     this._characterState.setCarma(this._player.getKarma());
   }
 
-  private _actionAfterChose(object: string, action: string) {
-    console.log(`${object} --- ${action}`);
+  private _createAnimals() {
+    console.log('creating animals...');
+    const animalPositions = this._environment.getAnimals();
+    animalPositions.forEach(item => {
+      const animal = new Animal(item.name, this._scene, this._shadowGenerator);
+      animal.setOriginPosition(item.position);
+    });
+  }
+
+  private _actionAfterChose(name: string, action: string) {
+    console.log(`${name} --- ${action}`);
   }
 
   private _checkCollisions(name) {
@@ -188,6 +198,8 @@ export class Game {
 
   setToStartPosition() {
     this._player.setOriginPosition(this._environment.getPlayerPoint());
+
+    this._createAnimals();
   }
 
 

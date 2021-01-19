@@ -10,11 +10,13 @@ export class Environment {
   private _runAfterLoaded: Function;
   private _saveParticleSystem;
   private _highlightLayer;
+  private _animals;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
     this._shadowGenerator = shadow;
     this._highlightLayer = new HighlightLayer("highlightEnv", this._scene);
+    this._animals = [];
 
     SceneLoader.ImportMesh("", "./assets/models/", "firstLevel.glb", this._scene, this._setEnvironment.bind(this));
   }
@@ -66,10 +68,22 @@ export class Environment {
       if (mesh.name.includes('wall'))  {
         mesh.isVisible = false;
         mesh.isPickable = true;
-
+        mesh.checkCollisions = true;
       }
+
+      if (mesh.name.includes('animal')) {
+        console.log("animal position was found");
+        mesh.isVisible = false;
+        this._animals.push({
+          name: mesh.name,
+          position: mesh.position
+        });
+      }
+
+
       if(mesh.name.includes("Cube")) {
         mesh.isPickable = true;
+        mesh.checkCollisions = true;
       }
 
 
@@ -121,6 +135,10 @@ export class Environment {
 
   public getPlayerPoint() {
     return this._playerPoint;
+  }
+
+  public getAnimals() {
+    return this._animals;
   }
 
 
