@@ -101,7 +101,8 @@ export class MainMenu {
     });
 
     startBtn.onPointerDownObservable.add(() => {
-      this._currentCallback = callback2;
+      this._info = null;
+      this._currentCallback = callback;
 
       const postProcess = new PostProcess("Fade", "fade", ["fadeLevel"], null, 1.0, camera);
       postProcess.onApply = (effect) => {
