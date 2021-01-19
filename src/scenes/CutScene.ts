@@ -107,7 +107,7 @@ export class CutScene {
           inf.setHealth(100);
           inf.setKarma(0);
           inf.setLookAtAngle(0);
-          inf.setPosition(new Vector3(1,3,0));
+          inf.setPosition([1,2,0]);
 
           this._callback(inf);
 
