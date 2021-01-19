@@ -60,7 +60,9 @@ export class ChoiseBox {
   }
 
   public setShow(isShow: boolean, name: string) {
-    this._objectName = name;
+    if (name) {
+      this._objectName = name;
+    }
     this._attackButton.isVisible = isShow;
     this._investigateButton.isVisible = isShow;
   }

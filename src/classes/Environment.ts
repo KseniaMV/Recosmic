@@ -74,6 +74,8 @@ export class Environment {
       if (mesh.name.includes('animal')) {
         console.log("animal position was found");
         mesh.isVisible = false;
+        mesh.isPickable = true;
+        mesh.checkCollisions = true;
         this._animals.push({
           name: mesh.name,
           position: mesh.position

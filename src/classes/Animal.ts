@@ -19,12 +19,10 @@ export class Animal {
   private _setModel (newMeshes, particleSystems, skeletons, animationGroups) {
     this._model = newMeshes[0];
     this._model.name = this._name;
-    this._model.scaling.scaleInPlace(0.5);
+    //this._model.scaling.scaleInPlace(0.5);
 
     if (this._originPosition) {
       this._model.position = this._originPosition;
-    } else {
-        this._model.position = new Vector3(1, 2, 0);
     }
 
     this._model.isPickable = true;
@@ -35,7 +33,6 @@ export class Animal {
     this._allMeshes.forEach(mesh => {
       mesh.isPickable = true;
       mesh.checkCollisions = true;
-      console.log(mesh.name)
       this._shadowGenerator.getShadowMap().renderList.push(mesh);
       mesh.receiveShadows = false;
     });
