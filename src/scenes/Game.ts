@@ -22,6 +22,7 @@ export class Game {
   private _environment;
   private _shadowGenerator;
   private _savedGame: PlayerInfo;
+  private _skybox;
   private _canvas: any;
   private _inventory;
   private _tablet: Tablet;
@@ -206,17 +207,32 @@ export class Game {
     this._player.setOriginPosition(this._environment.getPlayerPoint());
 
     this._createAnimals();
+
+    this._environment.addToWaterRender(this._skybox);
+    this._player.getMesh().getChildMeshes().forEach(mesh => {
+        this._environment.addToWaterRender(mesh);
+    });
+
   }
 
 
   private _createSkyBox() {
-    var skyboxMaterial = new SkyMaterial("skyMaterial", this._scene);
+    /*var skyboxMaterial = new SkyMaterial("skyMaterial", this._scene);
       skyboxMaterial.backFaceCulling = false;
       skyboxMaterial.diffuseColor = new Color3(1,1,1);
       var skybox = Mesh.CreateBox("skyBox", 300.0, this._scene);
-      skybox.material = skyboxMaterial;
-    }
+      skybox.material = skyboxMaterial;*/
 
+      this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
+      const skyboxMaterial = new StandardMaterial("skyBox", this._scene);
+      skyboxMaterial.backFaceCulling = false;
+      skyboxMaterial.reflectionTexture = new CubeTexture("./assets/textures/TropicalSunnyDay_nx.jpg", this._scene);
+      skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
+      skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
+      skyboxMaterial.specularColor = new Color3(0, 0, 0);
+      skyboxMaterial.disableLighting = true;
+      this._skybox.material = skyboxMaterial;
+  }
 
   getScene() {
     return this._scene;

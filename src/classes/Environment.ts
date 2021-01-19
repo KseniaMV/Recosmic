@@ -1,4 +1,5 @@
-import { Scene, ShadowGenerator, GlowLayer, HighlightLayer, ParticleSystem, Quaternion, Vector3,PBRMaterial, Mesh,StandardMaterial, Texture, Color4, Color3, CubeTexture, Sound, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
+import { Scene, ShadowGenerator, GlowLayer, HighlightLayer, ParticleSystem, PushMaterial, Vector2, Quaternion, Vector3,PBRMaterial, Mesh,StandardMaterial, Texture, Color4, Color3, CubeTexture, Sound, SceneLoader, MeshBuilder, AssetsManager } from "@babylonjs/core";
+import { WaterMaterial } from "@babylonjs/materials";
 
 export class Environment {
   private _scene: Scene;
@@ -10,6 +11,7 @@ export class Environment {
   private _runAfterLoaded: Function;
   private _saveParticleSystem;
   private _highlightLayer;
+  private _waterMaterial;
   private _animals;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
@@ -29,6 +31,25 @@ export class Environment {
     this._env = newMeshes[0];
     this._env.position.y = 0;
 
+
+    // test water
+    var water = Mesh.CreateGround("water", 25, 25, 32, this._scene);
+    this._waterMaterial = new WaterMaterial("water_material", this._scene);
+    this._waterMaterial.bumpTexture = new Texture("../assets/textures/waterbump.png", this._scene);
+    this._waterMaterial.windForce = -10;
+    this._waterMaterial.waveHeight = 0.1;
+    this._waterMaterial.bumpHeight = 0.05;
+    this._waterMaterial.waveLength = 0.1;
+    this._waterMaterial.waveSpeed = 10.0;
+    this._waterMaterial.colorBlendFactor = 0;
+    this._waterMaterial.windDirection = new Vector2(1, 1);
+    this._waterMaterial.colorBlendFactor = 0
+    water.material = this._waterMaterial;
+    water.position = new Vector3(-2,0,-3);
+
+
+
+
     /*const axis = new Vector3(0, 1, 0);
     const angle = -Math.PI / 4;
     const quaternion = new Quaternion.RotationAxis(axis, angle);
@@ -44,6 +65,7 @@ export class Environment {
 
     this._allMeshes.forEach(mesh => {
       mesh.receiveShadows = true;
+
 
       if (mesh.name === 'Plane') {
           this._ground = mesh;
@@ -93,7 +115,9 @@ export class Environment {
       if (mesh.name === 'Plane' || mesh.name === 'ground' || mesh.name === 'roud') {
           mesh.isPickable = false;
           mesh.checkCollisions = true;
+          this._waterMaterial.addToRenderList(mesh);
       }
+
 
       if (mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('Stone') || mesh.name.includes('savestation')) {
         this._shadowGenerator.getShadowMap().renderList.push(mesh);
@@ -202,5 +226,10 @@ export class Environment {
 
   public removeMeshToHighlight(meshName) {
     this._highlightLayer.removeAllMeshes();
+  }
+
+
+  public addToWaterRender(mesh) {
+    this._waterMaterial.addToRenderList(mesh);
   }
 }

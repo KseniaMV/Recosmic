@@ -1,4 +1,5 @@
-import { Ray, Quaternion, ShadowGenerator, Engine, Scene, Vector3, Mesh, Color4, Sound, SceneLoader, MeshBuilder, AssetsManager,ActionManager,ExecuteCodeAction } from "@babylonjs/core";
+import { Ray, Quaternion, ShadowGenerator, Engine, Scene, Vector3, Mesh, Color3, Texture, Color4, Sound, SceneLoader, MeshBuilder, AssetsManager,ActionManager,ExecuteCodeAction } from "@babylonjs/core";
+import { FurMaterial } from "@babylonjs/materials";
 
 export class Animal {
   private _scene: Scene;
@@ -31,7 +32,27 @@ export class Animal {
 
     this._allMeshes = this._model.getChildMeshes();
 
+    var furMaterial = new FurMaterial("fur", this._scene);
+    furMaterial.highLevelFur = false;
+	   furMaterial.furLength = 0.5;
+    furMaterial.furAngle = 0;
+    furMaterial.furColor = new Color3(1, 1, 1);
+    furMaterial.diffuseTexture = new Texture("./assets/textures/fur3.png", this._scene);
+    furMaterial.furTexture = FurMaterial.GenerateTexture("furTexture", this._scene);
+    furMaterial.furSpacing = 1;
+    furMaterial.furDensity = 30;
+    furMaterial.furSpeed = 200;
+    furMaterial.furGravity = new Vector3(0, -8, 0);
+    var quality = 32;
+
+
+
+
     this._allMeshes.forEach(mesh => {
+
+      //mesh.material = furMaterial;
+      //var shells = FurMaterial.FurifyMesh(mesh, quality);
+
       mesh.isPickable = true;
       mesh.checkCollisions = true;
       this._shadowGenerator.getShadowMap().renderList.push(mesh);
