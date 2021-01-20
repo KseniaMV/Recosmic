@@ -1,11 +1,9 @@
-import { Quests } from './../classes/Quests';
 import { Ray, ShadowGenerator, PointLight, DirectionalLight, Color3, Engine, Scene, Vector3, Mesh, Color4, ArcRotateCamera, Sound, PostProcess } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Rectangle} from "@babylonjs/gui";
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 import { Player } from '../classes/Player';
 import { Environment } from '../classes/Environment';
 import { ChoiseBox } from '../ui/ChoiseBox';
-import Inventory from '../classes/Inventory';
 import Tablet from "../classes/Tablet";
 import { CharacterState } from '../classes/CharacterState';
 
@@ -20,9 +18,8 @@ export class Game {
   private _shadowGenerator;
   private _canvas: any;
   private _inventory;
-  public   tablet: Tablet;
-  public quests: Quests;
-  public characterState: CharacterState;
+  private  _tablet: Tablet;
+  private _characterState: CharacterState;
   private _choiseBox: any;
 
   constructor(engine: Engine, callback, canvas) {
@@ -39,14 +36,15 @@ export class Game {
     const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
     sun.diffuse = new Color3(1, 1, 1);
     sun.specular = new Color3(1, 1, 1);
+    //sun.intensity = 10;
 
     // shadow
     var light2 = new DirectionalLight("dir01", new Vector3(0, -1, -1), this._scene);
     light2.position = new Vector3(0, 20, 30);
 
     light2.diffuse = new Color3(1, 1, 1);
-	   light2.specular = new Color3(1, 1, 1);
-     //light2.intensity = 10;
+	  light2.specular = new Color3(1, 1, 1);
+    light2.intensity = 3.5;
 
     this._shadowGenerator = new ShadowGenerator(512, light2);
     this._shadowGenerator.usePoissonSampling = true;
@@ -100,10 +98,8 @@ export class Game {
   }
 
   private createUI () {
-    this._inventory = new Inventory(this._scene, this._canvas);
-    this.quests = new Quests(this._scene, this._canvas);
-    this.tablet = new Tablet(this._scene, this._canvas, this.checkOpenUI);
-    this.characterState = new CharacterState(this._scene);
+    this._characterState = new CharacterState(this._scene);
+    this._tablet = new Tablet(this._scene, this._canvas);
   }
 
   private _actionAfterChose(object: string, action: string) {
@@ -151,7 +147,7 @@ export class Game {
 
   public checkOpenUI(flag:boolean) {
     if(flag === true ) {
-      this.characterState.removeHoverEffect();
+      this._characterState.removeHoverEffect();
     }
   }
 

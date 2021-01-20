@@ -14,6 +14,7 @@ export class CharacterState {
     private _effectGui: AdvancedDynamicTexture;
     private _effectName: TextBlock;
     private _effectButton: Button;
+    public isTabletOpen: boolean;
 
    
     constructor (scene: Scene) {
@@ -28,6 +29,7 @@ export class CharacterState {
         const stateGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._stateGUI  = stateGUI;
     }
+
 
     createHealth () {
         const health =  new Image("health", "../assets/sprites2/health_sprite.png");
@@ -152,6 +154,10 @@ export class CharacterState {
         });
     }
 
+    checkTabletState(tablet):boolean{
+        console.log(tablet.isTabletOpen)
+        return tablet.isTabletOpen;
+    }
 
     effectOnHover (effect) {
         const effectGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");

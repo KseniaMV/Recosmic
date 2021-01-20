@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Cabin', sans-serif;
 }
 
 *:active, *:focus {
@@ -13,6 +14,7 @@ body {
     height: 100vh;
     user-select: none;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .renderCanvas{
@@ -28,17 +30,63 @@ video {
     transform: translate(-50%, -50%);
 }
 
-.inventoryButton{
-    width: 80px;
-    height: 50px;
+
+.tabletBG {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: rgba(1,1,1,0.4);
+    overflow: hidden;
     position: absolute;
-    top: calc(100% - 100px);
-    left: calc(100% - 100px);
+    top: 0;
+    left: 0;
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.tablet {
+    width: 75%;
+    height: 90%;
+    margin: auto;
+    border: 10px solid rgb(10, 10, 10);
+    border-radius: 20px;
+    background: linear-gradient(to right, rgba(23, 23, 29, 0.6), rgba(219, 217, 218,.3));
+    box-shadow: 0 0 0 10px rgb(255,255,255);
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+
+.tablet_button{
+    width: 90px;
+    height: 90px;
+    margin: 50px;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 5px rgb(255,255,255);
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 90%;
+    background-size: 70px;
     background-color: transparent;
-    border: none;
-    cursor: pointer;
+    &:hover{
+        box-shadow: none;
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: 20px;
+    left: calc(75% - 20px);
+}
+
+.backButton {
+    position: absolute;
+    top: 20px;
+    left: 20px;
 }
 

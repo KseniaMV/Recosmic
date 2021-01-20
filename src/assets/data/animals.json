@@ -1,0 +1,21 @@
+{
+    "Catoxeltis colorful":{
+        "image" : "",
+        "description": "A cat that looks like a snake or a snake that looks like a cat, scientists still argue. A friendly animal, but has a powerful poison, sharp claws. Loves warming in the sun, confined spaces and silence.",
+        "drop": {
+            "research-mode": "bottle of poison",
+            "experiment-mode" : "poison glands"
+        },
+        "experiment_info": "In battle, stands on its hind legs and hits with its front legs. At this moment, his weak point is visible - the belly. Ranged Attack: Spits poison, over long distances." 
+    },
+
+    "Purple-brows bat":{
+        "image" : "",
+        "description": "He hears very badly, but sees perfectly. Soft fur and sturdy leather protects against cold and wind. Therefore, he feels great in the mountains and loves snow. The flaff of this animal is a rare find, used by the locals to make the finest and very warm scarves.",
+        "drop": {
+            "research-mode": "ball of yarn",
+            "experiment-mode" : "piece of leather"
+        },
+        "experiment_info": "In battle, uses ultrasound, which can stun, as well as dive overhead and bite. The bite can cause bleeding." 
+    }
+}

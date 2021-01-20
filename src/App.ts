@@ -38,8 +38,8 @@ export class App {
   }
 
   private async _main(): Promise<void> {
-    await this._goToStart();
-    //await this._goToGameScene();
+    //await this._goToStart();
+    await this._goToGameScene();
     this._engine.runRenderLoop(() => {
       this._scene.render();
     });

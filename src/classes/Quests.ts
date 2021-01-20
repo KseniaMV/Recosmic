@@ -2,11 +2,11 @@ import { Scene } from "@babylonjs/core";
 import { TextBlock, AdvancedDynamicTexture } from "@babylonjs/gui";
 import Tablet from "./Tablet";
 
-export class Quests {
+export default class Quests {
     private _scene: Scene;
     private _canvas: any;
     private _questsGui: AdvancedDynamicTexture;
-    public quests: Array;
+    public quests: any;
     public currentQuest: object;
     private questNumber: number;
     private _questConteiner: TextBlock;

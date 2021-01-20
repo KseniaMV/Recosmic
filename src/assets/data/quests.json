@@ -1,6 +1,14 @@
 [
     {
-        "name" : "find laboratory",
-        "description" : "There are a scientist's laboratory not far from the landing point. Find it."
+        "name" : "Find a laboratory",
+        "description" : "There are a scientist's laboratory not far from the landing point. Find it.",
+        "complete conditions" : "laboratory is fined",
+        "rewards": "information about Sam"
+    },
+    {
+        "name" : "Scientific interest",
+        "description" : "Flora and fauna on this planet is of scientific interest. Get information about animals and plants. Since the animals on this planet are intelligent, maybe they know something about Sam.",
+        "complete conditions" : "all animals and plants are fided",
+        "rewards": "unique item"
     }
 ]
