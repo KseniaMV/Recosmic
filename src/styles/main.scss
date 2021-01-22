@@ -78,7 +78,8 @@ video {
 }
 
 .tablet,
-.questSection {
+.questSection,
+.settingSection {
     width: 75%;
     height: 90%;
     margin: auto;
@@ -97,7 +98,8 @@ video {
     flex-wrap: wrap;
 }
 
-.questSection {
+.questSection,
+.settingSection {
     display: flex;
     flex-direction: column;
     flex-wrap: no-wrap;
@@ -169,13 +171,16 @@ video {
 
 .questTitle {
     width: 90%;
-    height: auto;
+    height: 100%;
     margin: auto 0;
     padding-left: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
     font-size: 36px;
     font-weight: bold;
     color: rgb(255,255,255);
-    text-align: left;
 }
 
 .quest--complete {
@@ -196,15 +201,14 @@ video {
     }
 }
 
-
 .questNotice {
     width: 50%;
     height: auto;
     margin: auto;
     padding: 30px;
     position: absolute;
-    top: 35%;
-    left: 30%;
+    top: 25%;
+    left: 25%;
     text-align: center;
     font-size: 36px;
     font-weight: bold;
@@ -277,6 +281,33 @@ video {
     background-repeat: no-repeat;
     background-size: 40px;
     &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
+
+//---------------setting section----------------------//
+
+.savegame-button,
+.exit-button {
+    width: 80%;
+    height: 80px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: rgb(255,255,255);
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 0 10px 2px (rgb(255,255,255));
+    text-shadow: 2px 2px 2px rgb(12, 6, 39);
+    background-color: rgba(147, 160, 189, 0.5);
+    &:hover {
+        box-shadow: none;
+        border: 1px solid rgb(7, 10, 19);
         cursor: url(../assets/images/gui/cursor_point.png), pointer;
     }
 }

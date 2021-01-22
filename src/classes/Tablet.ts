@@ -102,7 +102,6 @@ export default class Tablet {
         }
     }
 
-
     private _openTablet ():void{
         this._tabletButton.addEventListener("click",  ()=> {
             this._playClickSound();
@@ -126,8 +125,7 @@ export default class Tablet {
         if(button.classList.contains("questsButton")){
             button.addEventListener("click", ()=>{
                 this._playClickSound();
-                this.tablet.classList.remove("section--visible");
-                this._backButton.classList.remove("backButton--hidden");
+                this._clearTablet();
                 this._openQuestsSection();
             }) ;
         }
@@ -140,6 +138,7 @@ export default class Tablet {
         if(button.classList.contains("settingButton")){
             button.addEventListener("click", ()=>{
                 this._playClickSound();
+                this._clearTablet();
                 this._openSettingSection();
             }) ;
         }
@@ -158,6 +157,11 @@ export default class Tablet {
         this._tabletButton.disabled = false;
     }
 
+    private _clearTablet () {
+        this.tablet.classList.remove("section--visible");
+        this._backButton.classList.remove("backButton--hidden");
+    }
+
     private _createNoticeTablet () {
         this._tabletButton.classList.add("openTabletButton--active");
     }
@@ -171,24 +175,27 @@ export default class Tablet {
 
     //---------------setting section----------------//
 
-    private createSettingSection () {
-
-    }
-
     private _openSettingSection () {
-        console.log("open setting section");
+        const settingSection  = document.createElement("div");
+            settingSection.classList.add("settingSection");
+            settingSection.append(this._backButton);
+            this.tabletBG.append(settingSection);
+        const saveGameButton = document.createElement("button")
+            saveGameButton.classList.add("savegame-button");
+            saveGameButton.textContent = "save game";
+        const exitButton = document.createElement("button")
+            exitButton.classList.add("exit-button");
+            exitButton.textContent = "exit game";
+        
+            settingSection.append(saveGameButton);
+            saveGameButton.after(exitButton);
+    }
+
+    public saveGame () {
 
     }
 
-    private closeSetting () {
-
-    }
-
-    saveGame () {
-
-    }
-
-    exitGame () {
+    public exitGame () {
 
     }
 
