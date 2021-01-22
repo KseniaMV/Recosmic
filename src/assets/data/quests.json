@@ -8,7 +8,7 @@
     {
         "name" : "Scientific interest",
         "description" : "Flora and fauna on this planet is of scientific interest. Get information about animals and plants. Since the animals on this planet are intelligent, maybe they know something about Sam.",
-        "complete conditions" : "all animals and plants are fided",
+        "complete conditions" : "all animals and plants are finded",
         "rewards": "unique item"
     }
 ]

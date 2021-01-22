@@ -8,9 +8,7 @@ export default class Tablet {
     private _scene: Scene;
     private _canvas: any;
     private _tabletGui: AdvancedDynamicTexture;
-    private _tabletButton: Button; 
-    public encyclopedia: Array<object>;
-    public quests: Array<object>;
+    private _tabletButton: HTMLButtonElement; 
     public isTabletOpen: boolean;
     public tabletBG: HTMLDivElement;
     public tablet: HTMLDivElement;
@@ -18,19 +16,40 @@ export default class Tablet {
     private _questsButton: HTMLButtonElement;
     private _closeButton: HTMLButtonElement;
     private _catalogButton: HTMLButtonElement;
+    public questsData: Array<object>;
+    public quests: Quests;
+    public sceneQuestId: Array<number>;
+    private _backButton: HTMLButtonElement;
 
     constructor(scene: Scene, canvas){
         this._scene = scene;
         this._canvas = canvas;
-        this.encyclopedia = [];
-        this.quests = [];
         this.isTabletOpen = false;
+        this.sceneQuestId = [0,1];
         this.createTablet();
         this._createGUI();
-
+        this.quests = new Quests(this._scene, this._canvas);  //массив всех квестов дотсупный на планете
+        this.quests.getQuestsData()
+        .then(()=>{
+            setTimeout(() => {
+                this.quests.outPutCurrentQuest(0);
+                this.quests.questsList.push({
+                    id : 0,
+                    status : "notComplete"
+                });
+                this._createNoticeTablet();
+            }, 5000);
+            setTimeout(() => {
+                this.quests.outPutCurrentQuest(1);
+                this.quests.questsList.push({
+                    id : 1,
+                    status : "notComplete"
+                });
+            }, 9000);
+        });
     }
 
-   private _createGUI () {
+    private _createGUI () {
         const tabletGui = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._tabletGui = tabletGui;
         this._createOpenTabletButton();
@@ -38,90 +57,130 @@ export default class Tablet {
     }
 
     private _createOpenTabletButton () {
-        const tabletButton = Button.CreateImageWithCenterTextButton(
-            "tabButton",
-            "",
-            "../assets/images/gui/tablet2.png"
-        );
-        tabletButton.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        tabletButton.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
-        tabletButton.top = "20px";
-        tabletButton.left = "-20px";
-        tabletButton.width = "150px";
-        tabletButton.height = "100px";
-        tabletButton.thickness = 0;
-        this._tabletGui.addControl(tabletButton);
-        this._tabletButton = tabletButton; 
+        const tabletButton = document.createElement("button");
+            tabletButton.classList.add("openTabletButton");
+            tabletButton.style.backgroundImage = "url(../assets/images/gui/tablet2.png)";
+            document.body.append(tabletButton);
+            this._tabletButton = tabletButton;
     }
 
     public createTablet ():void{
         const tabletBG = document.createElement("div");
-            tabletBG.classList.add("tabletBG");
+            tabletBG.classList.add("tabletBG", "section--hidden");
             tabletBG.style.cursor = "url(../assets/images/gui/cursor2.png), pointer";
             document.body.append(tabletBG);
             this.tabletBG = tabletBG;
         const tablet = document.createElement("div");
-            tablet.classList.add("tablet");
+            tablet.classList.add("tablet", "section--hidden");
             tabletBG.append(tablet);
             this.tablet = tablet;
         const settingButton = this._createButtons("settingButton", "setting.png");
         const catalogButton = this._createButtons("catalogButton", "catalog.png");
         const questsButton = this._createButtons("questsButton", "quests.png");
         const closeButton = this._createButtons("closeButton", "close.png");
+        const backButton = this._createButtons("backButton","back.png");
         this._settingButton = settingButton;
         this._closeButton = closeButton;
         this._questsButton = questsButton;
         this._catalogButton = catalogButton;
+        this._backButton = backButton;
     }
 
     private _createButtons (buttonName: string, buttonImage: string):HTMLButtonElement {
         const button = document.createElement("button");
             button.classList.add("tablet_button", buttonName);
             button.style.backgroundImage = `url(../assets/images/gui/${buttonImage})`;
-            button.style.cursor = "url(../assets/images/gui/cursor2.png), pointer";
+            button.style.cursor = "url(../assets/images/gui/cursor_point.png), pointer";
             this._addButtonToTablet(button);
             this._addEvents(button);
             return button;
     }
 
     private _addButtonToTablet (button: HTMLButtonElement):void{
-        this.tablet.append(button);
+        if(!button.classList.contains("backButton")) {
+            this.tablet.append(button);
+        }
     }
 
 
     private _openTablet ():void{
-        this._tabletButton.onPointerDownObservable.add(() => {
+        this._tabletButton.addEventListener("click",  ()=> {
+            this._playClickSound();
             this.isTabletOpen = true;
-            this.tabletBG.style.display = "flex";
-            this.tablet.style.display = "flex";
+            this.tabletBG.classList.add("section--visible");
+            this.tablet.classList.add("section--visible");
+            if(this._tabletButton.classList.contains("openTabletButton--active")){
+                this._tabletButton.classList.remove("openTabletButton--active");
+            }
+            this._tabletButton.disabled = true;
         });
     }
 
     private _addEvents (button: HTMLButtonElement):void {
         if(button.classList.contains("closeButton")){
             button.addEventListener("click", ()=>{
+                this._playClickSound();
                 this._closeTablet();
+            }) ;
+        }
+        if(button.classList.contains("questsButton")){
+            button.addEventListener("click", ()=>{
+                this._playClickSound();
+                this.tablet.classList.remove("section--visible");
+                this._backButton.classList.remove("backButton--hidden");
+                this._openQuestsSection();
+            }) ;
+        }
+        if(button.classList.contains("catalogButton")){
+            button.addEventListener("click", ()=>{
+                this._playClickSound();
+                this._openCatalogSection();
+            }) ;
+        }
+        if(button.classList.contains("settingButton")){
+            button.addEventListener("click", ()=>{
+                this._playClickSound();
+                this._openSettingSection();
+            }) ;
+        }
+        if(button.classList.contains("backButton")){
+            button.addEventListener("click", ()=>{
+                this._playClickSound();
+                this._back(button);
             }) ;
         }
     }
 
     private _closeTablet() {
-        this.tabletBG.style.display = "none";
-        this.tablet.style.display = "none";
+        this.tabletBG.classList.remove("section--visible");
+        this.tablet.classList.remove("section--visible");
         this.isTabletOpen = false;
+        this._tabletButton.disabled = false;
     }
 
-    //settings section
+    private _createNoticeTablet () {
+        this._tabletButton.classList.add("openTabletButton--active");
+    }
 
-    createSettingsSection () {
+    private _back(button:HTMLButtonElement) {
+        const targetSection = button.parentElement;
+        targetSection.remove();
+        this.tablet.classList.remove("section--hidden");
+        this.tablet.classList.add("section--visible");
+    }
+
+    //---------------setting section----------------//
+
+    private createSettingSection () {
 
     }
 
-    openSettings () {
+    private _openSettingSection () {
+        console.log("open setting section");
 
     }
 
-    closeSettings () {
+    private closeSetting () {
 
     }
 
@@ -133,14 +192,14 @@ export default class Tablet {
 
     }
 
-    //encyclopedia section
+    //----------------catalog section------------//
 
     createCatalogSection () {
-
+        
     }
 
-    openCatalog () {
-
+    private _openCatalogSection () {
+        console.log("open catalog section");
     }
 
     closeCatalog () {
@@ -151,27 +210,40 @@ export default class Tablet {
 
     }
 
-    //quest section 
+    //-----------------quest section ---------------------------//
 
-    createQuestsSection () {
-
+    getQuestionsData () {
+        return this.quests.getQuestsData();
     }
 
-    openQuestsSection () {
-
+    private _openQuestsSection () {
+        const questSection = this.quests.createQuestsSection();
+            questSection.classList.add("questSection");
+            questSection.append(this._backButton);
+            this.tabletBG.append(questSection);
+            this.quests.createQuestConteiner(questSection);
+            questSection.addEventListener("click", (event)=>{
+                this._playClickSound();
+                if(event.target.id) {
+                    this.quests.hideQuestConteiners();
+                    const questDescription = this.quests.getQuestById(event.target.id)
+                    const description = this.quests.createQuestDescription(questDescription);
+                    questSection.append(description);
+                };
+            });
     }
 
     closeQuestsionSection () {
 
     }
 
-    addQuest (quest) {
-        this.quests.push(quest);
-        console.log(quest.name);
-        console.log(quest.description);
-    }
-
     setQuestStatus () {
         
     }
+
+    private _playClickSound() {
+        const sound  = new Audio("../assets/sounds/effects/table_click.wav");
+        sound.play();
+    }
+
 }

@@ -14,7 +14,7 @@ body {
     height: 100vh;
     user-select: none;
     overflow: hidden;
-    cursor: pointer;
+    cursor: url(../assets/images/gui/cursor2.png), pointer;
 }
 
 .renderCanvas{
@@ -30,6 +30,36 @@ video {
     transform: translate(-50%, -50%);
 }
 
+.openTabletButton {
+    width: 150px;
+    height: 100px;
+    border: none;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: center;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
+
+.openTabletButton--active::after {
+    content: "!";
+    display: block;
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    top: 15px;
+    left: 40px;
+    font-size: 55px;
+    font-weight: bold;
+    color: rgb(250, 236, 47);
+    visibility: visible;
+}
 
 .tabletBG {
     width: 100vw;
@@ -47,7 +77,8 @@ video {
     align-content: center;
 }
 
-.tablet {
+.tablet,
+.questSection {
     width: 75%;
     height: 90%;
     margin: auto;
@@ -56,10 +87,34 @@ video {
     background: linear-gradient(to right, rgba(23, 23, 29, 0.6), rgba(219, 217, 218,.3));
     box-shadow: 0 0 0 10px rgb(255,255,255);
     display: none;
-    flex-direction: row;
-    flex-wrap: wrap;
     justify-content: center;
     align-content: center;
+    position: relative;
+}
+
+.tablet {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.questSection {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: no-wrap;
+}
+
+.section--hidden {
+    display: none;
+}
+
+.section--visible {
+    display: flex;
+}
+
+.quest--hidden {
+    visibility: hidden;
+    position: relative;
+    top: 50%;
 }
 
 .tablet_button{
@@ -73,20 +128,155 @@ video {
     background-repeat: no-repeat;
     background-size: 70px;
     background-color: transparent;
+    transition: 0.3s;
     &:hover{
         box-shadow: none;
+        border: 1px solid rgb(255,255,255);
     }
 }
 
 .closeButton {
     position: absolute;
-    top: 20px;
-    left: calc(75% - 20px);
+    top: 10px;
+    right: 10px;
 }
 
 .backButton {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 10px;
+    left: 10px;
 }
 
+.questConsteiner {
+    width: 80%;
+    height: 80px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 2px (rgb(255,255,255));
+    text-shadow: 2px 2px 2px rgb(12, 6, 39);
+    background-color: rgba(147, 160, 189, 0.5);
+    &:hover {
+        box-shadow: none;
+        border: 1px solid rgb(7, 10, 19);
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
+
+.questTitle {
+    width: 90%;
+    height: auto;
+    margin: auto 0;
+    padding-left: 30px;
+    font-size: 36px;
+    font-weight: bold;
+    color: rgb(255,255,255);
+    text-align: left;
+}
+
+.quest--complete {
+    box-shadow: none;
+    text-shadow: none;
+    background-color: rgba(68, 110, 49, 0.5);
+    &::after {
+        content: "";
+        width: 70px;
+        height: 70px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-image: url("../assets/images/gui/quest_done.png");
+        background-position: center;
+        background-size: 60px;
+        background-repeat: no-repeat;
+    }
+}
+
+
+.questNotice {
+    width: 50%;
+    height: auto;
+    margin: auto;
+    padding: 30px;
+    position: absolute;
+    top: 35%;
+    left: 30%;
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    line-height: 1.2;
+    color: rgb(255,255,255);
+    text-shadow: 2px 2px 2px rgb(12, 6, 39);
+    z-index: 10;
+    background-color: rgba(94, 113, 126, 0.4);
+}
+
+//--------quest description ----------------//
+
+.questDescription_conteiner {
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    border-radius: 20px;
+    background-color: transparent;
+    box-shadow: 0 0 10px 2px rgb(210, 210, 224);
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    color: rgb(255,255,255);
+    text-shadow: 2px 2px 2px rgb(12, 6, 39);
+    z-index: 20;
+}
+
+.questDescription_name {
+    width: 100%;
+    height: 50px;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    border-bottom: 1px solid rgb(255,255,255);
+}
+
+.questDescription {
+    width: 100%;
+    height: calc(100% - 140px);
+    margin-bottom: 20px;
+    padding-left: 30px;
+    font-size: 24px;
+    text-align: left;
+}
+
+.questReward {
+    width: 100%;
+    height: 50px;
+    padding-right: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.description_close-button {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background-color: transparent;
+    border-radius: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40px;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
