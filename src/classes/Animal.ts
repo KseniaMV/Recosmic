@@ -5,6 +5,7 @@ export class Animal {
   private _scene: Scene;
   private _name: string;
   private _model: Mesh;
+  private _cubeMesh: Mesh;
   private _originPosition: Vector3;
   private _idleAnim;
 
@@ -12,8 +13,7 @@ export class Animal {
     this._scene = scene;
     this._shadowGenerator = shadow;
     this._name = animal;
-
-    const file = animal + ".glb";
+    const file = animal.match(/\[(.*?)\]/)[1] + ".glb";
     SceneLoader.ImportMesh("", "./assets/models/", file, this._scene, this._setModel.bind(this));
   }
 
@@ -21,7 +21,6 @@ export class Animal {
     this._model = newMeshes[0];
     this._model.scaling.scaleInPlace(0.5);
     this._model.name = this._name;
-    //this._model.scaling.scaleInPlace(0.5);
 
     if (this._originPosition) {
       this._model.position = this._originPosition;
@@ -32,26 +31,11 @@ export class Animal {
 
     this._allMeshes = this._model.getChildMeshes();
 
-    var furMaterial = new FurMaterial("fur", this._scene);
-    furMaterial.highLevelFur = false;
-	   furMaterial.furLength = 0.5;
-    furMaterial.furAngle = 0;
-    furMaterial.furColor = new Color3(1, 1, 1);
-    furMaterial.diffuseTexture = new Texture("./assets/textures/fur3.png", this._scene);
-    furMaterial.furTexture = FurMaterial.GenerateTexture("furTexture", this._scene);
-    furMaterial.furSpacing = 1;
-    furMaterial.furDensity = 30;
-    furMaterial.furSpeed = 200;
-    furMaterial.furGravity = new Vector3(0, -8, 0);
-    var quality = 32;
-
-
-
-
     this._allMeshes.forEach(mesh => {
 
-      //mesh.material = furMaterial;
-      //var shells = FurMaterial.FurifyMesh(mesh, quality);
+      if (mesh.name.includes('active_place')) {
+        mesh.isVisible = false;
+      }
 
       mesh.isPickable = true;
       mesh.checkCollisions = true;
@@ -65,10 +49,31 @@ export class Animal {
     this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
   }
 
-  public setOriginPosition(position) {
+  public setInfo(position, mesh, isDead) {
     this._originPosition = position;
+    this.isDead = isDead;
+    this._cubeMesh = mesh;
     if (this._model) {
       this._model.position = this._originPosition;
     }
+  }
+
+  public removeModel() {
+    this._model.isPickable = false;
+    this._model.checkCollisions = false;
+    this._model.isVisible = false;
+    this._cubeMesh.checkCollisions = false;
+    this._cubeMesh.isPickable = false;
+    this._cubeMesh.dispose();
+    this._allMeshes.forEach(mesh => {
+      mesh.isPickable = false;
+      mesh.checkCollisions = false;
+      mesh.isVisible = false;
+    });
+    console.log('removed');
+  }
+
+  public getName(): string {
+    return this._name;
   }
 }

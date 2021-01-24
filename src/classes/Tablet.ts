@@ -132,9 +132,11 @@ export default class Tablet {
     }
 
     addQuest (quest) {
+      if(quest) {
         this.quests.push(quest);
         console.log(quest.name);
         console.log(quest.description);
+      }
     }
 
     setQuestStatus () {

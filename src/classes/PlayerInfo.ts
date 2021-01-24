@@ -4,11 +4,14 @@ export class PlayerInfo {
   private _position: Array<number>;
   private _lookAtAngle: number;
   private _map: string;
+  private _enemyName: string;
+  private _killed: Array<string>;
 
   constructor() {
     this._health = 100;
     this._karma = 0;
     this._lookAtAngle = 0;
+    this._killed = []
   }
 
   public setHealth(health: number) {
@@ -49,5 +52,25 @@ export class PlayerInfo {
 
   public getMap(): string {
     return this._map;
+  }
+
+  public setEnemyName(name: string) {
+    this._enemyName = name;
+  }
+
+  public getEnemyName(): string {
+    return this._enemyName;
+  }
+
+  public getKilled(): Array<string> {
+    return this._killed;
+  }
+
+  public setKilled(killed: Array<string>) {
+    this._killed = killed;
+  }
+
+  public pushKilled(name: string) {
+    this._killed.push(name);
   }
 }
