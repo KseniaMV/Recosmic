@@ -22,7 +22,11 @@ export class Game {
   private _environment;
   private _shadowGenerator;
   private _savedGame: PlayerInfo;
+  private _killedAnimals;
   private _skybox;
+  private _animals;
+  private _callbackToChangeScene;
+  private _currentEnemy: string;
   private _canvas: any;
   private _inventory;
   private _tablet: Tablet;
@@ -36,9 +40,13 @@ export class Game {
     this._scene.clearColor = new Color4(0, 0, 0, 1);
     this._camera = new ArcRotateCamera("camera", (Math.PI / 3), (Math.PI / 3), 3*3, new Vector3(10, 10, 0), this._scene);
 
-    this._choiseBox = new ChoiseBox(this._scene, this._actionAfterChose.bind(this));
+    this._animals = [];
+    this._killedAnimals = [];
 
-    //this._createSkyBox();
+    this._choiseBox = new ChoiseBox(this._scene, this._actionAfterChose.bind(this));
+    this._choiseBox2 = new ChoiseBox(this._scene, this._actionAfterChose2.bind(this));
+
+    this._createSkyBox();
 
     const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
     sun.diffuse = new Color3(1, 1, 1);
@@ -59,17 +67,6 @@ export class Game {
     this._shadowGenerator.blurBoxOffset = 1;
     this._shadowGenerator.blurScale = 1.0;
     this._shadowGenerator.setDarkness(0.3);
-
-    // for fps camera
-    this._scene.gravity = new Vector3(0, -0.9, 0);
-    this._scene.collisionsEnabled = true;
-
-    // fps camera
-    this._camera = new FreeCamera("FreeCamera", new Vector3(2, 5, 2), this._scene);
-    this._camera.attachControl(canvas, true);
-    this._camera.checkCollisions = true;
-    this._camera.applyGravity = true;
-    this._camera.ellipsoid = new Vector3(1, 2, 1);
 
 
     this._environment = new Environment(this._scene, this._shadowGenerator);
@@ -123,6 +120,12 @@ export class Game {
       this._player.update();
 
     });
+
+    canvas.onclick = null;
+  }
+
+  public setCallbackToChangeScene(func) {
+    this._callbackToChangeScene = func;
   }
 
   private _funcForTablet(str: string) {
@@ -135,15 +138,34 @@ export class Game {
   }
 
   public setSavedGame(info: PlayerInfo) {
-    this._savedGame = info;
+    console.log(info.getKilled())
+    if (Number.parseInt(info.getHealth()) > 0) {
+      this._savedGame = info;
+    } else {
+      info = LoadGame.load();
+    }
+    
+    this._animals.forEach(animal => {
+      const regName = animal.getName().match(/\[(.*?)\]/);
+      if (regName) {
+        const cname = regName[1];
+        if (info.getKilled().includes(cname)) {
+          console.log('need to remove animal');
+          this._killedAnimals.push(cname);
+          animal.removeModel();
+        }
+      }
+    });
+
 
     this._player.setHealth(Number.parseInt(info.getHealth()));
     this._player.setKarma(Number.parseInt(info.getKarma()));
     this._player.setLookAtAngle(Number.parseFloat(info.getLookAtAngle()));
-    const x = info.getPosition()[0];
-    const y = info.getPosition()[1];
-    const z = info.getPosition()[2];
+    const x = Number.parseFloat(info.getPosition()[0]);
+    const y = Number.parseFloat(info.getPosition()[1]);
+    const z = Number.parseFloat(info.getPosition()[2]);
     this._player.setOriginPosition(new Vector3(x, y, z));
+    //this._killedAnimals = info.getKilled();
     this._updateState();
   }
 
@@ -157,12 +179,32 @@ export class Game {
     const animalPositions = this._environment.getAnimals();
     animalPositions.forEach(item => {
       const animal = new Animal(item.name, this._scene, this._shadowGenerator);
-      animal.setOriginPosition(item.position);
+      animal.setInfo(item.position, item.mesh, item.isDead);
+      this._animals.push(animal);
     });
   }
 
   private _actionAfterChose(name: string, action: string) {
     console.log(`${name} --- ${action}`);
+  }
+
+  private _actionAfterChose2(name: string, action: string) {
+    if (action === 'attack') {
+      console.log('go to battle scene');
+      const info = new PlayerInfo();
+      info.setMap('firstLevel');
+      info.setPosition([
+        this._player.getMesh().position.x,
+        this._player.getMesh().position.y,
+        this._player.getMesh().position.z
+      ]);
+      info.setHealth(this._player.getHealth());
+      info.setKarma(this._player.getKarma());
+      info.setLookAtAngle(this._player.getLookAtAngle());
+      info.setEnemyName(name.match(/\[(.*?)\]/)[1]);
+      info.setKilled(this._killedAnimals);
+      this._callbackToChangeScene(info);
+    }
   }
 
   private _checkCollisions(name) {
@@ -180,11 +222,22 @@ export class Game {
       }
     }
 
-    /*if (name.includes('active')) {
-      this._environment.addMeshToHighlight(name);
+    if (!this._choiseBox2.getIsChose() && name.includes('animal')) {
+      const regName = name.match(/\[(.*?)\]/);
+      if (regName) {
+        this._currentEnemy = regName[1];
+      }
+      this._choiseBox2.setShow(true, name);
+      //this._environment.addMeshToHighlight(name);
     } else {
-      this._environment.removeMeshToHighlight(name);
-    }*/
+      //this._environment.removeMeshToHighlight(name);
+      this._choiseBox2.setShow(false);
+      if (this._choiseBox2.getIsChose()) {
+        setTimeout(() => {
+            this._choiseBox2.setIsChose(false);
+        }, 5000);
+      }
+    }
 
     if (name.includes('savestation')) {
       this._environment.startSaveParticles();
@@ -199,6 +252,7 @@ export class Game {
       info.setHealth(this._player.getHealth());
       info.setKarma(this._player.getKarma());
       info.setLookAtAngle(this._player.getLookAtAngle());
+      info.setKilled(this._killedAnimals);
       LoadGame.save(info);
     }
   }
@@ -217,13 +271,7 @@ export class Game {
 
 
   private _createSkyBox() {
-    /*var skyboxMaterial = new SkyMaterial("skyMaterial", this._scene);
-      skyboxMaterial.backFaceCulling = false;
-      skyboxMaterial.diffuseColor = new Color3(1,1,1);
-      var skybox = Mesh.CreateBox("skyBox", 300.0, this._scene);
-      skybox.material = skyboxMaterial;*/
-
-      this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
+      /*this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
       const skyboxMaterial = new StandardMaterial("skyBox", this._scene);
       skyboxMaterial.backFaceCulling = false;
       skyboxMaterial.reflectionTexture = new CubeTexture("./assets/textures/TropicalSunnyDay_nx.jpg", this._scene);
@@ -231,6 +279,13 @@ export class Game {
       skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
       skyboxMaterial.specularColor = new Color3(0, 0, 0);
       skyboxMaterial.disableLighting = true;
+      this._skybox.material = skyboxMaterial;*/
+      this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
+      const skyboxMaterial = new SkyMaterial("skyBox", this._scene);
+      skyboxMaterial.backFaceCulling = false;
+      skyboxMaterial.turbidity = 20;
+      skyboxMaterial.luminance = 0.1;
+      skyboxMaterial.rayleigh = 0;
       this._skybox.material = skyboxMaterial;
   }
 

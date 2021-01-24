@@ -101,7 +101,9 @@ export class Environment {
         const invertPosition = new Vector3(-mesh.position.x, mesh.position.y, mesh.position.z);
         this._animals.push({
           name: mesh.name,
-          position: invertPosition
+          mesh: mesh,
+          position: invertPosition,
+          isDead: false
         });
       }
 

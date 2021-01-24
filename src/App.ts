@@ -7,8 +7,9 @@ import { CutScene } from "./scenes/CutScene";
 import { Game } from "./scenes/Game";
 import { Story } from "./scenes/Story";
 import { PlayerInfo } from "./classes/PlayerInfo";
+import { Battle } from "./scenes/Battle";
 
-enum State { START = 0, GAME = 1, CUTSCENE = 3, STORY = 4 };
+enum State { START = 0, GAME = 1, CUTSCENE = 3, STORY = 4, BATTLE = 5 };
 
 export class App {
   private _scene: Scene;
@@ -40,6 +41,7 @@ export class App {
 
   private async _main(): Promise<void> {
     await this._goToStart();
+    //await this._goToBattleScene();
     //await this._goToGameScene();
     this._engine.runRenderLoop(() => {
       this._scene.render();
@@ -79,5 +81,13 @@ export class App {
     const scene = game.getScene();
     await this._goToScene(State.GAME, scene);
     game.setSavedGame(info);
+    game.setCallbackToChangeScene(this._goToBattleScene.bind(this));
+  }
+
+  private async _goToBattleScene(info: PlayerInfo): Promise<void> {
+    const battle = new Battle(this._engine, this._canvas, this._goToGameScene.bind(this));
+    const scene = battle.getScene();
+    await this._goToScene(State.BATTLE, scene);
+    battle.setInfoGame(info);
   }
 }

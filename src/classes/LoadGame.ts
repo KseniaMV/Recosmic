@@ -9,6 +9,8 @@ export class LoadGame {
     info.setHealth(Number.parseInt(localStorage.getItem("health", 100)));
     info.setKarma(Number.parseInt(localStorage.getItem("karma", 0)));
     info.setLookAtAngle(Number.parseFloat(localStorage.getItem("lookAtAngle")));
+    const killed = JSON.parse(localStorage.getItem("killed"));
+    info.setKilled(killed);
     return info;
   }
 
@@ -18,5 +20,6 @@ export class LoadGame {
     localStorage.setItem("health", info.getHealth());
     localStorage.setItem("karma", info.getKarma());
     localStorage.setItem("lookAtAngle", info.getLookAtAngle());
+    localStorage.setItem("killed", JSON.stringify(info.getKilled()));
   }
 }
