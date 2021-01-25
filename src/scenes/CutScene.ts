@@ -1,6 +1,7 @@
 import { Engine, Scene, SceneLoader, Vector3, Mesh, Color3, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Animation, BezierCurveEase, CubeTexture, Texture, BackgroundMaterial} from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control} from "@babylonjs/gui";
 import { Planet } from "../classes/Planet";
+import { PlayerInfo } from "../classes/PlayerInfo";
 
 export class CutScene {
   private _scene: Scene;
@@ -100,7 +101,16 @@ export class CutScene {
         this._fadeLevel -= .05;
         if (this._fadeLevel <= 0) {
           this._transition = false;
-          this._callback();
+          //this._callback();
+
+          const inf = new PlayerInfo();
+          inf.setHealth(100);
+          inf.setKarma(0);
+          inf.setLookAtAngle(0);
+          inf.setPosition([1,2,0]);
+
+          this._callback(inf);
+
         }
       }
     });
