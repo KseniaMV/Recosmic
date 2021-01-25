@@ -1,0 +1,93 @@
+{
+    "Babylon": {
+        "count" : 5,
+        "image": "5.png",
+        "animals": [
+            "Catoxeltis colorful",
+            "Purple-brows bat"
+        ],
+        "plants" : [
+            "AmorphoLilius",
+            "Woodsia",
+            "Heliconia"
+        ]    
+    },
+    "Default1": {
+        "count" : 10,
+        "image": "2.png",
+        "animals": [
+            "Catoxeltis colorful",
+            "Purple-brows bat"
+        ],
+        "plants" : [
+            "AmorphoLilius",
+            "Woodsia",
+            "Heliconia"
+        ]
+    },
+    "Default2": {
+        "count" : 7,
+        "image": "3.png",
+        "animals": [
+            "Catoxeltis colorful",
+            "Purple-brows bat"
+        ],
+        "plants" : [
+            "AmorphoLilius",
+            "Woodsia",
+            "Heliconia"
+        ]
+    },
+    "Default3": {
+        "count" : 9,
+        "image": "1.png",
+        "animals": [
+            "Catoxeltis colorful",
+            "Purple-brows bat"
+        ],
+        "plants" : [
+            "AmorphoLilius",
+            "Woodsia",
+            "Heliconia"
+        ]
+    },
+    "Default4": {
+        "count" : 15,
+        "image": "4.png",
+        "animals": [
+            "Catoxeltis colorful",
+            "Purple-brows bat"
+        ],
+        "plants" : [
+            "AmorphoLilius",
+            "Woodsia",
+            "Heliconia"
+        ]
+    },
+    "Default5": {
+        "count" : 10,
+        "image": "6.png",
+        "animals": [
+            "Catoxeltis colorful",
+            "Purple-brows bat"
+        ],
+        "plants" : [
+            "AmorphoLilius",
+            "Woodsia",
+            "Heliconia"
+        ]
+    },
+    "Default6": {
+        "count" : 7,
+        "image": "7.png",
+        "animals": [
+            "Catoxeltis colorful",
+            "Purple-brows bat"
+        ],
+        "plants" : [
+            "AmorphoLilius",
+            "Woodsia",
+            "Heliconia"
+        ]
+    }
+}
