@@ -1,7 +1,6 @@
 import { Scene} from "@babylonjs/core";
-import { AdvancedDynamicTexture, Button, Rectangle, Control } from "@babylonjs/gui";
+import { AdvancedDynamicTexture} from "@babylonjs/gui";
 import Catalog from "./Catalog";
-import Inventory from './Inventory';
 import Quests  from './Quests';
 
 //27 esc
