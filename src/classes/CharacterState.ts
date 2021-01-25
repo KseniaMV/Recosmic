@@ -1,5 +1,6 @@
 import { Scene } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Control, Image, TextBlock } from "@babylonjs/gui";
+import Tablet from "./Tablet";
 
 export class CharacterState {
     private _stateGUI: AdvancedDynamicTexture;
@@ -13,24 +14,17 @@ export class CharacterState {
     private _effectGui: AdvancedDynamicTexture;
     private _effectName: TextBlock;
     private _effectButton: Button;
-    private _isBlocked: boolean = false;
-
     constructor (scene: Scene) {
         this._scene = scene;
         this.createCharacterStateGUI();
         this.createHealth();
         this.createKarma();
         this.createEffect();
-
     }
 
     createCharacterStateGUI () {
         const stateGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._stateGUI  = stateGUI;
-    }
-
-    public block (flag: boolean) {
-      this._isBlocked = flag;
     }
 
     createHealth () {
@@ -87,6 +81,10 @@ export class CharacterState {
 
     }
 
+   public removeHoverEffect () {
+        this._effectGui.removeControl(this._effectButton);
+    }
+
     createEffect () {
         const effect1 =  new Image("effect1", "../assets/sprites2/effect1.png");
         effect1.width = "50px";
@@ -108,6 +106,8 @@ export class CharacterState {
         this._effect1.onPointerOutObservable.add(()=>{
             this.removeHover();
         });
+
+
 
         const effect2 =  new Image("effect2", "../assets/sprites2/effect2.png");
         effect2.width = "50px";
@@ -152,12 +152,6 @@ export class CharacterState {
         });
     }
 
-    removeHover() {
-      if (this._effectGui) {
-        this._effectGui.removeControl(this._effectButton);
-      }
-    }
-
     effectOnHover (effect) {
       if (!this._isBlocked) {
         const effectGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -179,6 +173,7 @@ export class CharacterState {
         this._effectButton = effectButton;
       }
     }
+
 
     upHP () {
       if (this._health.cellId > 0) {
@@ -223,29 +218,4 @@ export class CharacterState {
     }
 }
 
-/*const sparklerLife = new Image("sparkLife", "./sprites/sparkLife.png");
-        sparklerLife.width = "54px";
-        sparklerLife.height = "162px";
-        sparklerLife.cellId = 0;
-        sparklerLife.cellHeight = 108;
-        sparklerLife.cellWidth = 36;
-        sparklerLife.sourceWidth = 36;
-        sparklerLife.sourceHeight = 108;
-        sparklerLife.horizontalAlignment = 0;
-        sparklerLife.verticalAlignment = 0;
-        sparklerLife.left = "14px";
-        sparklerLife.top = "14px";
-        playerUI.addControl(sparklerLife);
-        this._sparklerLife = sparklerLife;*/
 
-    /* setInterval(() => {
-        if (cellFlag) {
-            if (image.cellId < 10) image.cellId++;
-            else image.cellId = 1;
-        }
-        else {
-            image.sourceLeft += image.sourceWidth;
-
-            if (image.sourceLeft >= 1408) image.sourceLeft = 0;
-        }
-    }, 50);*/

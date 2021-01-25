@@ -28,14 +28,14 @@ export default class Inventory {
         const inventoryButton = Button.CreateImageWithCenterTextButton(
             "inventoryButton",
             "",
-            "../assets/images/gui/Kriminalist.png"
+            ""
         );
         inventoryButton.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
         inventoryButton.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
-        inventoryButton.top = "-80px";
-        inventoryButton.left = "-64px";
-        inventoryButton.width = "80px";
-        inventoryButton.height = "50px";
+        inventoryButton.top = "-40px";
+        inventoryButton.left = "-10px";
+        inventoryButton.width = "200px";
+        inventoryButton.height = "150px";
         inventoryButton.thickness = 0;
         this._inventoryGui.addControl(inventoryButton);
         this._inventoryButton = inventoryButton; 

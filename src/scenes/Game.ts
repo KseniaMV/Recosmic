@@ -5,7 +5,6 @@ import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 import { Player } from '../classes/Player';
 import { Environment } from '../classes/Environment';
 import { ChoiseBox } from '../ui/ChoiseBox';
-import Inventory from '../classes/Inventory';
 import Tablet from "../classes/Tablet";
 import { CharacterState } from '../classes/CharacterState';
 import { PlayerInfo } from '../classes/PlayerInfo';
@@ -29,9 +28,9 @@ export class Game {
   private _currentEnemy: string;
   private _canvas: any;
   private _inventory;
-  private _tablet: Tablet;
-  public quests: Quests;
+  private  _tablet: Tablet;
   private _characterState: CharacterState;
+  private _choiseBox: any;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -51,14 +50,15 @@ export class Game {
     const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
     sun.diffuse = new Color3(1, 1, 1);
     sun.specular = new Color3(1, 1, 1);
+    //sun.intensity = 10;
 
     // shadow
     var light2 = new DirectionalLight("dir01", new Vector3(0, -7, -1), this._scene);
     light2.position = new Vector3(0, 50, 30);
 
     light2.diffuse = new Color3(1, 1, 1);
-	   light2.specular = new Color3(0.9, 0.7, 0.9);
-     light2.intensity = 3.5;
+	  light2.specular = new Color3(0.9, 0.7, 0.9);
+    light2.intensity = 3.5;
 
     this._shadowGenerator = new ShadowGenerator(1024, light2);
     this._shadowGenerator.usePoissonSampling = true;
@@ -74,15 +74,6 @@ export class Game {
 
     this._player = new Player(this._scene, this._shadowGenerator);
     this._player.setCollisionCallback(this._checkCollisions.bind(this));
-
-    //GUI
-    this._inventory = new Inventory(this._scene, this._canvas);
-    this._tablet = new Tablet(this._scene, this._canvas);
-    this.quests = new Quests(this._scene, this._canvas);
-    this._characterState = new CharacterState(this._scene);
-
-    // set callback to tablet
-    this._tablet.setCallback(this._funcForTablet.bind(this));
 
     // CharacterState test
     window.addEventListener('click',(function(){
@@ -116,12 +107,15 @@ export class Game {
           this._callback();
         }
       }
-
       this._player.update();
-
     });
-
     canvas.onclick = null;
+    this.createUI();
+  }
+
+  private createUI () {
+    this._characterState = new CharacterState(this._scene);
+    this._tablet = new Tablet(this._scene, this._canvas);
   }
 
   public setCallbackToChangeScene(func) {
@@ -156,7 +150,6 @@ export class Game {
         }
       }
     });
-
 
     this._player.setHealth(Number.parseInt(info.getHealth()));
     this._player.setKarma(Number.parseInt(info.getKarma()));
@@ -259,27 +252,15 @@ export class Game {
 
   setToStartPosition() {
     this._player.setOriginPosition(this._environment.getPlayerPoint());
-
     this._createAnimals();
-
     this._environment.addToWaterRender(this._skybox);
     this._player.getMesh().getChildMeshes().forEach(mesh => {
         this._environment.addToWaterRender(mesh);
     });
-
   }
 
 
   private _createSkyBox() {
-      /*this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
-      const skyboxMaterial = new StandardMaterial("skyBox", this._scene);
-      skyboxMaterial.backFaceCulling = false;
-      skyboxMaterial.reflectionTexture = new CubeTexture("./assets/textures/TropicalSunnyDay_nx.jpg", this._scene);
-      skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
-      skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
-      skyboxMaterial.specularColor = new Color3(0, 0, 0);
-      skyboxMaterial.disableLighting = true;
-      this._skybox.material = skyboxMaterial;*/
       this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
       const skyboxMaterial = new SkyMaterial("skyBox", this._scene);
       skyboxMaterial.backFaceCulling = false;
@@ -300,6 +281,12 @@ export class Game {
     };
     this._transition = true;
     this._scene.detachControl();
+  }
+
+  public checkOpenUI(flag:boolean) {
+    if(flag === true ) {
+      this._characterState.removeHoverEffect();
+    }
   }
 
 }

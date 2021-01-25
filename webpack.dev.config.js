@@ -121,7 +121,7 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, 'src/scenes'),
                     to: path.resolve(__dirname, 'dist/scenes')
-                },
+                }
             ]
             
         })
