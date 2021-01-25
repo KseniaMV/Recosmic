@@ -6,8 +6,10 @@ import { MainMenu } from "./scenes/MainMenu";
 import { CutScene } from "./scenes/CutScene";
 import { Game } from "./scenes/Game";
 import { Story } from "./scenes/Story";
+import { PlayerInfo } from "./classes/PlayerInfo";
+import { Battle } from "./scenes/Battle";
 
-enum State { START = 0, GAME = 1, CUTSCENE = 3, STORY = 4 };
+enum State { START = 0, GAME = 1, CUTSCENE = 3, STORY = 4, BATTLE = 5 };
 
 export class App {
   private _scene: Scene;
@@ -38,8 +40,12 @@ export class App {
   }
 
   private async _main(): Promise<void> {
-    //await this._goToStart();
-    await this._goToGameScene();
+    await this._goToStart();
+    //await this._goToGameScene();
+   // await this._goToStart();
+    //await this._goToBattleScene();
+    //await this._goToGameScene();
+
     this._engine.runRenderLoop(() => {
       this._scene.render();
     });
@@ -64,7 +70,7 @@ export class App {
   }
 
   private async _goToStart(): Promise<void> {
-    const scene = new MainMenu(this._engine, this._goToStory.bind(this)).getScene();
+    const scene = new MainMenu(this._engine, this._goToStory.bind(this), this._goToGameScene.bind(this)).getScene();
     await this._goToScene(State.START, scene);
   }
 
@@ -73,8 +79,18 @@ export class App {
     await this._goToScene(State.CUTSCENE, scene);
   }
 
-  private async _goToGameScene(): Promise<void> {
-    const scene = new Game(this._engine, null, this._canvas).getScene();
+  private async _goToGameScene(info: PlayerInfo): Promise<void> {
+    const game = new Game(this._engine, null, this._canvas);
+    const scene = game.getScene();
     await this._goToScene(State.GAME, scene);
+    game.setSavedGame(info);
+    game.setCallbackToChangeScene(this._goToBattleScene.bind(this));
+  }
+
+  private async _goToBattleScene(info: PlayerInfo): Promise<void> {
+    const battle = new Battle(this._engine, this._canvas, this._goToGameScene.bind(this));
+    const scene = battle.getScene();
+    await this._goToScene(State.BATTLE, scene);
+    battle.setInfoGame(info);
   }
 }

@@ -9,10 +9,16 @@ export class Story {
 
     video.addEventListener('ended', () => {
       video.style.display = "none";
+      document.body.removeChild(video);
       callback();
     });
 
-    window.addEventListener('click', () => {
+    const skipButton = <HTMLButtonElement> document.createElement('BUTTON');
+    skipButton.classList.add('skipButton');
+    skipButton.textContent = 'SKIP';
+    document.body.appendChild(skipButton);
+    skipButton.addEventListener('click', () => {
+      document.body.removeChild(skipButton);
       video.currentTime = 999999999999999;
     })
   }

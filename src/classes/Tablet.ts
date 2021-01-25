@@ -48,8 +48,7 @@ export default class Tablet {
             }, 9000);
         });
     }
-
-    private _createGUI () {
+private _createGUI () {
         const tabletGui = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._tabletGui = tabletGui;
         this._createOpenTabletButton();
@@ -254,3 +253,4 @@ export default class Tablet {
     }
 
 }
+

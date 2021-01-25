@@ -14,9 +14,6 @@ export class CharacterState {
     private _effectGui: AdvancedDynamicTexture;
     private _effectName: TextBlock;
     private _effectButton: Button;
-    public isTabletOpen: boolean;
-
-   
     constructor (scene: Scene) {
         this._scene = scene;
         this.createCharacterStateGUI();
@@ -29,7 +26,6 @@ export class CharacterState {
         const stateGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._stateGUI  = stateGUI;
     }
-
 
     createHealth () {
         const health =  new Image("health", "../assets/sprites2/health_sprite.png");
@@ -49,10 +45,12 @@ export class CharacterState {
         this._stateGUI.addControl(health);
         this._health = health;
         this._health.onPointerEnterObservable.add(()=>{
-            this.effectOnHover(this._health);
+          this.effectOnHover(this._health);
         });
         this._health.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+          if (this._effectGui) {
+            this.removeHover();
+          }
         });
     }
 
@@ -78,7 +76,7 @@ export class CharacterState {
             this.effectOnHover(this._carma);
         });
         this._carma.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
 
     }
@@ -103,10 +101,10 @@ export class CharacterState {
         this._stateGUI.addControl(effect1);
         this._effect1 = effect1;
         this._effect1.onPointerEnterObservable.add(()=>{
-            this.effectOnHover(this._effect1);
+          this.effectOnHover(this._effect1);
         });
         this._effect1.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
 
 
@@ -129,7 +127,7 @@ export class CharacterState {
             this.effectOnHover(this._effect2);
         });
         this._effect2.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
 
         const effect3 =  new Image("effect3", "../assets/sprites2/effect3.png");
@@ -150,16 +148,12 @@ export class CharacterState {
             this.effectOnHover(this._effect3);
         });
         this._effect3.onPointerOutObservable.add(()=>{
-            this._effectGui.removeControl(this._effectButton);
+            this.removeHover();
         });
     }
 
-    checkTabletState(tablet):boolean{
-        console.log(tablet.isTabletOpen)
-        return tablet.isTabletOpen;
-    }
-
     effectOnHover (effect) {
+      if (!this._isBlocked) {
         const effectGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._effectGui = effectGUI;
         const effectButton = Button.CreateImageWithCenterTextButton(
@@ -177,6 +171,7 @@ export class CharacterState {
         effectButton.color = "white";
         this._effectGui.addControl(effectButton)
         this._effectButton = effectButton;
+      }
     }
 
 
@@ -192,6 +187,11 @@ export class CharacterState {
       }
     }
 
+    setHP (hp: number) {
+      const id = 21 - Math.floor(20 / 100 * hp);
+      this._health.cellId = id;
+    }
+
     upCarma () {
       if (this._carma.cellId < 20) {
         this._carma.cellId++;
@@ -204,6 +204,11 @@ export class CharacterState {
       }
     }
 
+    setCarma (carma: number) {
+      const id = Math.floor(20 / 100 * carma);
+      this._carma.cellId = id;
+    }
+
     setEffect (effect) {
 
     }
@@ -213,29 +218,4 @@ export class CharacterState {
     }
 }
 
-/*const sparklerLife = new Image("sparkLife", "./sprites/sparkLife.png");
-        sparklerLife.width = "54px";
-        sparklerLife.height = "162px";
-        sparklerLife.cellId = 0;
-        sparklerLife.cellHeight = 108;
-        sparklerLife.cellWidth = 36;
-        sparklerLife.sourceWidth = 36;
-        sparklerLife.sourceHeight = 108;
-        sparklerLife.horizontalAlignment = 0;
-        sparklerLife.verticalAlignment = 0;
-        sparklerLife.left = "14px";
-        sparklerLife.top = "14px";
-        playerUI.addControl(sparklerLife);
-        this._sparklerLife = sparklerLife;*/
 
-    /* setInterval(() => {
-        if (cellFlag) {
-            if (image.cellId < 10) image.cellId++;
-            else image.cellId = 1;
-        }
-        else {
-            image.sourceLeft += image.sourceWidth;
-
-            if (image.sourceLeft >= 1408) image.sourceLeft = 0;
-        }
-    }, 50);*/

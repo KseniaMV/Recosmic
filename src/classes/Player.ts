@@ -1,5 +1,6 @@
 import { Ray, Quaternion, ShadowGenerator, Engine, Scene, Vector3, Mesh, Color4, Sound, SceneLoader, MeshBuilder, AssetsManager,ActionManager,ExecuteCodeAction } from "@babylonjs/core";
 
+
 export class Player {
   private _scene: Scene;
   private _tailAnim;
@@ -17,11 +18,15 @@ export class Player {
   private _isChangedAnim = false;
   private _originPosition;
   private _collisionCallback: Function;
+  private _health: number;
+  private _karma: number;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
     this._shadowGenerator = shadow;
     this._speed = this._VELOCITY;
+    this._health = 100;
+    this._karma = 0;
 
     SceneLoader.ImportMesh("", "./assets/models/", "doc.glb", this._scene, this._setTestModel.bind(this));
 
@@ -114,10 +119,10 @@ export class Player {
   public update() {
     if (this._model) {
       if (this._horizontal !== 0 || this._vertical !== 0) {
-        const axis = new Vector3(0, 1, 0);
-        const angle = Math.atan2(-this._vertical, -this._horizontal);
-        const quaternion = Quaternion.RotationAxis(axis, angle);
-        this._model.rotationQuaternion = quaternion;
+        //const axis = new Vector3(0, 1, 0);
+        this._lookAtAngle = Math.atan2(-this._vertical, -this._horizontal);
+        //const quaternion = Quaternion.RotationAxis(axis, this._lookAtAngle);
+        //this._model.rotationQuaternion = quaternion;
 
         if (!this._isChangedAnim) {
           this._currentAnim.stop();
@@ -132,6 +137,10 @@ export class Player {
         this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
       }
 
+      const axis = new Vector3(0, 1, 0);
+      const quaternion = Quaternion.RotationAxis(axis, this._lookAtAngle);
+      this._model.rotationQuaternion = quaternion;
+
       this.raycastGrounded();
       this.raycastCollisions();
 
@@ -143,7 +152,7 @@ export class Player {
   }
 
   raycastCollisions() {
-    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree');
+    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('savestation') || mesh.name.includes('animal');
     const length = 1.5;
     let forward = new Vector3(0, 0, 1);
     //const stopWalking = (hit) => this._speed  = -this._VELOCITY;
@@ -178,4 +187,31 @@ export class Player {
     return this._model;
   }
 
+  public getHealth(): number {
+    return this._health;
+  }
+
+  public setHealth(health: number) {
+    if (health >=0 && health <= 100) {
+      this._health = health;
+    }
+  }
+
+  public getKarma(): number {
+    return this._karma;
+  }
+
+  public setKarma(karma: number) {
+    if (karma >=0 && karma <= 100) {
+      this._karma = karma;
+    }
+  }
+
+  public getLookAtAngle(): number {
+    return this._lookAtAngle;
+  }
+
+  public setLookAtAngle(angle: number) {
+    this._lookAtAngle = angle;
+  }
 }
