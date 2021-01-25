@@ -12,3 +12,15 @@
 ## Developers
 +[kseniaMV](https://github.com/KseniaMV);
 +[archylex](https://github.com/archylex);
+
++ js/ts
++ html/scss
++ babylon
++ blender
+
+
+
+## Developers
++ [kseniaMV](https://github.com/KseniaMV);
++ [archylex](https://github.com/archylex);
+

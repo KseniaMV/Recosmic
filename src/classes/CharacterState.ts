@@ -14,9 +14,6 @@ export class CharacterState {
     private _effectGui: AdvancedDynamicTexture;
     private _effectName: TextBlock;
     private _effectButton: Button;
-    private _isBlocked: boolean = false;
-
-   
     constructor (scene: Scene) {
         this._scene = scene;
         this.createCharacterStateGUI();
@@ -28,10 +25,6 @@ export class CharacterState {
     createCharacterStateGUI () {
         const stateGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._stateGUI  = stateGUI;
-    }
-
-    public block (flag: boolean) {
-      this._isBlocked = flag;
     }
 
     createHealth () {
@@ -53,11 +46,6 @@ export class CharacterState {
         this._health = health;
         this._health.onPointerEnterObservable.add(()=>{
           this.effectOnHover(this._health);
-        });
-        this._health.onPointerOutObservable.add(()=>{
-          if (this._effectGui) {
-            this.removeHover();
-          }
         });
     }
 
@@ -81,9 +69,6 @@ export class CharacterState {
         this._carma = karma;
         this._carma.onPointerEnterObservable.add(()=>{
             this.effectOnHover(this._carma);
-        });
-        this._carma.onPointerOutObservable.add(()=>{
-            this.removeHover();
         });
 
     }
@@ -110,12 +95,7 @@ export class CharacterState {
         this._effect1.onPointerEnterObservable.add(()=>{
           this.effectOnHover(this._effect1);
         });
-        this._effect1.onPointerOutObservable.add(()=>{
-            this.removeHover();
-        });
-
-
-
+  
         const effect2 =  new Image("effect2", "../assets/sprites2/effect2.png");
         effect2.width = "50px";
         effect2.height = "50px";
@@ -132,9 +112,6 @@ export class CharacterState {
         this._effect2 = effect2;
         this._effect2.onPointerEnterObservable.add(()=>{
             this.effectOnHover(this._effect2);
-        });
-        this._effect2.onPointerOutObservable.add(()=>{
-            this.removeHover();
         });
 
         const effect3 =  new Image("effect3", "../assets/sprites2/effect3.png");
@@ -154,19 +131,9 @@ export class CharacterState {
         this._effect3.onPointerEnterObservable.add(()=>{
             this.effectOnHover(this._effect3);
         });
-        this._effect3.onPointerOutObservable.add(()=>{
-            this.removeHover();
-        });
-    }
-
-    removeHover() {
-      if (this._effectGui) {
-        this._effectGui.removeControl(this._effectButton);
-      }
     }
 
     effectOnHover (effect) {
-      if (!this._isBlocked) {
         const effectGUI = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._effectGui = effectGUI;
         const effectButton = Button.CreateImageWithCenterTextButton(
@@ -184,7 +151,7 @@ export class CharacterState {
         effectButton.color = "white";
         this._effectGui.addControl(effectButton)
         this._effectButton = effectButton;
-      }
+      
     }
 
 
@@ -231,29 +198,4 @@ export class CharacterState {
     }
 }
 
-/*const sparklerLife = new Image("sparkLife", "./sprites/sparkLife.png");
-        sparklerLife.width = "54px";
-        sparklerLife.height = "162px";
-        sparklerLife.cellId = 0;
-        sparklerLife.cellHeight = 108;
-        sparklerLife.cellWidth = 36;
-        sparklerLife.sourceWidth = 36;
-        sparklerLife.sourceHeight = 108;
-        sparklerLife.horizontalAlignment = 0;
-        sparklerLife.verticalAlignment = 0;
-        sparklerLife.left = "14px";
-        sparklerLife.top = "14px";
-        playerUI.addControl(sparklerLife);
-        this._sparklerLife = sparklerLife;*/
 
-    /* setInterval(() => {
-        if (cellFlag) {
-            if (image.cellId < 10) image.cellId++;
-            else image.cellId = 1;
-        }
-        else {
-            image.sourceLeft += image.sourceWidth;
-
-            if (image.sourceLeft >= 1408) image.sourceLeft = 0;
-        }
-    }, 50);*/
