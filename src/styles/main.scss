@@ -79,7 +79,8 @@ video {
 
 .tablet,
 .questSection,
-.settingSection {
+.settingSection,
+.catalogSection {
     width: 75%;
     height: 90%;
     margin: auto;
@@ -99,24 +100,11 @@ video {
 }
 
 .questSection,
-.settingSection {
+.settingSection,
+.catalogSection {
     display: flex;
     flex-direction: column;
     flex-wrap: no-wrap;
-}
-
-.section--hidden {
-    display: none;
-}
-
-.section--visible {
-    display: flex;
-}
-
-.quest--hidden {
-    visibility: hidden;
-    position: relative;
-    top: 50%;
 }
 
 .tablet_button{
@@ -139,13 +127,13 @@ video {
 
 .closeButton {
     position: absolute;
-    top: 10px;
+    top: -30px;
     right: 10px;
 }
 
 .backButton {
     position: absolute;
-    top: 10px;
+    top: -30px;
     left: 10px;
 }
 
@@ -311,3 +299,258 @@ video {
         cursor: url(../assets/images/gui/cursor_point.png), pointer;
     }
 }
+
+//------------------catalog section-------------//
+
+.catalog_slider {
+    width: 100%;
+    min-width: 350px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-end;
+}
+
+.planetSection {
+    width: 220px;
+    height: 220px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(147, 160, 189, 0.5);
+    transition: 0.3s;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        transform: scale(1.05);
+        box-shadow: 0 0 20px 2px (rgb(255,255,255));
+    }
+    clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.planetSection_image {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.planetSection_count {
+    width: 90%;
+    height: 20%;
+    font-size: 28px;
+    font-weight: bold;
+    color: rgb(255,255,255);
+    text-shadow: 2px 2px 2px rgb(12, 6, 39);
+    text-align: center;
+}
+
+.planetSection_name {
+    width: 90%;
+    height: 10%;
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: rgb(255,255,255);
+    text-shadow: 2px 2px 2px rgb(12, 6, 39);
+    text-align: center;
+}
+
+.catalog_pagination {
+    width: 50%;
+    height: 50px;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
+
+.countPagination {
+    width:80%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.countPaginationItem {
+    width: 20px;
+    height: 20px;
+    margin: auto 10px;
+    border-radius: 20px;
+    border: 1px solid rgb(210, 210, 224);
+}
+
+.paginationItem--active {
+    border: 3px solid rgb(210, 210, 224);
+}
+
+.catalog_button {
+    border: none;
+    box-shadow: 0 0 5px 2px rgb(255,255,255);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40px;
+    background-color: transparent;
+    transition: 0.3s;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
+
+.catalog_left-button {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+}
+
+.catalog_right-button {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+}
+
+.itemsConteiner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 15;
+}
+
+.button-closeData{
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgb(255,255,255);
+    border-radius: 5px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 25px;
+    background-color: transparent;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
+
+.itemCard {
+    width: 150px;
+    height: 200px;
+    margin: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 2px (rgb(255,255,255));
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        transform: scale(1.05);
+        box-shadow: 0 0 20px 2px (rgb(255,255,255));
+    }
+}
+
+.itemDescription {
+    width: 60%;
+    min-width: 350px;
+    height: 450px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    background-color: rgba(147, 160, 189, 0.5);
+}
+
+.itemDescription_image {
+    width: 40%;
+    height: 100%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.itemDescription_text {
+    width: 60%;
+    height: 100%;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: rgb(255,255,255);
+    text-shadow: 2px 2px 2px rgb(12, 6, 39);
+}
+
+
+.item_name {
+    width: 100%;
+    height: 50px;
+    text-align: left;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.item_description,
+.item_usage,
+.item_drop {
+    width: 100%;
+    height: 60%;
+    text-align: left;
+    font-size: 28px;
+}
+
+
+.unknown_planet,
+.unknown_item {
+    filter: brightness(50%);
+    &:hover {
+        transform: none;
+    }
+}
+
+.section--hidden {
+    display: none;
+}
+
+.section--visible {
+    display: flex;
+}
+
+.quest--hidden {
+    visibility: hidden;
+    position: relative;
+    top: 50%;
+}
+
+.backButton--hide {
+    visibility: hidden;
+}
+
+.backButton--show {
+    visibility: visible;
+}
+

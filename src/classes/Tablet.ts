@@ -1,5 +1,6 @@
 import { Scene} from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control } from "@babylonjs/gui";
+import Catalog from "./Catalog";
 import Inventory from './Inventory';
 import Quests  from './Quests';
 
@@ -132,6 +133,7 @@ export default class Tablet {
         if(button.classList.contains("catalogButton")){
             button.addEventListener("click", ()=>{
                 this._playClickSound();
+                this._clearTablet();
                 this._openCatalogSection();
             }) ;
         }
@@ -201,16 +203,15 @@ export default class Tablet {
 
     //----------------catalog section------------//
 
-    createCatalogSection () {
-        
-    }
-
     private _openCatalogSection () {
-        console.log("open catalog section");
-    }
+        const catalog = new Catalog("Babylon");
+        const catalogSection = catalog.createCatalogSection(); 
+            this.tabletBG.append(catalogSection);
+            catalogSection.append(this._backButton);
+            catalog.openCurrentPlanetCatalog(); 
 
-    closeCatalog () {
-
+       /* const pagination = catalog.pagination();
+            catalogSection.append(pagination); */
     }
 
     addInfoToCatalog () {

@@ -30,7 +30,7 @@ export class MainMenu {
     imageRectBg.thickness = 0;
     guiMenu.addControl(imageRectBg);
 
-    const startbg = new Image("startbg", "./assets/images/backgrounds/main_menu_bg.jpg");
+    const startbg = new Image("startbg", "./assets/images/backgrounds/main_menu_bg2.png");
     imageRectBg.addControl(startbg);
 
     const logo = new Image("logo", "./assets/images/gui/logo.png");
