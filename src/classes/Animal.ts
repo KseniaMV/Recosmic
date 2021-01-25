@@ -8,6 +8,10 @@ export class Animal {
   private _cubeMesh: Mesh;
   private _originPosition: Vector3;
   private _idleAnim;
+  private _allMeshes: any;
+  private _shadowGenerator: ShadowGenerator;
+  private _currentAnim: any;
+  isDead: any;
 
   constructor (animal: string, scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;

@@ -56,7 +56,7 @@ export class MainMenu {
     startBtn.height = "70px";
     startBtn.color = "rgb(19, 55, 90)";
     startBtn.fontWeight = "bold";
-    startBtn.top = "80%";
+    startBtn.top = "82%";
     startBtn.left = "-25%";
     startBtn.thickness = 0;
     startBtn.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
@@ -74,7 +74,7 @@ export class MainMenu {
     loadBtn.height = "70px";
     loadBtn.color = "rgb(19, 55, 90)";
     loadBtn.fontWeight = "bold";
-    loadBtn.top = "60%";
+    loadBtn.top = "70%";
     loadBtn.left = "-25%";
     loadBtn.thickness = 0;
     loadBtn.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;

@@ -14,8 +14,8 @@ export class ChoiseBox {
 
     this._attackButton = Button.CreateImageWithCenterTextButton(
       "ATTACK",
-      "ATTACK",
-      "./assets/images/gui/button.png"
+      "EXPERIMENT",
+      "./assets/images/gui/button2.png"
     );
 
     this._attackButton.fontFamily = "Arial";
@@ -36,15 +36,15 @@ export class ChoiseBox {
 
     this._investigateButton = Button.CreateImageWithCenterTextButton(
       "INVESTIGATE",
-      "INVESTIGATE",
-      "./assets/images/gui/button.png"
+      "RESEARCH",
+      "./assets/images/gui/button2.png"
     );
 
     this._investigateButton.fontFamily = "Arial";
     this._investigateButton.width = 0.2
     this._investigateButton.height = "70px";
     this._investigateButton.color = "white";
-    this._investigateButton.top = "-5%";
+    this._investigateButton.top = "-15%";
     this._investigateButton.thickness = 0;
     this._investigateButton.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
     choiseMenu.addControl(this._investigateButton);

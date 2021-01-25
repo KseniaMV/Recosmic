@@ -1,6 +1,5 @@
 import { Scene } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Control, Image, TextBlock } from "@babylonjs/gui";
-import Tablet from "./Tablet";
 
 export class CharacterState {
     private _stateGUI: AdvancedDynamicTexture;
@@ -47,18 +46,18 @@ export class CharacterState {
         this._health.onPointerEnterObservable.add(()=>{
           this.effectOnHover(this._health);
         });
+        this._health.onPointerOutObservable.add(()=>{
+          this._effectGui.removeControl(this._effectButton);
+      });
     }
 
     createKarma () {
-        //const karma =  new Image("karma", "../assets/sprites2/carma_sprite2.png");
         const karma =  new Image("karma", "../assets/sprites2/carma_sprite_new.png");
         karma.width = "100px";
         karma.height = "100px";
         karma.cellId = 0;
         karma.cellHeight = 100;
-        //karma.cellWidth = 90;
         karma.cellWidth = 78;
-        //karma.sourceWidth = 90;
         karma.sourceWidth = 78;
         karma.sourceHeight = 100;
         karma.horizontalAlignment = 0;
@@ -70,11 +69,10 @@ export class CharacterState {
         this._carma.onPointerEnterObservable.add(()=>{
             this.effectOnHover(this._carma);
         });
+        this._carma.onPointerOutObservable.add(()=>{
+          this._effectGui.removeControl(this._effectButton);
+      });
 
-    }
-
-   public removeHoverEffect () {
-        this._effectGui.removeControl(this._effectButton);
     }
 
     createEffect () {
@@ -95,6 +93,9 @@ export class CharacterState {
         this._effect1.onPointerEnterObservable.add(()=>{
           this.effectOnHover(this._effect1);
         });
+        this._effect1.onPointerOutObservable.add(()=>{
+          this._effectGui.removeControl(this._effectButton);
+      });
   
         const effect2 =  new Image("effect2", "../assets/sprites2/effect2.png");
         effect2.width = "50px";
@@ -113,6 +114,10 @@ export class CharacterState {
         this._effect2.onPointerEnterObservable.add(()=>{
             this.effectOnHover(this._effect2);
         });
+        this._effect2.onPointerOutObservable.add(()=>{
+          this._effectGui.removeControl(this._effectButton);
+      });
+
 
         const effect3 =  new Image("effect3", "../assets/sprites2/effect3.png");
         effect3.width = "50px";
@@ -131,6 +136,9 @@ export class CharacterState {
         this._effect3.onPointerEnterObservable.add(()=>{
             this.effectOnHover(this._effect3);
         });
+        this._effect3.onPointerOutObservable.add(()=>{
+          this._effectGui.removeControl(this._effectButton);
+      });
     }
 
     effectOnHover (effect) {

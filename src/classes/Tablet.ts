@@ -28,27 +28,30 @@ export default class Tablet {
         this.sceneQuestId = [0,1];
         this.createTablet();
         this._createGUI();
-        this.quests = new Quests(this._scene, this._canvas);  //массив всех квестов дотсупный на планете
+        this.quests = new Quests(this._scene, this._canvas);  //массив всех квестов доступный на планете
         this.quests.getQuestsData()
         .then(()=>{
-            setTimeout(() => {
-                this.quests.outPutCurrentQuest(0);
-                this.quests.questsList.push({
-                    id : 0,
-                    status : "notComplete"
-                });
-                this._createNoticeTablet();
-            }, 5000);
-            setTimeout(() => {
-                this.quests.outPutCurrentQuest(1);
-                this.quests.questsList.push({
-                    id : 1,
-                    status : "notComplete"
-                });
-            }, 9000);
+            if(!localStorage.getItem("cosmic")) {
+                setTimeout(() => {
+                    this.quests.outPutCurrentQuest(0);
+                    this.quests.questsList.push({
+                        id : 0,
+                        status : "notComplete"
+                    });
+                    this._createNoticeTablet();
+                }, 5000);
+                setTimeout(() => {
+                    this.quests.outPutCurrentQuest(1);
+                    this.quests.questsList.push({
+                        id : 1,
+                        status : "notComplete"
+                    });
+                }, 9000);
+            }
         });
     }
-private _createGUI () {
+
+    private _createGUI () {
         const tabletGui = AdvancedDynamicTexture.CreateFullscreenUI("UI");
         this._tabletGui = tabletGui;
         this._createOpenTabletButton();

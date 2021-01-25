@@ -28,6 +28,9 @@ export class Battle {
   private _PLAYER_SPEED: number = 15;
   private _PLAYER_DAMAGE: number = 5;
   private _ARENA_LENGTH: number = 1000;
+  isBattleOver: any;
+  private _playerKarma: number;
+  _weapon: any;
 
   constructor(engine: Engine, canvas: HTMLCanvasElement, callback: Function) {
     this._callback = callback;

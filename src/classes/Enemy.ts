@@ -30,6 +30,8 @@ export class Enemy {
   private _WALKING_SPEED = 1.5;
   private _BULLET_SPEED = 5.5;
   private _RELOAD_TIME = 700;
+  private _direction: any;
+  private _currentAnim: any;
 
   constructor(name: string, scene: Scene) {
     this._scene = scene;

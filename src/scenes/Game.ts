@@ -1,4 +1,4 @@
-import { Quests } from './../classes/Quests';
+
 import { Ray, ShadowGenerator, PointLight, DirectionalLight, FreeCamera, Color3, Engine, Scene, Vector3, Mesh, Color4, ArcRotateCamera, Sound, PostProcess } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Rectangle} from "@babylonjs/gui";
 import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
@@ -31,6 +31,7 @@ export class Game {
   private  _tablet: Tablet;
   private _characterState: CharacterState;
   private _choiseBox: any;
+  private _choiseBox2: ChoiseBox;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -76,12 +77,11 @@ export class Game {
     this._player.setCollisionCallback(this._checkCollisions.bind(this));
 
     // CharacterState test
-    window.addEventListener('click',(function(){
+    /*window.addEventListener('click',(function(){
       this._player.setHealth(this._player.getHealth() - 5);
       this._player.setKarma(this._player.getKarma() + 5);
       this._updateState();
-    }).bind(this));
-
+    }).bind(this));*/
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
@@ -261,18 +261,6 @@ export class Game {
 
 
   private _createSkyBox() {
-<<<<<<< HEAD
-      /*this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
-      const skyboxMaterial = new StandardMaterial("skyBox", this._scene);
-      skyboxMaterial.backFaceCulling = false;
-      skyboxMaterial.reflectionTexture = new CubeTexture("./assets/textures/TropicalSunnyDay_nx.jpg", this._scene);
-      skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
-      skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
-      skyboxMaterial.specularColor = new Color3(0, 0, 0);
-      skyboxMaterial.disableLighting = true;
-      this._skybox.material = skyboxMaterial;*/
-=======
->>>>>>> 4a7f41c0cb9757b7c87e061de78e891a2ec71759
       this._skybox = Mesh.CreateBox("skyBox", 5000.0, this._scene);
       const skyboxMaterial = new SkyMaterial("skyBox", this._scene);
       skyboxMaterial.backFaceCulling = false;

@@ -5,6 +5,8 @@ export class BattleGUI {
   private _health_circle: Image;
   private _enemyName: TextBlock;
   private _old_health_Width: number;
+  private _wonText: TextBlock;
+  private _byeText: TextBlock;
 
   constructor() {
     const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -68,12 +70,11 @@ export class BattleGUI {
     this._wonText.shadowBlur = 5;
     this._wonText.shadowOffsetX = -2;
     this._wonText.shadowOffsetY = 2;
-    this._wonText.text = "ANIMAL WAS DEAD\nYOU WON";
+    this._wonText.text = "ANIMAL IS DEAD\nYOU WIN";
     this._wonText.textWrapping = true;
     this._wonText.resizeToFit = true;
     this._wonText.height = 0.1;
     this._wonText.width = 0.5;
-    this._wonText.fontFamily = "Arial";
     gui.addControl(this._wonText);
     this._wonText.scaleX = 0;
     this._wonText.scaleY = 0;

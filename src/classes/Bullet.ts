@@ -21,7 +21,7 @@ export class Bullet {
   }
 
   private _createBullet(target: Vector3, position: Vector3, color: Color3) {
-    const bullet = new Mesh.CreateSphere ("bullet", 12, 3, this._scene, false);
+    const bullet = Mesh.CreateSphere ("bullet", 12, 3, this._scene, false);
     const direction = target.subtract(position);
     direction.normalize();
     direction.scaleInPlace(this._speed);
