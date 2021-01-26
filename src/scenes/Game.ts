@@ -212,7 +212,23 @@ export class Game {
     }
   }
 
-  private _actionAfterChose(name: string, action: string) {         
+  private _createInfo(): PlayerInfo {
+    const info = new PlayerInfo();
+    info.setMap('firstLevel');
+    info.setPosition(JSON.stringify([
+      this._player.getMesh().position.x,
+      this._player.getMesh().position.y,
+      this._player.getMesh().position.z
+    ]));
+    info.setHealth(this._player.getHealth());
+    info.setKarma(this._player.getKarma());
+    info.setLookAtAngle(this._player.getLookAtAngle() | 0);
+    info.setKilled(this._killedAnimals);
+
+    return info;
+  }
+
+  private _actionAfterChose(name: string, action: string) {
     if (action === 'get') {
       const info = new PlayerInfo();
       const treeName = name.match(/{(.*?)}/)[1];
