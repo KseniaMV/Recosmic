@@ -1,6 +1,3 @@
-import { ThinEngine } from "@babylonjs/core";
-import { AdvancedDynamicTextureTreeItemComponent } from "@babylonjs/inspector/components/sceneExplorer/entities/gui/advancedDynamicTextureTreeItemComponent";
-
 export default class Catalog {
     private totalItemCount: number;
     public currentCount: number;
@@ -188,7 +185,6 @@ export default class Catalog {
     }
 
     public openItemCard () {
-
     }
 
     private _checkLocalStorage () {
@@ -198,14 +194,14 @@ export default class Catalog {
                 this._items.forEach(item => {
                     if(item.dataset.name === element) {
                         const type = item.dataset.type;
-                        let imageName = "";
+                        let imageName = element;
                         if(element === "Catoxeltis colorful") {
                             imageName = "Catoxeltis_colorful";
                         }
                         if(element === "Purple-brows bat") {
                             imageName = "Purple-brows_bat";
                         }
-                        item.style.backgroundImage = `url(../assets/images/${type}/${imageName}.png`;
+                        item.style.backgroundImage = `url(../assets/images/${type}/${imageName}.png)`;
                         item.classList.remove("unknown_item");
                     }
                 });

@@ -39,7 +39,7 @@ export class GameGUI {
     this._saveText.textWrapping = true;
     this._saveText.height = 0.15;
     this._saveText.width = 0.5;
-    this._saveText.fontFamily = "Arial";
+    this._saveText.fontFamily = "Cabin";
     this._gui.addControl(this._saveText);
 
     this._saveRectangle.scaleX = 0;
@@ -73,7 +73,7 @@ export class GameGUI {
     this._demoText.textWrapping = true;
     this._demoText.height = 0.15;
     this._demoText.width = 0.5;
-    this._demoText.fontFamily = "Arial";
+    this._demoText.fontFamily = "Cabin";
     this._gui.addControl(this._demoText);
 
     this._demoRectangle.scaleX = 0;

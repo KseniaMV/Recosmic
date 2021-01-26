@@ -101,12 +101,19 @@ export class PlayerInfo {
   }
 
   private _setPlanetItem (name, objectItems) {
-      const item = name === "animal-1" ? "Catoxeltis colorful" : "Purple-brows bat";
+    let item = name;
+    if(name === "animal-1") {
+      item = "Catoxeltis colorful";
+    };
+    if(name === "animal-2") {
+      item = "Purple-brows bat";
+    };
+      //const item = name === "animal-1" ? "Catoxeltis colorful" : "Purple-brows bat";
       objectItems.add(item);
       localStorage.setItem('cosmic-items', JSON.stringify(Array.from(objectItems)));
       const quest = new Quests().checkQuestCompleteState(1);
   }
-  
+
   public setCheckpoint(check: boolean) {
     this._checkpoint = check;
   }

@@ -12,6 +12,7 @@ import { PlayerInfo } from '../classes/PlayerInfo';
 import { LoadGame } from '../classes/LoadGame';
 import { Animal } from '../classes/Animal';
 import { ChoiseBoxTree } from "../ui/ChoiseBoxTree";
+import Quests from "../classes/Quests";
 
 export class Game {
   private _scene: Scene;
@@ -212,11 +213,11 @@ export class Game {
   }
 
   private _actionAfterChose(name: string, action: string) {         
-    console.log(`${name}`);
     if (action === 'get') {
       const info = new PlayerInfo();
       const treeName = name.match(/{(.*?)}/)[1];
       info.setPlanetItemToLocalStorage(treeName);
+      console.log(treeName);
     }
   }
 
@@ -252,12 +253,14 @@ export class Game {
 
         setTimeout(() => {
           this._gameGUI.hideDemoText();
-        }, 5000);
 
+        }, 5000);
+        const endQuests = new Quests().checkQuestCompleteState(0);
         setTimeout(() => {
           this._isEnd = false;
         }, 6000);
       }
+
     }
 
     //console.log(name);
