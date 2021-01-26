@@ -35,6 +35,7 @@ export class Game {
   private _choiseBox2: ChoiseBox;
   private _incrementHealth: boolean = false;
   private _incrementHealthAllow: boolean = true;
+  private _isEnd: boolean = false;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -114,8 +115,11 @@ export class Game {
       }
       this._player.update();
     });
-    canvas.onclick = null;
+
     this.createUI();
+
+    canvas.onclick = null;
+    document.exitPointerLock();
   }
 
   private createUI () {
@@ -206,7 +210,8 @@ export class Game {
   }
 
   private _actionAfterChose(name: string, action: string) {
-    console.log(`${name} --- ${action}`);
+    const treeName = name.match(/\{(.*?)\}/)[1];
+    console.log(`${treeName} --- ${action}`);
   }
 
   private _createInfo(): PlayerInfo {
@@ -250,7 +255,18 @@ export class Game {
 
   private _checkCollisions(name) {
     if (name.includes('laboratory')) {
-      console.log('The End!');
+      if (!this._isEnd) {
+        this._isEnd = true;
+        this._gameGUI.showDemoText();
+
+        setTimeout(() => {
+          this._gameGUI.hideDemoText();
+        }, 5000);
+
+        setTimeout(() => {
+          this._isEnd = false;
+        }, 6000);
+      }
     }
 
     //console.log(name);
