@@ -20,18 +20,21 @@ export default class Tablet {
     public quests: Quests;
     public sceneQuestId: Array<number>;
     private _backButton: HTMLButtonElement;
+    private _catalog: Catalog;
+    private _reseached: any[];
 
     constructor(scene: Scene, canvas){
         this._scene = scene;
         this._canvas = canvas;
         this.isTabletOpen = false;
+        this._reseached = [];
         this.sceneQuestId = [0,1];
         this.createTablet();
         this._createGUI();
-        this.quests = new Quests(this._scene, this._canvas);  //массив всех квестов доступный на планете
+        this.quests = new Quests();  //массив всех квестов доступный на планете
         this.quests.getQuestsData()
         .then(()=>{
-            if(!localStorage.getItem("cosmic")) {
+            if(!localStorage.getItem("cosmic-quests")) {
                 setTimeout(() => {
                     this.quests.outPutCurrentQuest(0);
                     this.quests.questsList.push({
@@ -46,6 +49,7 @@ export default class Tablet {
                         id : 1,
                         status : "notComplete"
                     });
+                    this.quests.saveQuests();
                 }, 9000);
             }
         });
@@ -210,12 +214,6 @@ export default class Tablet {
             this.tabletBG.append(catalogSection);
             catalogSection.append(this._backButton);
             catalog.openCurrentPlanetCatalog(); 
-
-       /* const pagination = catalog.pagination();
-            catalogSection.append(pagination); */
-    }
-
-    addInfoToCatalog () {
 
     }
 

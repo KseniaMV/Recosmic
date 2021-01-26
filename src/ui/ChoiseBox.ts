@@ -18,7 +18,7 @@ export class ChoiseBox {
       "./assets/images/gui/button2.png"
     );
 
-    this._attackButton.fontFamily = "Arial";
+    this._attackButton.fontFamily = "Cabin";
     this._attackButton.width = 0.2
     this._attackButton.height = "70px";
     this._attackButton.color = "white";
@@ -40,7 +40,7 @@ export class ChoiseBox {
       "./assets/images/gui/button2.png"
     );
 
-    this._investigateButton.fontFamily = "Arial";
+    this._investigateButton.fontFamily = "Cabin";
     this._investigateButton.width = 0.2
     this._investigateButton.height = "70px";
     this._investigateButton.color = "white";

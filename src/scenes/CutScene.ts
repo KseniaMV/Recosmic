@@ -71,7 +71,7 @@ export class CutScene {
       "PLAY",
       "./assets/images/gui/button2.png"
     );
-    playBtn.fontFamily = "Arial";
+    playBtn.fontFamily =  "Cabin";
     playBtn.width = 0.2
     playBtn.height = "70px";
     playBtn.fontWeight = "bold";

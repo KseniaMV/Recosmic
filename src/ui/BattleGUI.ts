@@ -26,7 +26,7 @@ export class BattleGUI {
     this._enemyName.resizeToFit = true;
     this._enemyName.height = 0.1;
     this._enemyName.width = 0.5;
-    this._enemyName.fontFamily = "Arial";
+    this._enemyName.fontFamily =  "Cabin";
     gui.addControl(this._enemyName);
 
     this._health_line = new Image("image_line", "./assets/images/battle/enemy_line.png");
@@ -96,7 +96,7 @@ export class BattleGUI {
     this._byeText.resizeToFit = true;
     this._byeText.height = 0.1;
     this._byeText.width = 0.5;
-    this._byeText.fontFamily = "Arial";
+    this._byeText.fontFamily =  "Cabin";
     gui.addControl(this._byeText);
     this._byeText.scaleX = 0;
     this._byeText.scaleY = 0;

@@ -10,6 +10,7 @@ import { CharacterState } from '../classes/CharacterState';
 import { PlayerInfo } from '../classes/PlayerInfo';
 import { LoadGame } from '../classes/LoadGame';
 import { Animal } from '../classes/Animal';
+import { ChoiseBoxTree } from "../ui/ChoiseBoxTree";
 
 export class Game {
   private _scene: Scene;
@@ -32,6 +33,7 @@ export class Game {
   private _characterState: CharacterState;
   private _choiseBox: any;
   private _choiseBox2: ChoiseBox;
+  private _reseached: Array<string>;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -42,8 +44,9 @@ export class Game {
 
     this._animals = [];
     this._killedAnimals = [];
+    this._reseached = [];
 
-    this._choiseBox = new ChoiseBox(this._scene, this._actionAfterChose.bind(this));
+    this._choiseBox = new ChoiseBoxTree(this._scene, this._actionAfterChose.bind(this));
     this._choiseBox2 = new ChoiseBox(this._scene, this._actionAfterChose2.bind(this));
 
     this._createSkyBox();
@@ -122,15 +125,6 @@ export class Game {
     this._callbackToChangeScene = func;
   }
 
-  private _funcForTablet(str: string) {
-    if (str === 'open') {
-      this._characterState.block(true);
-    } else {
-      this._characterState.block(false);
-    }
-    console.log('This is from Tablet: ' + str);
-  }
-
   public setSavedGame(info: PlayerInfo) {
     console.log(info.getKilled())
     if (Number.parseInt(info.getHealth()) > 0) {
@@ -177,8 +171,13 @@ export class Game {
     });
   }
 
-  private _actionAfterChose(name: string, action: string) {
-    console.log(`${name} --- ${action}`);
+  private _actionAfterChose(name: string, action: string) {         
+    console.log(`${name}`);
+    if (action === 'get') {
+      const info = new PlayerInfo();
+      const treeName = name.match(/{(.*?)}/)[1];
+      info.setPlanetItemToLocalStorage(treeName);
+    }
   }
 
   private _actionAfterChose2(name: string, action: string) {
@@ -191,6 +190,7 @@ export class Game {
         this._player.getMesh().position.y,
         this._player.getMesh().position.z
       ]);
+      info.setPlanetItemToLocalStorage(name.match(/\[(.*?)\]/)[1]);
       info.setHealth(this._player.getHealth());
       info.setKarma(this._player.getKarma());
       info.setLookAtAngle(this._player.getLookAtAngle());
@@ -234,7 +234,6 @@ export class Game {
 
     if (name.includes('savestation')) {
       this._environment.startSaveParticles();
-
       const info = new PlayerInfo();
       info.setMap('firstLevel');
       info.setPosition(JSON.stringify([
@@ -281,12 +280,6 @@ export class Game {
     };
     this._transition = true;
     this._scene.detachControl();
-  }
-
-  public checkOpenUI(flag:boolean) {
-    if(flag === true ) {
-      this._characterState.removeHoverEffect();
-    }
   }
 
 }

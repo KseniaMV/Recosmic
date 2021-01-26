@@ -1,3 +1,6 @@
+import { ThinEngine } from "@babylonjs/core";
+import { AdvancedDynamicTextureTreeItemComponent } from "@babylonjs/inspector/components/sceneExplorer/entities/gui/advancedDynamicTextureTreeItemComponent";
+
 export default class Catalog {
     private totalItemCount: number;
     public currentCount: number;
@@ -9,14 +12,17 @@ export default class Catalog {
     paginationItems: any[];
     planets: any[];
     private _itemsConteiner: HTMLDivElement;
+    private _items: any[];
 
     constructor (currentPlanet) {
         this.currentPlanet = currentPlanet;
-        this.currentCount = 0;
+        this.currentCount = 0;       //количество изученых животных
         this.paginationCurrentItem = 0;
         this.paginationItems = [];
         this.planetData = {};
         this.planets = [];
+        this._items = [];
+
     }
 
     public getPlanetData (){
@@ -74,8 +80,16 @@ export default class Catalog {
             planetName.textContent = name;
         const planetCount = document.createElement("p");
             planetCount.classList.add("planetSection_count");
-            planetCount.textContent = `${this.currentCount} / ${data.count}`;
-
+            if(name === this.currentPlanet) {
+                if(localStorage.getItem("cosmic-items")){
+                    const count = JSON.parse(localStorage.getItem("cosmic-items")).length;
+                    planetCount.textContent = `${count} / ${data.count}`;
+                }else {
+                    planetCount.textContent = `${this.currentCount} / ${data.count}`;
+                } 
+            }else {
+                planetCount.textContent = `${this.currentCount} / ${data.count}`;
+            }
             planetSection.append(planetImage);
             planetImage.after(planetCount);
             planetCount.after(planetName);
@@ -88,16 +102,17 @@ export default class Catalog {
             if(e.target.dataset.name && e.target.dataset.name === this.currentPlanet) {
                 const targetPlanetData =  this.planetData[e.target.dataset.name];
                 const dataConteiner = this._createDataConteiner(targetPlanetData.image);
-                
+
                 targetPlanetData.animals.forEach(animal => {
-                    this._createDefaultItem ("animals", dataConteiner, animal); 
+                    this._createDefaultItem ("animals", dataConteiner, animal);
                 });
                 targetPlanetData.plants.forEach(plant => {
-                    this._createDefaultItem ("plants", dataConteiner, plant); 
+                    this._createDefaultItem ("plants", dataConteiner, plant);
                 });
                 this._hidePlanetSection();
                 this.sliderConteiner.append(dataConteiner);
-                this._createCloseDataButton (dataConteiner)
+                this._createCloseDataButton (dataConteiner);
+                this._checkLocalStorage();
             }
         })
     }
@@ -119,7 +134,9 @@ export default class Catalog {
         item.setAttribute("data-name", itemName);
         item.setAttribute("data-type", itemType);
         conteiner.append(item);
+        this._items.push(item);
     }
+
     private _hidePlanetSection () {
         this.planets.forEach(planet =>{
             planet.classList.toggle("section--hidden");
@@ -136,10 +153,6 @@ export default class Catalog {
                 conteiner.remove();
                 this._hidePlanetSection();
             });
-    }
-
-    private createQuantityСheck () {
-
     }
 
     public getItemDescription (type, name) {
@@ -176,6 +189,28 @@ export default class Catalog {
 
     public openItemCard () {
 
+    }
+
+    private _checkLocalStorage () {
+        if(localStorage.getItem("cosmic-items")) {
+            const data =  JSON.parse(localStorage.getItem("cosmic-items"));
+            data.forEach(element => {
+                this._items.forEach(item => {
+                    if(item.dataset.name === element) {
+                        const type = item.dataset.type;
+                        let imageName = "";
+                        if(element === "Catoxeltis colorful") {
+                            imageName = "Catoxeltis_colorful";
+                        }
+                        if(element === "Purple-brows bat") {
+                            imageName = "Purple-brows_bat";
+                        }
+                        item.style.backgroundImage = `url(../assets/images/${type}/${imageName}.png`;
+                        item.classList.remove("unknown_item");
+                    }
+                });
+            });
+        }
     }
 
 }

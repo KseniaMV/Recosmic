@@ -51,7 +51,7 @@ export class MainMenu {
       "START GAME",
       "./assets/images/gui/button2.png"
     );
-    startBtn.fontFamily = "Arial";
+    startBtn.fontFamily =  "Cabin";
     startBtn.width = "250px"
     startBtn.height = "70px";
     startBtn.color = "rgb(19, 55, 90)";
@@ -69,7 +69,7 @@ export class MainMenu {
       "LOAD GAME",
       "./assets/images/gui/button2.png"
     );
-    loadBtn.fontFamily = "Arial";
+    loadBtn.fontFamily =  "Cabin";
     loadBtn.width = "250px"
     loadBtn.height = "70px";
     loadBtn.color = "rgb(19, 55, 90)";
@@ -101,6 +101,8 @@ export class MainMenu {
     });
 
     startBtn.onPointerDownObservable.add(() => {
+      localStorage.removeItem("cosmic-quests");
+      localStorage.removeItem("cosmic-items");
       this._info = null;
       this._currentCallback = callback;
 

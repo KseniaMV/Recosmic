@@ -175,7 +175,7 @@ export class Battle {
   }
 
   private _fire() {
-    const bullet = new Mesh.CreateSphere ("bullet", 12, 3, this._scene, false);
+    const bullet = Mesh.CreateSphere ("bullet", 12, 3, this._scene, false);
     const direction = this._camera.getTarget().subtract(this._camera.position);
     direction.normalize();
     direction.scaleInPlace(this._BULLET_SPEED);

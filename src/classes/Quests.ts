@@ -1,4 +1,5 @@
 import { Scene } from "@babylonjs/core";
+import Popup from "./Popup";
 
 export default class Quests {
     private _scene: Scene;
@@ -9,9 +10,7 @@ export default class Quests {
     private _questData: unknown;
     public loadedQuestList: Array<object>;
 
-    constructor (scene: Scene, canvas) {
-        this._scene = scene;
-        this._canvas = canvas;
+    constructor () {
         this.questsList = [];
         this.loadedQuestList = [];
     }
@@ -117,12 +116,36 @@ export default class Quests {
             return questDescription_conteiner;
     }
 
-    public setQuestCompleteState (id) {
-        this.questsList.forEach((questObject)=>{
-            if(questObject['id'] === id) {
-                questObject['status'] === "complete";
-            }
-        });
+    public checkQuestCompleteState (id) {
+        if(id === 0) {
+            this._setCompleteStatus(id);
+        }
+        if(id === 1) {
+            if(localStorage.getItem("cosmic-items")) {
+                const data = JSON.parse(localStorage.getItem("cosmic-items")).length;
+                if(data === 5) {
+                    this._setCompleteStatus(id)
+                }
+            } 
+        }
+    }
+
+    private _setCompleteStatus (id) {
+        this.checkSavedQuests()
+        .then(() => {
+            this.questsList.forEach((questObject)=>{
+                console.log(questObject['id']);
+                if(questObject['id'] === id) {
+                    questObject['status'] = "complete";
+                    this.getQuestsData()
+                    .then(()=> {
+                        const popup = new Popup(`The quest "${this._questData[id].name}" is completed`);
+                        popup.createPopup();
+                        this.saveQuests();
+                    })
+                }
+            });
+        })
     }
 
     public outPutCurrentQuest (id:number) {                     //notice
@@ -138,15 +161,16 @@ export default class Quests {
     //-------------save quest to LocalStorage ------------//
 
     public saveQuests () {
-        if(localStorage.getItem("cosmic")) {
-            localStorage.clear();
-        }
+       /* if(localStorage.getItem("cosmic-quests")) {
+            //localStorage.clear();
+            localStorage.removeItem("cosmic-quests")
+        }*/
         const questForSave = JSON.stringify(this.questsList);
-        localStorage.setItem("cosmic", questForSave);
+        localStorage.setItem("cosmic-quests", questForSave);
     }
 
     public async checkSavedQuests () {
-        const savedQuests = localStorage.getItem("cosmic");
+        const savedQuests = localStorage.getItem("cosmic-quests");
         if(savedQuests) {
             this.questsList = [];
             this.loadedQuestList = JSON.parse(savedQuests);

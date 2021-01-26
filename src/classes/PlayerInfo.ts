@@ -1,3 +1,6 @@
+import Popup from "./Popup";
+import Quests from "./Quests";
+
 export class PlayerInfo {
   private _health: number;
   private _karma: number;
@@ -73,4 +76,33 @@ export class PlayerInfo {
   public pushKilled(name: string) {
     this._killed.push(name);
   }
+
+  public setPlanetItemToLocalStorage(name) {
+    let items = new Set();
+    this._getPlanetItems()
+    .then((data) => {
+      if(data) {
+        data.forEach(element => {
+          items.add(element);
+        });
+        this._setPlanetItem (name, items);
+      }else {
+        this._setPlanetItem (name, items);
+      }
+    });
+  }
+
+  private async _getPlanetItems () {
+    if(localStorage.getItem('cosmic-items')) {
+      return JSON.parse(localStorage.getItem('cosmic-items'));
+    }
+  }
+
+  private _setPlanetItem (name, objectItems) {
+      const item = name === "animal-1" ? "Catoxeltis colorful" : "Purple-brows bat";
+      objectItems.add(item);
+      localStorage.setItem('cosmic-items', JSON.stringify(Array.from(objectItems)));
+      const quest = new Quests().checkQuestCompleteState(1);
+  }
+
 }
