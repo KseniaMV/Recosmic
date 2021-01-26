@@ -7,8 +7,9 @@ import Quests  from './Quests';
 export default class Tablet {
     private _scene: Scene;
     private _canvas: any;
+    private _exitFunc: Function;
     private _tabletGui: AdvancedDynamicTexture;
-    private _tabletButton: HTMLButtonElement; 
+    private _tabletButton: HTMLButtonElement;
     public isTabletOpen: boolean;
     public tabletBG: HTMLDivElement;
     public tablet: HTMLDivElement;
@@ -193,9 +194,15 @@ export default class Tablet {
         const exitButton = document.createElement("button")
             exitButton.classList.add("exit-button");
             exitButton.textContent = "exit game";
-        
+
             settingSection.append(saveGameButton);
             saveGameButton.after(exitButton);
+
+            exitButton.addEventListener("click", ()=>{
+                    this._playClickSound();
+                    this.exitGame();
+                }) ;
+
     }
 
     public saveGame () {
@@ -203,17 +210,22 @@ export default class Tablet {
     }
 
     public exitGame () {
-
+      this._exitFunc();
+      this._closeTablet();
+      const tabletBtn = document.querySelector('.openTabletButton');
+      if (tabletBtn) {
+          tabletBtn.remove();
+      }
     }
 
     //----------------catalog section------------//
 
     private _openCatalogSection () {
         const catalog = new Catalog("Babylon");
-        const catalogSection = catalog.createCatalogSection(); 
+        const catalogSection = catalog.createCatalogSection();
             this.tabletBG.append(catalogSection);
             catalogSection.append(this._backButton);
-            catalog.openCurrentPlanetCatalog(); 
+            catalog.openCurrentPlanetCatalog();
 
     }
 
@@ -245,7 +257,7 @@ export default class Tablet {
     }
 
     setQuestStatus () {
-        
+
     }
 
     private _playClickSound() {
@@ -253,5 +265,8 @@ export default class Tablet {
         sound.play();
     }
 
-}
+    public setExitFunc(func: Function) {
+      this._exitFunc = func;
+    }
 
+}

@@ -80,7 +80,7 @@ export class App {
   }
 
   private async _goToGameScene(info: PlayerInfo): Promise<void> {
-    const game = new Game(this._engine, null, this._canvas);
+    const game = new Game(this._engine, this._goToStart.bind(this), this._canvas);
     const scene = game.getScene();
     await this._goToScene(State.GAME, scene);
     game.setSavedGame(info);

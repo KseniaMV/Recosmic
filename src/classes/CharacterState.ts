@@ -96,7 +96,7 @@ export class CharacterState {
         this._effect1.onPointerOutObservable.add(()=>{
           this._effectGui.removeControl(this._effectButton);
       });
-  
+
         const effect2 =  new Image("effect2", "../assets/sprites2/effect2.png");
         effect2.width = "50px";
         effect2.height = "50px";
@@ -159,7 +159,7 @@ export class CharacterState {
         effectButton.color = "white";
         this._effectGui.addControl(effectButton)
         this._effectButton = effectButton;
-      
+
     }
 
 
@@ -176,7 +176,9 @@ export class CharacterState {
     }
 
     setHP (hp: number) {
-      const id = 21 - Math.floor(20 / 100 * hp);
+      let id = 20 - Math.floor(20 / 100 * hp);
+      id = id < 0 ? 0 : id;
+      id = id > 20 ? 20 : id;
       this._health.cellId = id;
     }
 
@@ -205,5 +207,3 @@ export class CharacterState {
 
     }
 }
-
-

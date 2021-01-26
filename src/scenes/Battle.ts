@@ -25,7 +25,7 @@ export class Battle {
   private _playerHealth: number;
   private _startUpdate: boolean = false;
   private _BULLET_SPEED: number = 10;
-  private _PLAYER_SPEED: number = 15;
+  private _PLAYER_SPEED: number = 20;
   private _PLAYER_DAMAGE: number = 5;
   private _ARENA_LENGTH: number = 1000;
   isBattleOver: any;
@@ -93,9 +93,9 @@ export class Battle {
       }
     });
 
-    setTimeout(() => {
+    /*setTimeout(() => {
       this._startUpdate = true;
-    }, 5000);
+    }, 6000);*/
   }
 
   public setInfoGame(info: PlayerInfo) {
@@ -153,6 +153,7 @@ export class Battle {
     this._enemy.getMesh().getChildMeshes().forEach(mesh => {
       this._world.addShadow(mesh, true);
     });
+    this._startUpdate = true;
   }
 
   private _createCamera() {
@@ -248,6 +249,10 @@ export class Battle {
         this._infoGame.setHealth(this._playerHealth);
         this._battleGUI.setHP(this._playerHealth);
       }
+    }
+
+    if (this._startUpdate && this.isBattleOver) {
+      this._enemy.runDeadAction();
     }
 
     if (this._playerHealth <= 30 && !this.isBattleChoise) {

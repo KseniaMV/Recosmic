@@ -84,6 +84,12 @@ export class Environment {
         }
       }
 
+      if (mesh.name.includes('treecollider')) {
+          mesh.isVisible = false;
+          mesh.isPickable = true;
+          mesh.isActiveItem = true;
+      }
+
       mesh.checkCollisions = true;
       mesh.isPickable = true;
 
@@ -109,6 +115,11 @@ export class Environment {
 
 
       if(mesh.name.includes("Cube")) {
+        mesh.isPickable = true;
+        mesh.checkCollisions = true;
+      }
+
+      if(mesh.name.includes("laboratory")) {
         mesh.isPickable = true;
         mesh.checkCollisions = true;
       }

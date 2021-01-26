@@ -5,6 +5,7 @@ import {SkyMaterial} from '@babylonjs/materials/sky/skyMaterial';
 import { Player } from '../classes/Player';
 import { Environment } from '../classes/Environment';
 import { ChoiseBox } from '../ui/ChoiseBox';
+import { GameGUI } from '../ui/GameGUI';
 import Tablet from "../classes/Tablet";
 import { CharacterState } from '../classes/CharacterState';
 import { PlayerInfo } from '../classes/PlayerInfo';
@@ -33,7 +34,9 @@ export class Game {
   private _characterState: CharacterState;
   private _choiseBox: any;
   private _choiseBox2: ChoiseBox;
-  private _reseached: Array<string>;
+  private _incrementHealth: boolean = false;
+  private _incrementHealthAllow: boolean = true;
+  private _isEnd: boolean = false;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -48,6 +51,8 @@ export class Game {
 
     this._choiseBox = new ChoiseBoxTree(this._scene, this._actionAfterChose.bind(this));
     this._choiseBox2 = new ChoiseBox(this._scene, this._actionAfterChose2.bind(this));
+
+    this._gameGUI = new GameGUI();
 
     this._createSkyBox();
 
@@ -112,35 +117,62 @@ export class Game {
       }
       this._player.update();
     });
-    canvas.onclick = null;
+
     this.createUI();
+
+    canvas.onclick = null;
+    document.exitPointerLock();
   }
 
   private createUI () {
     this._characterState = new CharacterState(this._scene);
     this._tablet = new Tablet(this._scene, this._canvas);
+    this._tablet.setExitFunc(this._callback.bind(this));
   }
 
   public setCallbackToChangeScene(func) {
     this._callbackToChangeScene = func;
   }
 
+  private _healing() {
+    if (Number.parseInt(this._player.getHealth()) >= 100) {
+      this._incrementHealth = false;
+    } else {
+      this._incrementHealth = true;
+      this._player.setHealth(Number.parseInt(this._player.getHealth()) + 5);
+      this._updateState();
+    }
+    if (this._incrementHealth) {
+      setTimeout(this._healing.bind(this), 5000);
+    }
+  }
+
+  private _funcForTablet(str: string) {
+    if (str === 'open') {
+      this._characterState.block(true);
+    } else {
+      this._characterState.block(false);
+    }
+    console.log('This is from Tablet: ' + str);
+  }
+
   public setSavedGame(info: PlayerInfo) {
-    console.log(info.getKilled())
     if (Number.parseInt(info.getHealth()) > 0) {
       this._savedGame = info;
     } else {
       info = LoadGame.load();
     }
-    
+
     this._animals.forEach(animal => {
       const regName = animal.getName().match(/\[(.*?)\]/);
       if (regName) {
         const cname = regName[1];
-        if (info.getKilled().includes(cname)) {
-          console.log('need to remove animal');
-          this._killedAnimals.push(cname);
-          animal.removeModel();
+        const killedAnimals = info.getKilled();
+        if (killedAnimals) {
+          if (info.getKilled().includes(cname)) {
+            this._killedAnimals.push(cname);
+            animal.removeModel();
+          }
         }
       }
     });
@@ -154,6 +186,7 @@ export class Game {
     this._player.setOriginPosition(new Vector3(x, y, z));
     //this._killedAnimals = info.getKilled();
     this._updateState();
+    this._healing();
   }
 
   private _updateState() {
@@ -169,6 +202,13 @@ export class Game {
       animal.setInfo(item.position, item.mesh, item.isDead);
       this._animals.push(animal);
     });
+
+    // save start
+    if (!LoadGame.load().getCheckpoint()) {
+      const info = this._createInfo();
+      info.setCheckpoint(false);
+      LoadGame.save(info);
+    }
   }
 
   private _actionAfterChose(name: string, action: string) {         
@@ -183,6 +223,7 @@ export class Game {
   private _actionAfterChose2(name: string, action: string) {
     if (action === 'attack') {
       console.log('go to battle scene');
+
       const info = new PlayerInfo();
       info.setMap('firstLevel');
       info.setPosition([
@@ -196,11 +237,29 @@ export class Game {
       info.setLookAtAngle(this._player.getLookAtAngle());
       info.setEnemyName(name.match(/\[(.*?)\]/)[1]);
       info.setKilled(this._killedAnimals);
+
+      this._incrementHealth = false;
+
       this._callbackToChangeScene(info);
     }
   }
 
   private _checkCollisions(name) {
+    if (name.includes('laboratory')) {
+      if (!this._isEnd) {
+        this._isEnd = true;
+        this._gameGUI.showDemoText();
+
+        setTimeout(() => {
+          this._gameGUI.hideDemoText();
+        }, 5000);
+
+        setTimeout(() => {
+          this._isEnd = false;
+        }, 6000);
+      }
+    }
+
     //console.log(name);
     if (!this._choiseBox.getIsChose() && name.includes('active_tree')) {
       this._choiseBox.setShow(true, name);
@@ -233,19 +292,32 @@ export class Game {
     }
 
     if (name.includes('savestation')) {
-      this._environment.startSaveParticles();
-      const info = new PlayerInfo();
-      info.setMap('firstLevel');
-      info.setPosition(JSON.stringify([
-        this._player.getMesh().position.x,
-        this._player.getMesh().position.y,
-        this._player.getMesh().position.z
-      ]));
-      info.setHealth(this._player.getHealth());
-      info.setKarma(this._player.getKarma());
-      info.setLookAtAngle(this._player.getLookAtAngle());
-      info.setKilled(this._killedAnimals);
-      LoadGame.save(info);
+      if (!this._isSaved) {
+        this._isSaved = true;
+        this._environment.startSaveParticles();
+
+        const info = new PlayerInfo();
+        info.setMap('firstLevel');
+        info.setPosition(JSON.stringify([
+          this._player.getMesh().position.x,
+          this._player.getMesh().position.y,
+          this._player.getMesh().position.z
+        ]));
+        info.setHealth(this._player.getHealth());
+        info.setKarma(this._player.getKarma());
+        info.setLookAtAngle(this._player.getLookAtAngle());
+        info.setKilled(this._killedAnimals);
+        info.setCheckpoint(true);
+        LoadGame.save(info);
+
+        this._gameGUI.showSaveText();
+
+        setTimeout(this._gameGUI.hideSaveText.bind(this._gameGUI), 3000);
+
+        setTimeout(() => {
+          this._isSaved = false;
+        }, 5000);
+      }
     }
   }
 
