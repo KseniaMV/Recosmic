@@ -6,12 +6,14 @@ export class PlayerInfo {
   private _map: string;
   private _enemyName: string;
   private _killed: Array<string>;
+  private _checkpoint: boolean;
 
   constructor() {
     this._health = 100;
     this._karma = 0;
     this._lookAtAngle = 0;
-    this._killed = []
+    this._killed = [];
+    this._checkpoint = false;
   }
 
   public setHealth(health: number) {
@@ -72,5 +74,13 @@ export class PlayerInfo {
 
   public pushKilled(name: string) {
     this._killed.push(name);
+  }
+
+  public setCheckpoint(check: boolean) {
+    this._checkpoint = check;
+  }
+
+  public getCheckpoint() : boolean {
+    return this._checkpoint;
   }
 }

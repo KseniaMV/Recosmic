@@ -32,6 +32,7 @@ export class Enemy {
   private _RELOAD_TIME = 700;
   private _direction: any;
   private _currentAnim: any;
+  private _distance: number;
 
   constructor(name: string, scene: Scene) {
     this._scene = scene;
@@ -72,15 +73,14 @@ export class Enemy {
 
   public runDeadAction() {
     this._isFireEnabled = false;
+    this._idleAnime.stop();
+    this._attackFarAnime.stop();
+    this._attackDistanceAnime.stop();
     if (this._fallingAngle < Math.PI) {
       this._fallingAngle += 0.01;
       this._model.rotate(new Vector3(0, 0, 1), 0.01, Space.WORLD);
     } else {
       if (!this._deadParticles) {
-        this._idleAnime.stop();
-        this._attackFarAnime.stop();
-        this._attackDistanceAnime.stop();
-
         this._deadParticles = this._createParticles();
         this._deadParticles.start();
 
@@ -100,7 +100,12 @@ export class Enemy {
   }
 
   private _walkAndShift(target) {
-    target = new Vector3(target.x + 150, target.y, target.z + 150);
+
+    if (this._model.position.x > 500 || this._model.position.x > 500) {
+      target = new Vector3(target.x - 100, target.y, target.z - 100);
+    } else {
+        target = new Vector3(target.x + 100, target.y, target.z + 100);
+    }
     const direction = target.subtract(this._model.position);
     direction.normalize();
     direction.scaleInPlace(this._WALKING_SPEED);
@@ -166,10 +171,11 @@ export class Enemy {
   private _aiBot(position: Vector3) {
     const distance = this._model.position.subtract(position).length();
     let newAction;
+    this._distance = distance;
 
-    if (distance < 110 && distance > 30) {
+    if (distance < 110 && distance > 50) {
       newAction = ACTION.RUN;
-    } else if (distance <= 30) {
+    } else if (distance <= 50) {
       newAction = ACTION.ATTACK_1;
     } else {
       newAction = ACTION.ATTACK_2;
@@ -183,6 +189,7 @@ export class Enemy {
           console.log("walking");
           this._isWalking = true;
           this._isFireEnabled = false;
+          this._isAttackOne = false;
           this._changeAnime(this._idleAnime);
           this._walkToTarget(position);
           break;
@@ -190,6 +197,7 @@ export class Enemy {
           console.log("attack 1");
           this._changeAnime(this._idleAnime);
           this._isWalking = false;
+          this._isShifting = false;
           this._isFireEnabled = false;
           break;
         case ACTION.ATTACK_2:
@@ -204,15 +212,12 @@ export class Enemy {
       }
     }
 
-    if (this._currentAction = ACTION.ATTACK_2) {
+    if (this._currentAction == ACTION.ATTACK_2) {
       const randShift = Math.random() * 100;
       if (randShift < 49 && !this._isShifting) {
-        console.log(this._isShifting);
         this._isShifting = true;
-        console.log('shift')
         this._walkAndShift(position);
         setTimeout(() => {
-          console.log(this._isShifting);
           this._isShifting = false;
         }, 3500);
       }
@@ -286,5 +291,9 @@ export class Enemy {
 
   public getBullet() {
     return this._bullet;
+  }
+
+  public getDistance() {
+    return this._distance;
   }
 }

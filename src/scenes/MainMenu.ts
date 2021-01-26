@@ -104,6 +104,8 @@ export class MainMenu {
       this._info = null;
       this._currentCallback = callback;
 
+      localStorage.clear();
+
       const postProcess = new PostProcess("Fade", "fade", ["fadeLevel"], null, 1.0, camera);
       postProcess.onApply = (effect) => {
         effect.setFloat("fadeLevel", fadeLevel);
