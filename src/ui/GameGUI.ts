@@ -1,4 +1,4 @@
-import { AdvancedDynamicTexture, Rectangle, Image, TextBlock, Control } from "@babylonjs/gui";
+import { AdvancedDynamicTexture, Button, Rectangle, Image, TextBlock, Control } from "@babylonjs/gui";
 
 export class GameGUI {
   private _gui: AdvancedDynamicTexture;
@@ -6,12 +6,18 @@ export class GameGUI {
   private _saveRectangle: Rectangle;
   private _demoText: TextBlock;
   private _demoRectangle: Rectangle;
+  private _researchRectangle: Rectangle;
+  private _researchPic: Image;
+  private _researchText: Text;
+  private _researchButton: Button;
+  private _isResearch: boolean = false;
 
   constructor() {
     this._gui = AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
     this._createSave();
     this._createDemo();
+    this._createResearch();
   }
 
   private _createSave() {
@@ -82,6 +88,72 @@ export class GameGUI {
     this._demoText.scaleY = 0;
   }
 
+  // research
+  private _createResearch() {
+    this._researchRectangle = new Rectangle();
+    this._researchRectangle.width = 0.5;
+    this._researchRectangle.height = 0.57;
+    this._researchRectangle.cornerRadius = 20;
+    this._researchRectangle.color = "White";
+    this._researchRectangle.thickness = 5;
+    this._researchRectangle.background = "blue";
+    this._researchRectangle.alpha = 0.5;
+    this._gui.addControl(this._researchRectangle);
+
+    this._researchPic = new Image("logo", "./assets/images/gui/logo.png");
+    this._researchPic.width = 0.39;
+    this._researchPic.height = 0.22;
+    this._researchPic.top = "-15%";
+    this._gui.addControl(this._researchPic);
+
+    this._researchText = new TextBlock();
+    this._researchText.textHorizontalAlignment = TextBlock.HORIZONTAL_ALIGNMENT_CENTER;
+    this._researchText.textVerticalAlignment = TextBlock.VERTICAL_ALIGNMENT_TOP;
+    this._researchText.fontSize = "28px";
+    this._researchText.color = "white";
+    this._researchText.shadowColor = "black";
+    this._researchText.shadowBlur = 5;
+    this._researchText.shadowOffsetX = -2;
+    this._researchText.shadowOffsetY = 2;
+    this._researchText.text = "Sorry! This is the end of demo version. We need more donates.";
+    this._researchText.resizeToFit = true;
+    this._researchText.textWrapping = true;
+    this._researchText.height = 0.15;
+    this._researchText.width = 0.5;
+    this._researchText.top = "5%";
+    this._researchText.fontFamily = "Cabin";
+    this._gui.addControl(this._researchText);
+
+    this._researchButton = Button.CreateImageWithCenterTextButton(
+      "research_ok",
+      "OK",
+      "./assets/images/gui/button2.png"
+    );
+    this._researchButton.fontFamily =  "Cabin";
+    this._researchButton.width = "250px"
+    this._researchButton.height = "70px";
+    this._researchButton.color = "rgb(19, 55, 90)";
+    this._researchButton.fontWeight = "bold";
+    this._researchButton.top = "65%";
+    this._researchButton.thickness = 0;
+    this._researchButton.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+    this._researchButton.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+    this._gui.addControl(this._researchButton);
+
+    this._researchButton.onPointerDownObservable.add(() => {
+      this.hideResearch();
+    });
+
+    this._researchRectangle.scaleX = 0;
+    this._researchRectangle.scaleY = 0;
+    this._researchPic.scaleX = 0;
+    this._researchPic.scaleY = 0;
+    this._researchText.scaleX = 0;
+    this._researchText.scaleY = 0;
+    this._researchButton.scaleX = 0;
+    this._researchButton.scaleY = 0;
+  }
+
   private _scalingAnimation(a, p) {
     if (a < 1) {
       a += 0.05;
@@ -128,5 +200,33 @@ export class GameGUI {
   public hideDemoText() {
     this._scalingAnimationMinus(1, this._demoText);
     this._scalingAnimationMinus(1, this._demoRectangle);
+  }
+
+  public showResearch(name: string) {
+    const filename = name.match(/\[(.*?)\]/)[1];
+    const animalName = name.match(/\{(.*?)\}/)[1];
+    console.log(`name: ${animalName}\nfilename: ../${filename}.png`);
+
+    this._isResearch = true;
+    this._scalingAnimation(0, this._researchText);
+    this._scalingAnimation(0, this._researchPic);
+    this._scalingAnimation(0, this._researchRectangle);
+    this._scalingAnimation(0, this._researchButton);
+  }
+
+  public hideResearch() {
+    this._isResearch = false;
+    this._scalingAnimationMinus(1, this._researchText);
+    this._scalingAnimationMinus(1, this._researchPic);
+    this._scalingAnimationMinus(1, this._researchRectangle);
+    this._scalingAnimationMinus(1, this._researchButton);
+  }
+
+  public getIsResearch(): boolean {
+    return this._isResearch;
+  }
+
+  public setIsResearch(is: boolean) {
+    this._isResearch = is;
   }
 }

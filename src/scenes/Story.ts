@@ -12,7 +12,6 @@ export class Story {
     skipButton.textContent = 'SKIP';
     document.body.appendChild(skipButton);
     skipButton.addEventListener('click', () => {
-      document.body.removeChild(skipButton);
       video.currentTime = 999999999999999;
     });
 

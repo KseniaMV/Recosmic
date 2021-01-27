@@ -251,6 +251,13 @@ export class Game {
 
       this._callbackToChangeScene(info);
     }
+
+    if (action === 'research' && !this._gameGUI.getIsResearch()) {
+      this._gameGUI.showResearch(name);
+
+      const info = new PlayerInfo();
+      info.setPlanetItemToLocalStorage(name.match(/\{(.*?)\}/)[1]);
+    }
   }
 
   private _checkCollisions(name) {
@@ -284,7 +291,7 @@ export class Game {
       }
     }
 
-    if (!this._choiseBox2.getIsChose() && name.includes('animal')) {
+    if (!this._choiseBox2.getIsChose() && name.includes('animal') && !this._gameGUI.getIsResearch()) {
       const regName = name.match(/\[(.*?)\]/);
       if (regName) {
         this._currentEnemy = regName[1];
