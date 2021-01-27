@@ -5,11 +5,15 @@ import { LoadGame } from "../classes/LoadGame";
 
 export class MainMenu {
   private _scene: Scene;
+  private _camera: FreeCamera;
   private _transition: boolean;
-  private _callback;
-  private _callback2;
-  private _currentCallback;
-  private _info;
+  private _fadeLevel: number = 1.0;
+  private _music: Sound;
+  private _sfxClick: Sound;
+  private _callback: Function;
+  private _callback2: Function;
+  private _currentCallback: Function;
+  private _info: PlayerInfo;
 
   constructor(engine: Engine, callback, callback2) {
     this._callback = callback;
@@ -17,16 +21,16 @@ export class MainMenu {
     this._scene = new Scene(engine);
     this._scene.clearColor = new Color4(0, 0, 0, 1);
 
-    let camera = new FreeCamera("camera1", new Vector3(0, 0, 0), this._scene);
-    camera.setTarget(Vector3.Zero());
+    this._camera = new FreeCamera("camera1", new Vector3(0, 0, 0), this._scene);
+    this._camera.setTarget(Vector3.Zero());
 
-    const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
+    this._music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
       loop: true,
       autoplay: true
     });
 
-    const sfxClick = new Sound("selection", "./assets/sounds/effects/click.wav", this._scene, null);
+    this._sfxClick = new Sound("selection", "./assets/sounds/effects/click.wav", this._scene, null);
 
     const guiMenu = AdvancedDynamicTexture.CreateFullscreenUI("UI");
     guiMenu.idealHeight = 720;
@@ -63,7 +67,6 @@ export class MainMenu {
     startBtn.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
     imageRectBg.addControl(startBtn);
 
-    // load game
     const loadBtn = Button.CreateImageWithCenterTextButton(
       "load",
       "LOAD GAME",
@@ -81,13 +84,11 @@ export class MainMenu {
     loadBtn.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
     imageRectBg.addControl(loadBtn);
 
-
-    let fadeLevel = 1.0;
     this._transition = false;
     this._scene.registerBeforeRender(() => {
       if (this._transition) {
-        fadeLevel -= .05;
-        if (fadeLevel <= 0) {
+        this._fadeLevel -= .05;
+        if (this._fadeLevel <= 0) {
           this._transition = false;
 
           if (this._info) {
@@ -95,54 +96,39 @@ export class MainMenu {
           } else {
             this._currentCallback();
           }
-
         }
       }
     });
 
     startBtn.onPointerDownObservable.add(() => {
-      localStorage.removeItem("cosmic-quests");
-      localStorage.removeItem("cosmic-items");
       this._info = null;
       this._currentCallback = callback;
-
       localStorage.clear();
-
-      const postProcess = new PostProcess("Fade", "fade", ["fadeLevel"], null, 1.0, camera);
-      postProcess.onApply = (effect) => {
-        effect.setFloat("fadeLevel", fadeLevel);
-      };
-
-      this._transition = true;
-
-      sfxClick.play();
-      music.stop();
-
-      this._scene.detachControl();
+      this._closeScene();
     });
 
     loadBtn.onPointerDownObservable.add(() => {
-      if (localStorage.getItem("health")) {
+      if (JSON.parse(localStorage.getItem("checkpoint"))) {
         this._info = LoadGame.load();
-
         this._currentCallback = callback2;
-
-        const postProcess = new PostProcess("Fade", "fade", ["fadeLevel"], null, 1.0, camera);
-        postProcess.onApply = (effect) => {
-          effect.setFloat("fadeLevel", fadeLevel);
-        };
-
-        this._transition = true;
-
-        sfxClick.play();
-        music.stop();
-
-        this._scene.detachControl();
+        this._closeScene();
       }
     });
   }
 
-  getScene() {
+  private _closeScene() {
+    const postProcess = new PostProcess("Fade", "fade", ["fadeLevel"], null, 1.0, this._camera);
+    postProcess.onApply = (effect) => {
+      effect.setFloat("fadeLevel", this._fadeLevel);
+    };
+
+    this._transition = true;
+
+    this._sfxClick.play();
+    this._music.stop();
+  }
+
+  public getScene() {
     return this._scene;
   }
 }

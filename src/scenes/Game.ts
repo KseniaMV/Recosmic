@@ -248,7 +248,7 @@ export class Game {
         this._player.getMesh().position.y,
         this._player.getMesh().position.z
       ]);
-      info.setPlanetItemToLocalStorage(name.match(/\[(.*?)\]/)[1]);
+      info.setPlanetItemToLocalStorage(name.match(/\{(.*?)\}/)[1]);
       info.setHealth(this._player.getHealth());
       info.setKarma(this._player.getKarma());
       info.setLookAtAngle(this._player.getLookAtAngle());

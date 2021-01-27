@@ -10,6 +10,9 @@ export class PlayerInfo {
   private _enemyName: string;
   private _killed: Array<string>;
   private _checkpoint: boolean;
+  private _knewItems: Array<string>
+  private _gotQuests: Array<string>
+  private _completedQuests: Array<string>
 
   constructor() {
     this._health = 100;
@@ -100,14 +103,14 @@ export class PlayerInfo {
     }
   }
 
-  private _setPlanetItem (name, objectItems) {
-    let item = name;
+  private _setPlanetItem (item, objectItems) {
+    /*let item = name;
     if(name === "animal-1") {
       item = "Catoxeltis colorful";
     };
     if(name === "animal-2") {
       item = "Purple-brows bat";
-    };
+    };*/
       //const item = name === "animal-1" ? "Catoxeltis colorful" : "Purple-brows bat";
       objectItems.add(item);
       localStorage.setItem('cosmic-items', JSON.stringify(Array.from(objectItems)));
