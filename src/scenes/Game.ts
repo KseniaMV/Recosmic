@@ -111,7 +111,10 @@ export class Game {
           this._callback();
         }
       }
-      this._player.update();
+
+      if (!this._gameGUI.getIsResearch()) {
+        this._player.update();
+      }
     });
 
     this.createUI();
