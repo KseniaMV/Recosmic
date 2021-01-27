@@ -11,6 +11,8 @@ export class LoadGame {
     info.setLookAtAngle(Number.parseFloat(localStorage.getItem("lookAtAngle", "0")));
     const killed = JSON.parse(localStorage.getItem("killed", []));
     info.setKilled(killed);
+    const weakSpots = JSON.parse(localStorage.getItem("weakSpots", []));
+    info.setWeakSpots(weakSpots);
     info.setCheckpoint(localStorage.getItem("checkpoint", false));
     return info;
   }
@@ -22,6 +24,7 @@ export class LoadGame {
     localStorage.setItem("karma", info.getKarma());
     localStorage.setItem("lookAtAngle", info.getLookAtAngle());
     localStorage.setItem("killed", JSON.stringify(info.getKilled()));
+    localStorage.setItem("weakSpots", JSON.stringify(info.getWeakSpots()));
     localStorage.setItem("checkpoint", info.getCheckpoint());
   }
 

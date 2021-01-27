@@ -25,7 +25,9 @@ export class Game {
   private _shadowGenerator;
   private _savedGame: PlayerInfo;
   private _killedAnimals;
+  private _weakSpots;
   private _skybox;
+  private _infoGame: PlayerInfo;
   private _animals;
   private _callbackToChangeScene;
   private _currentEnemy: string;
@@ -48,6 +50,7 @@ export class Game {
 
     this._animals = [];
     this._killedAnimals = [];
+    this._weakSpots = [];
     this._reseached = [];
 
     this._choiseBox = new ChoiseBoxTree(this._scene, this._actionAfterChose.bind(this));
@@ -166,6 +169,10 @@ export class Game {
       }
     });
 
+    if (info.getWeakSpots()) {
+        this._weakSpots = info.getWeakSpots();
+    }
+
     this._player.setHealth(Number.parseInt(info.getHealth()));
     this._player.setKarma(Number.parseInt(info.getKarma()));
     this._player.setLookAtAngle(Number.parseFloat(info.getLookAtAngle()));
@@ -210,6 +217,7 @@ export class Game {
     info.setKarma(this._player.getKarma());
     info.setLookAtAngle(this._player.getLookAtAngle() | 0);
     info.setKilled(this._killedAnimals);
+    info.setWeakSpots(this._weakSpots)
 
     return info;
   }
@@ -237,6 +245,7 @@ export class Game {
       info.setLookAtAngle(this._player.getLookAtAngle());
       info.setEnemyName(name);
       info.setKilled(this._killedAnimals);
+      info.setWeakSpots(this._weakSpots);
 
       this._incrementHealth = false;
 
@@ -308,6 +317,7 @@ export class Game {
         info.setKarma(this._player.getKarma());
         info.setLookAtAngle(this._player.getLookAtAngle());
         info.setKilled(this._killedAnimals);
+        info.setWeakSpots(this._weakSpots);
         info.setCheckpoint(true);
         LoadGame.save(info);
 

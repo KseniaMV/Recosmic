@@ -140,11 +140,20 @@ export class Battle {
     animationGroups.forEach(animation => {
       animation.stop();
     });
+
+    this._battleGUI.showStartMessage();
+    setTimeout(() => {
+      this._battleGUI.hideStartMessage();
+    }, 4500);
   }
 
   private _setEnemy() {
     this._enemy.getMesh().getChildMeshes().forEach(mesh => {
       this._world.addShadow(mesh, true);
+      const name = this._infoGame.getEnemyName().match(/\{(.*?)\}/)[1];
+      if (mesh == 'active_place' && this._infoGame.getWeakSpots().includes(name)) {
+        mesh.isVisible = true;
+      }
     });
     this._startUpdate = true;
   }
@@ -174,9 +183,15 @@ export class Battle {
 
       this._enemy.getMeshes().forEach(mesh => {
         if (this._bullet.checkIntersect(mesh)) {
-          if (mesh.name === 'active_place') {
+          const name = this._infoGame.getEnemyName().match(/\{(.*?)\}/)[1];
+          if (mesh.name === 'active_place' && !this._infoGame.getWeakSpots().includes(name)) {
             mesh.isVisible = true;
             this._enemy.setHealth(this._enemy.getHealth() - 5);
+            this._battleGUI.showFoundWeakSpot();
+            setTimeout(() => {
+              this._battleGUI.hideFoundWeakSpot();
+            }, 2000);
+            this._infoGame.pushWeakSpots(name);
           }
           this._enemy.setHealth(this._enemy.getHealth() - 5);
           this._battleGUI.setEnemyHealth(this._enemy.getHealth());
@@ -184,6 +199,7 @@ export class Battle {
             this._enemy.runDeadAction();
             this.isBattleOver = true;
             this._infoGame.pushKilled(this._infoGame.getEnemyName());
+            this._infoGame.setKarma(this._infoGame.getKarma() + 5);
             this._battleGUI.showWin();
             setTimeout(() => {
               this.closeScene();
