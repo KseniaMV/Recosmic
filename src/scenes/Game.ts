@@ -78,19 +78,11 @@ export class Game {
     this._shadowGenerator.blurScale = 1.0;
     this._shadowGenerator.setDarkness(0.3);
 
-
     this._environment = new Environment(this._scene, this._shadowGenerator);
     this._environment.setActionAfterLoaded(this.setToStartPosition.bind(this));
 
     this._player = new Player(this._scene, this._shadowGenerator);
     this._player.setCollisionCallback(this._checkCollisions.bind(this));
-
-    // CharacterState test
-    /*window.addEventListener('click',(function(){
-      this._player.setHealth(this._player.getHealth() - 5);
-      this._player.setKarma(this._player.getKarma() + 5);
-      this._updateState();
-    }).bind(this));*/
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
@@ -154,7 +146,7 @@ export class Game {
     } else {
       this._characterState.block(false);
     }
-    console.log('This is from Tablet: ' + str);
+    // console.log('This is from Tablet: ' + str);
   }
 
   public setSavedGame(info: PlayerInfo) {
@@ -165,15 +157,11 @@ export class Game {
     }
 
     this._animals.forEach(animal => {
-      const regName = animal.getName().match(/\[(.*?)\]/);
-      if (regName) {
-        const cname = regName[1];
-        const killedAnimals = info.getKilled();
-        if (killedAnimals) {
-          if (info.getKilled().includes(cname)) {
-            this._killedAnimals.push(cname);
-            animal.removeModel();
-          }
+      const killedAnimals = info.getKilled();
+      if (killedAnimals) {
+        if (killedAnimals.includes(animal.getName())) {
+          this._killedAnimals.push(animal.getName());
+          animal.removeModel();
         }
       }
     });
@@ -185,7 +173,6 @@ export class Game {
     const y = Number.parseFloat(info.getPosition()[1]);
     const z = Number.parseFloat(info.getPosition()[2]);
     this._player.setOriginPosition(new Vector3(x, y, z));
-    //this._killedAnimals = info.getKilled();
     this._updateState();
     this._healing();
   }
@@ -196,7 +183,6 @@ export class Game {
   }
 
   private _createAnimals() {
-    console.log('creating animals...');
     const animalPositions = this._environment.getAnimals();
     animalPositions.forEach(item => {
       const animal = new Animal(item.name, this._scene, this._shadowGenerator);
@@ -233,14 +219,11 @@ export class Game {
       const info = new PlayerInfo();
       const treeName = name.match(/{(.*?)}/)[1];
       info.setPlanetItemToLocalStorage(treeName);
-      console.log(treeName);
     }
   }
 
   private _actionAfterChose2(name: string, action: string) {
     if (action === 'attack') {
-      console.log('go to battle scene');
-
       const info = new PlayerInfo();
       info.setMap('firstLevel');
       info.setPosition([
@@ -252,7 +235,7 @@ export class Game {
       info.setHealth(this._player.getHealth());
       info.setKarma(this._player.getKarma());
       info.setLookAtAngle(this._player.getLookAtAngle());
-      info.setEnemyName(name.match(/\[(.*?)\]/)[1]);
+      info.setEnemyName(name);
       info.setKilled(this._killedAnimals);
 
       this._incrementHealth = false;
@@ -279,7 +262,6 @@ export class Game {
 
     }
 
-    //console.log(name);
     if (!this._choiseBox.getIsChose() && name.includes('active_tree')) {
       this._choiseBox.setShow(true, name);
       this._environment.addMeshToHighlight(name);

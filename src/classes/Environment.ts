@@ -66,13 +66,11 @@ export class Environment {
     this._allMeshes.forEach(mesh => {
       mesh.receiveShadows = true;
 
-
       if (mesh.name === 'Plane') {
           this._ground = mesh;
       }
 
       if (mesh.name === 'player') {
-        console.log('Player point was found');
         mesh.isVisible = false;
         this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
       }
@@ -100,7 +98,6 @@ export class Environment {
       }
 
       if (mesh.name.includes('animal')) {
-        console.log("animal position was found");
         mesh.isVisible = false;
         mesh.isPickable = true;
         mesh.checkCollisions = true;
@@ -113,7 +110,6 @@ export class Environment {
         });
       }
 
-
       if(mesh.name.includes("Cube")) {
         mesh.isPickable = true;
         mesh.checkCollisions = true;
@@ -124,13 +120,11 @@ export class Environment {
         mesh.checkCollisions = true;
       }
 
-
       if (mesh.name === 'Plane' || mesh.name === 'ground' || mesh.name === 'roud') {
           mesh.isPickable = false;
           mesh.checkCollisions = true;
           this._waterMaterial.addToRenderList(mesh);
       }
-
 
       if (mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('Stone') || mesh.name.includes('savestation')) {
         this._shadowGenerator.getShadowMap().renderList.push(mesh);
@@ -142,7 +136,6 @@ export class Environment {
         }
 
       }
-
 
       if (mesh.name.includes('grass')) {
         const mat = new StandardMaterial("grass", this._scene);

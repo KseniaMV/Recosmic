@@ -5,6 +5,7 @@ export class Bullet {
   private _speed: number;
   private _borderRadius: number;
   private _bullets;
+  private _BULLET_SIZE: number = 1;
 
   constructor(scene: Scene) {
     this._scene = scene;
@@ -21,7 +22,7 @@ export class Bullet {
   }
 
   private _createBullet(target: Vector3, position: Vector3, color: Color3) {
-    const bullet = Mesh.CreateSphere ("bullet", 12, 3, this._scene, false);
+    const bullet = Mesh.CreateSphere ("bullet", 12, this._BULLET_SIZE, this._scene, false);
     const direction = target.subtract(position);
     direction.normalize();
     direction.scaleInPlace(this._speed);

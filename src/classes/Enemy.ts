@@ -95,12 +95,10 @@ export class Enemy {
     const direction = target.subtract(this._model.position);
     direction.normalize();
     direction.scaleInPlace(this._WALKING_SPEED);
-    //direction.y = 1;
     this._direction = direction;
   }
 
   private _walkAndShift(target) {
-
     if (this._model.position.x > 500 || this._model.position.x > 500) {
       target = new Vector3(target.x - 100, target.y, target.z - 100);
     } else {
@@ -109,24 +107,7 @@ export class Enemy {
     const direction = target.subtract(this._model.position);
     direction.normalize();
     direction.scaleInPlace(this._WALKING_SPEED);
-    //direction.y = 1;
     this._direction = direction;
-  }
-
-  public checkIntersect(object: Mesh): boolean {
-    let result = false;
-    this._model.getChildMeshes().forEach(mesh => {
-      if (mesh.intersectsMesh(object)) {
-        console.log(mesh.name)
-        result = true;
-        if (mesh.name === 'active_place') {
-          mesh.isVisible = true;
-          this._health -= 5;
-        }
-      }
-    });
-
-    return result;
   }
 
   public update(object: any) {
@@ -173,9 +154,9 @@ export class Enemy {
     let newAction;
     this._distance = distance;
 
-    if (distance < 110 && distance > 50) {
+    if (distance < 110 && distance > 40) {
       newAction = ACTION.RUN;
-    } else if (distance <= 50) {
+    } else if (distance <= 40) {
       newAction = ACTION.ATTACK_1;
     } else {
       newAction = ACTION.ATTACK_2;
@@ -186,7 +167,6 @@ export class Enemy {
 
       switch (newAction) {
         case ACTION.RUN:
-          console.log("walking");
           this._isWalking = true;
           this._isFireEnabled = false;
           this._isAttackOne = false;
@@ -194,14 +174,12 @@ export class Enemy {
           this._walkToTarget(position);
           break;
         case ACTION.ATTACK_1:
-          console.log("attack 1");
           this._changeAnime(this._idleAnime);
           this._isWalking = false;
           this._isShifting = false;
           this._isFireEnabled = false;
           break;
         case ACTION.ATTACK_2:
-          console.log("attack 2");
           this._changeAnime(this._attackDistanceAnime);
           this._isWalking = false;
           this._isFireEnabled = true;
@@ -229,7 +207,7 @@ export class Enemy {
       this._isAttackOne = true;
       setTimeout(() => {
         this._isAttackOne = false;
-      }, 1000);
+      }, 1700);
       return true;
     }
     return false;
@@ -241,15 +219,6 @@ export class Enemy {
 
   public runAfterLoaded(callback: Function) {
     this._callback = callback;
-  }
-
-  public subtractHealth(percent: number) {
-    if (this._health > 0) {
-      this._health -= percent;
-    } else {
-      console.log('Enemy was killed. You won!');
-      //this._runDeadAction();
-    }
   }
 
   private _createParticles() {
@@ -295,5 +264,9 @@ export class Enemy {
 
   public getDistance() {
     return this._distance;
+  }
+
+  public getMeshes() {
+    return this._model.getChildMeshes();
   }
 }

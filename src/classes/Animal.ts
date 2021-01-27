@@ -74,7 +74,6 @@ export class Animal {
       mesh.checkCollisions = false;
       mesh.isVisible = false;
     });
-    console.log('removed');
   }
 
   public getName(): string {
