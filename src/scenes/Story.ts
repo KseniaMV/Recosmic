@@ -7,12 +7,6 @@ export class Story {
     video.play();
     document.body.appendChild(video);
 
-    video.addEventListener('ended', () => {
-      video.style.display = "none";
-      document.body.removeChild(video);
-      callback();
-    });
-
     const skipButton = <HTMLButtonElement> document.createElement('BUTTON');
     skipButton.classList.add('skipButton');
     skipButton.textContent = 'SKIP';
@@ -20,6 +14,13 @@ export class Story {
     skipButton.addEventListener('click', () => {
       document.body.removeChild(skipButton);
       video.currentTime = 999999999999999;
-    })
+    });
+
+    video.addEventListener('ended', () => {
+      video.style.display = "none";
+      document.body.removeChild(video);
+      document.body.removeChild(skipButton);
+      callback();
+    });
   }
 }
