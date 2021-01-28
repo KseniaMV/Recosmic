@@ -365,11 +365,11 @@ video {
     min-width: 350px;
     height: 100%;
     margin: 0 auto;
+    padding-top: 100px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    align-content: flex-end;
 }
 
 .planetSection {
@@ -420,38 +420,13 @@ video {
     text-align: center;
 }
 
-.catalog_pagination {
-    width: 50%;
-    height: 50px;
-    margin: 10px auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+@media screen and (max-width: 1000px) {
+    .catalog_slider {
+        height: auto;
+        overflow-y: scroll;
+
     }
-}
 
-.countPagination {
-    width:80%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.countPaginationItem {
-    width: 20px;
-    height: 20px;
-    margin: auto 10px;
-    border-radius: 20px;
-    border: 1px solid rgb(210, 210, 224);
-}
-
-.paginationItem--active {
-    border: 3px solid rgb(210, 210, 224);
 }
 
 .catalog_button {
@@ -591,7 +566,7 @@ video {
     border: none;
     box-shadow: 0 0 5px 1px rgb(255,255,255);
     background-color: transparent;
-    background-size: 35px;
+    background-size: 65px;
     background-repeat: no-repeat;
     background-position: center;
     position: relative;

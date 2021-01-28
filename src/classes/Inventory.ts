@@ -1,17 +1,10 @@
-import { Scene } from "@babylonjs/core";
-import { AdvancedDynamicTexture, Button, Control, StackPanel } from "@babylonjs/gui";
 import Popup from "./Popup";
 
 export default class Inventory {
     private _inventoryBG: HTMLDivElement;
     private _inventory: HTMLDivElement;
     constructor(){
-        
 
-    }
-
-    closeInventory () {
-        
     }
 
     private _getDropData (type) {
@@ -31,7 +24,7 @@ export default class Inventory {
         });
     }
 
-   public getItem (name, type, mode) {
+    public getItem (name, type, mode) {
         const itemData = this._getDropData(type);
         itemData.then((data)=> {
             const fruit = data[name].drop;
@@ -135,7 +128,6 @@ export default class Inventory {
             }
         });
     }
-
 
     getItemDescritpion () {
 

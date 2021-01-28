@@ -42,6 +42,7 @@ export class Game {
   private _incrementHealthAllow: boolean = true;
   private _isEnd: boolean = false;
   private _gameGUI: GameGUI;
+  private _isSaved: boolean;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
