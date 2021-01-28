@@ -134,13 +134,14 @@ export default class Quests {
         this.checkSavedQuests()
         .then(() => {
             this.questsList.forEach((questObject)=>{
-                console.log(questObject['id']);
-                if(questObject['id'] === id) {
+                if(questObject['id'] === id && questObject['status'] != "complete") {
                     questObject['status'] = "complete";
                     this.getQuestsData()
                     .then(()=> {
-                        const popup = new Popup(`The quest "${this._questData[id].name}" is completed`);
-                        popup.createPopup();
+                        setTimeout(() => {
+                            const popup = new Popup(`The quest "${this._questData[id].name}" is completed`);
+                            popup.createPopup();
+                        }, 2000);
                         this.saveQuests();
                     })
                 }

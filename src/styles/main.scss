@@ -61,7 +61,8 @@ video {
     visibility: visible;
 }
 
-.tabletBG {
+.tabletBG,
+.inventoryBG {
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -69,6 +70,10 @@ video {
     left: 0;
     background-color: rgba(1,1,1,0.4);
     overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .skipButton {
@@ -116,6 +121,22 @@ video {
     position: relative;
 }
 
+.inventory-conteiner {
+    width: 75%;
+    height: 90%;
+    margin: auto;
+    border: 10px solid rgb(10, 10, 10);
+    border-radius: 20px;
+    background: linear-gradient(to right, rgba(23, 23, 29, 0.6), rgba(219, 217, 218,.3));
+    box-shadow: 0 0 0 10px rgb(255,255,255);
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    position: relative;
+}
+
 .tablet {
     flex-direction: row;
     flex-wrap: wrap;
@@ -144,6 +165,7 @@ video {
     &:hover{
         box-shadow: none;
         border: 1px solid rgb(255,255,255);
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -151,6 +173,12 @@ video {
     position: absolute;
     top: -30px;
     right: 10px;
+}
+
+.closeInventoryButton {
+    position: absolute;
+    top: -40px;
+    right: -20px;
 }
 
 .backButton {
@@ -323,6 +351,10 @@ video {
     }
 }
 
+.savegame-button {
+    visibility: hidden;
+}
+
 //------------------catalog section-------------//
 
 .catalog_slider {
@@ -462,13 +494,13 @@ video {
 }
 
 .button-closeData{
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border: 1px solid rgb(255,255,255);
     border-radius: 5px;
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 5px;
+    right: 5px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 25px;
@@ -546,6 +578,50 @@ video {
     font-size: 28px;
 }
 
+/*---------------------------inventory---------------------------*/ 
+
+.inventory_item {
+    width: 90px;
+    height: 90px;
+    margin: auto;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 0 5px 1px rgb(255,255,255);
+    background-color: transparent;
+    background-size: 35px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    &:hover {
+        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+    }
+}
+
+.inventory_item-count {
+    width: 10px;
+    height: 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(255,255,255);
+    background-color: transparent;
+    position: absolute;
+    top: 75px;
+    left: 70px;
+}
+
+.dropItem-name {
+    position: absolute;
+    top: 5px;
+    left: 35px;
+    width: auto;
+    height: auto;
+    color: rgb(255,255,255);
+    visibility: hidden;
+}
+.dropItem-name--show {
+    visibility: visible;
+}
 
 .unknown_planet,
 .unknown_item {

@@ -13,6 +13,7 @@ import { LoadGame } from '../classes/LoadGame';
 import { Animal } from '../classes/Animal';
 import { ChoiseBoxTree } from "../ui/ChoiseBoxTree";
 import Quests from "../classes/Quests";
+import Inventory from "../classes/Inventory";
 
 export class Game {
   private _scene: Scene;
@@ -38,6 +39,7 @@ export class Game {
   private _incrementHealth: boolean = false;
   private _incrementHealthAllow: boolean = true;
   private _isEnd: boolean = false;
+  private _gameGUI: GameGUI;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -48,7 +50,6 @@ export class Game {
 
     this._animals = [];
     this._killedAnimals = [];
-    this._reseached = [];
 
     this._choiseBox = new ChoiseBoxTree(this._scene, this._actionAfterChose.bind(this));
     this._choiseBox2 = new ChoiseBox(this._scene, this._actionAfterChose2.bind(this));
@@ -127,8 +128,12 @@ export class Game {
 
   private createUI () {
     this._characterState = new CharacterState(this._scene);
-    this._tablet = new Tablet(this._scene, this._canvas);
-    this._tablet.setExitFunc(this._callback.bind(this));
+    if(!document.querySelector(".tabletBG")) {
+      this._tablet = new Tablet(this._scene, this._canvas);
+      this._tablet.setExitFunc(this._callback.bind(this));
+    }
+    this._inventory = new Inventory();
+    this._inventory.openInventory();
   }
 
   public setCallbackToChangeScene(func) {
@@ -233,7 +238,7 @@ export class Game {
       const info = new PlayerInfo();
       const treeName = name.match(/{(.*?)}/)[1];
       info.setPlanetItemToLocalStorage(treeName);
-      console.log(treeName);
+      this._inventory.getItem(treeName, 'plants', 'research-mode');
     }
   }
 
@@ -258,6 +263,10 @@ export class Game {
       this._incrementHealth = false;
 
       this._callbackToChangeScene(info);
+    }
+
+    if(action === 'investigate') {
+      ///dialog
     }
   }
 

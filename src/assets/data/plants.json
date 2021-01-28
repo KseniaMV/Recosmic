@@ -9,7 +9,7 @@
         "image" : "../assets/images/trees/AmorphoLilius.png",
         "description" : "A Big tufted tree. The crown of the tree provides refuge for small birds. The tree loves coolness, grows in lowlands, often in the mountains. The bark of the tree is extremely hard. Attempts to use the bark for production have not been crowned with success, as they were able to extract it in very small quantities",
         "usage" : "The fruit of the tree is not tasty, but the elixir from it effectively heals wounds",
-        "drop" : ["Woodsia bark", "Woodsia fruit"]
+        "drop" : "Woodsia fruit"
     },
     "Heliconia" : {
         "image" : "../assets/images/trees/AmorphoLilius.png",
