@@ -10,6 +10,7 @@ export class PlayerInfo {
   private _enemyName: string;
   private _killed: Array<string>;
   private _checkpoint: boolean;
+  private _weakSpots: Array<string>
   private _knewItems: Array<string>
   private _gotQuests: Array<string>
   private _completedQuests: Array<string>
@@ -80,6 +81,18 @@ export class PlayerInfo {
 
   public pushKilled(name: string) {
     this._killed.push(name);
+  }
+
+  public getWeakSpots(): Array<string> {
+    return this._weakSpots;
+  }
+
+  public setWeakSpots(weakSpots: Array<string>) {
+    this._weakSpots = weakSpots;
+  }
+
+  public pushWeakSpots(name: string) {
+    this._weakSpots.push(name);
   }
 
   public setPlanetItemToLocalStorage(name) {

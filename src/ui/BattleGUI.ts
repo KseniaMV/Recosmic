@@ -1,4 +1,4 @@
-import { AdvancedDynamicTexture, Image, TextBlock, Control } from "@babylonjs/gui";
+import { AdvancedDynamicTexture, Image, Rectangle, TextBlock, Control } from "@babylonjs/gui";
 
 export class BattleGUI {
   private _health_line: Image;
@@ -7,6 +7,8 @@ export class BattleGUI {
   private _old_health_Width: number;
   private _wonText: TextBlock;
   private _byeText: TextBlock;
+  private _activePlaceRectangle;
+  private _activePlaceText;
 
   constructor() {
     const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI");
@@ -100,6 +102,72 @@ export class BattleGUI {
     gui.addControl(this._byeText);
     this._byeText.scaleX = 0;
     this._byeText.scaleY = 0;
+
+    // active place / weak spot
+    this._activePlaceRectangle = new Rectangle();
+    this._activePlaceRectangle.width = 0.5;
+    this._activePlaceRectangle.height = 0.15;
+    this._activePlaceRectangle.cornerRadius = 20;
+    this._activePlaceRectangle.color = "White";
+    this._activePlaceRectangle.thickness = 5;
+    this._activePlaceRectangle.background = "blue";
+    this._activePlaceRectangle.alpha = 0.5;
+    gui.addControl(this._activePlaceRectangle);
+
+    this._activePlaceText = new TextBlock();
+    this._activePlaceText.textHorizontalAlignment = TextBlock.HORIZONTAL_ALIGNMENT_CENTER;
+    this._activePlaceText.textVerticalAlignment = TextBlock.VERTICAL_ALIGNMENT_TOP;
+    this._activePlaceText.fontSize = "28px";
+    this._activePlaceText.color = "white";
+    this._activePlaceText.shadowColor = "black";
+    this._activePlaceText.shadowBlur = 5;
+    this._activePlaceText.shadowOffsetX = -2;
+    this._activePlaceText.shadowOffsetY = 2;
+    this._activePlaceText.text = "You have found a weak spot!";
+    this._activePlaceText.resizeToFit = true;
+    this._activePlaceText.textWrapping = true;
+    this._activePlaceText.height = 0.15;
+    this._activePlaceText.width = 0.5;
+    this._activePlaceText.fontFamily = "Cabin";
+    gui.addControl(this._activePlaceText);
+
+    this._activePlaceRectangle.scaleX = 0;
+    this._activePlaceRectangle.scaleY = 0;
+    this._activePlaceText.scaleX = 0;
+    this._activePlaceText.scaleY = 0;
+
+    // start message
+    this._startRectangle = new Rectangle();
+    this._startRectangle.width = 0.55;
+    this._startRectangle.height = 0.3;
+    this._startRectangle.cornerRadius = 20;
+    this._startRectangle.color = "White";
+    this._startRectangle.thickness = 5;
+    this._startRectangle.background = "blue";
+    this._startRectangle.alpha = 0.5;
+    gui.addControl(this._startRectangle);
+
+    this._startText = new TextBlock();
+    this._startText.textHorizontalAlignment = TextBlock.HORIZONTAL_ALIGNMENT_CENTER;
+    this._startText.textVerticalAlignment = TextBlock.VERTICAL_ALIGNMENT_TOP;
+    this._startText.fontSize = "28px";
+    this._startText.color = "white";
+    this._startText.shadowColor = "black";
+    this._startText.shadowBlur = 5;
+    this._startText.shadowOffsetX = -2;
+    this._startText.shadowOffsetY = 2;
+    this._startText.text = "The animal doesn't want to die and will resist. Your reputation will drop due to aggressive actions. You will receive +5 karma.";
+    this._startText.resizeToFit = true;
+    this._startText.textWrapping = true;
+    this._startText.height = 0.3;
+    this._startText.width = 0.5;
+    this._startText.fontFamily = "Cabin";
+    gui.addControl(this._startText);
+
+    this._startRectangle.scaleX = 0;
+    this._startRectangle.scaleY = 0;
+    this._startText.scaleX = 0;
+    this._startText.scaleY = 0;
   }
 
   public setHP (hp: number) {
@@ -129,7 +197,24 @@ export class BattleGUI {
       p.scaleY = a;
       setTimeout(() => {
         this._scalingAnimation(a, p)
-      }, 100);
+      }, 0.1);
+    } else {
+      p.scaleX = 1.0;
+      p.scaleY = 1.0;
+    }
+  }
+
+  private _scalingAnimationMinus(a, p) {
+    if (a > 0) {
+      a -= 0.1;
+      p.scaleX = a;
+      p.scaleY = a;
+      setTimeout(() => {
+        this._scalingAnimationMinus(a, p)
+      }, 50);
+    } else {
+      p.scaleX = 0;
+      p.scaleY = 0;
     }
   }
 
@@ -140,4 +225,25 @@ export class BattleGUI {
   public showByeBye() {
     this._scalingAnimation(0, this._byeText);
   }
+
+  public showFoundWeakSpot() {
+    this._scalingAnimation(0, this._activePlaceText);
+    this._scalingAnimation(0, this._activePlaceRectangle);
+  }
+
+  public hideFoundWeakSpot() {
+    this._scalingAnimationMinus(1, this._activePlaceText);
+    this._scalingAnimationMinus(1, this._activePlaceRectangle);
+  }
+
+  public showStartMessage() {
+    this._scalingAnimation(0, this._startText);
+    this._scalingAnimation(0, this._startRectangle);
+  }
+
+  public hideStartMessage() {
+    this._scalingAnimationMinus(1, this._startText);
+    this._scalingAnimationMinus(1, this._startRectangle);
+  }
+
 }

@@ -26,7 +26,9 @@ export class Game {
   private _shadowGenerator;
   private _savedGame: PlayerInfo;
   private _killedAnimals;
+  private _weakSpots;
   private _skybox;
+  private _infoGame: PlayerInfo;
   private _animals;
   private _callbackToChangeScene;
   private _currentEnemy: string;
@@ -50,6 +52,7 @@ export class Game {
 
     this._animals = [];
     this._killedAnimals = [];
+    this._weakSpots = [];
 
     this._choiseBox = new ChoiseBoxTree(this._scene, this._actionAfterChose.bind(this));
     this._choiseBox2 = new ChoiseBox(this._scene, this._actionAfterChose2.bind(this));
@@ -79,19 +82,11 @@ export class Game {
     this._shadowGenerator.blurScale = 1.0;
     this._shadowGenerator.setDarkness(0.3);
 
-
     this._environment = new Environment(this._scene, this._shadowGenerator);
     this._environment.setActionAfterLoaded(this.setToStartPosition.bind(this));
 
     this._player = new Player(this._scene, this._shadowGenerator);
     this._player.setCollisionCallback(this._checkCollisions.bind(this));
-
-    // CharacterState test
-    /*window.addEventListener('click',(function(){
-      this._player.setHealth(this._player.getHealth() - 5);
-      this._player.setKarma(this._player.getKarma() + 5);
-      this._updateState();
-    }).bind(this));*/
 
     const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
       volume: 0.3,
@@ -117,7 +112,10 @@ export class Game {
           this._callback();
         }
       }
-      this._player.update();
+
+      if (!this._gameGUI.getIsResearch()) {
+        this._player.update();
+      }
     });
 
     this.createUI();
@@ -159,7 +157,7 @@ export class Game {
     } else {
       this._characterState.block(false);
     }
-    console.log('This is from Tablet: ' + str);
+    // console.log('This is from Tablet: ' + str);
   }
 
   public setSavedGame(info: PlayerInfo) {
@@ -170,18 +168,18 @@ export class Game {
     }
 
     this._animals.forEach(animal => {
-      const regName = animal.getName().match(/\[(.*?)\]/);
-      if (regName) {
-        const cname = regName[1];
-        const killedAnimals = info.getKilled();
-        if (killedAnimals) {
-          if (info.getKilled().includes(cname)) {
-            this._killedAnimals.push(cname);
-            animal.removeModel();
-          }
+      const killedAnimals = info.getKilled();
+      if (killedAnimals) {
+        if (killedAnimals.includes(animal.getName())) {
+          this._killedAnimals.push(animal.getName());
+          animal.removeModel();
         }
       }
     });
+
+    if (info.getWeakSpots()) {
+        this._weakSpots = info.getWeakSpots();
+    }
 
     this._player.setHealth(Number.parseInt(info.getHealth()));
     this._player.setKarma(Number.parseInt(info.getKarma()));
@@ -190,7 +188,6 @@ export class Game {
     const y = Number.parseFloat(info.getPosition()[1]);
     const z = Number.parseFloat(info.getPosition()[2]);
     this._player.setOriginPosition(new Vector3(x, y, z));
-    //this._killedAnimals = info.getKilled();
     this._updateState();
     this._healing();
   }
@@ -201,7 +198,6 @@ export class Game {
   }
 
   private _createAnimals() {
-    console.log('creating animals...');
     const animalPositions = this._environment.getAnimals();
     animalPositions.forEach(item => {
       const animal = new Animal(item.name, this._scene, this._shadowGenerator);
@@ -229,6 +225,7 @@ export class Game {
     info.setKarma(this._player.getKarma());
     info.setLookAtAngle(this._player.getLookAtAngle() | 0);
     info.setKilled(this._killedAnimals);
+    info.setWeakSpots(this._weakSpots)
 
     return info;
   }
@@ -244,8 +241,6 @@ export class Game {
 
   private _actionAfterChose2(name: string, action: string) {
     if (action === 'attack') {
-      console.log('go to battle scene');
-
       const info = new PlayerInfo();
       info.setMap('firstLevel');
       info.setPosition([
@@ -257,16 +252,20 @@ export class Game {
       info.setHealth(this._player.getHealth());
       info.setKarma(this._player.getKarma());
       info.setLookAtAngle(this._player.getLookAtAngle());
-      info.setEnemyName(name.match(/\[(.*?)\]/)[1]);
+      info.setEnemyName(name);
       info.setKilled(this._killedAnimals);
+      info.setWeakSpots(this._weakSpots);
 
       this._incrementHealth = false;
 
       this._callbackToChangeScene(info);
     }
 
-    if(action === 'investigate') {
-      ///dialog
+    if (action === 'research' && !this._gameGUI.getIsResearch()) {
+      this._gameGUI.showResearch(name);
+
+      const info = new PlayerInfo();
+      info.setPlanetItemToLocalStorage(name.match(/\{(.*?)\}/)[1]);
     }
   }
 
@@ -288,12 +287,11 @@ export class Game {
 
     }
 
-    //console.log(name);
     if (!this._choiseBox.getIsChose() && name.includes('active_tree')) {
       this._choiseBox.setShow(true, name);
-      this._environment.addMeshToHighlight(name);
+      this._environment.addMeshToHighlight(name.replace("treecollider", "_primitive0"));
     } else {
-      this._environment.removeMeshToHighlight(name);
+      this._environment.removeMeshToHighlight(name.replace("treecollider", "_primitive0"));
       this._choiseBox.setShow(false);
       if (this._choiseBox.getIsChose()) {
         setTimeout(() => {
@@ -302,7 +300,7 @@ export class Game {
       }
     }
 
-    if (!this._choiseBox2.getIsChose() && name.includes('animal')) {
+    if (!this._choiseBox2.getIsChose() && name.includes('animal') && !this._gameGUI.getIsResearch()) {
       const regName = name.match(/\[(.*?)\]/);
       if (regName) {
         this._currentEnemy = regName[1];
@@ -335,6 +333,7 @@ export class Game {
         info.setKarma(this._player.getKarma());
         info.setLookAtAngle(this._player.getLookAtAngle());
         info.setKilled(this._killedAnimals);
+        info.setWeakSpots(this._weakSpots);
         info.setCheckpoint(true);
         LoadGame.save(info);
 

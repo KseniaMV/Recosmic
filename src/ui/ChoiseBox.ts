@@ -53,7 +53,7 @@ export class ChoiseBox {
       sfxClick.play();
       this.setShow(false);
       this._isChose = true;
-      callback(this._objectName, 'investigate');
+      callback(this._objectName, 'research');
     });
 
     this.setShow(false);

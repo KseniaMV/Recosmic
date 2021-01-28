@@ -44,9 +44,9 @@ export class MainMenu {
     imageRectBg.addControl(startbg);
 
     const logo = new Image("logo", "./assets/images/gui/logo.png");
-    logo.width = 0.5;
-    logo.height = 0.3;
-    logo.top = "10%";
+    logo.width = 0.39;
+    logo.height = 0.22;
+    logo.top = "3%";
     logo.left = "-25%";
     imageRectBg.addControl(logo);
 
@@ -113,6 +113,66 @@ export class MainMenu {
         this._currentCallback = callback2;
         this._closeScene();
       }
+    });
+
+    this._createLogo();
+  }
+
+  private _createLogo() {
+    const guiLogo = AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    const logoK = Button.CreateImageWithCenterTextButton(
+      "K",
+      "",
+      "./assets/images/gui/logoK.png"
+    );
+    logoK.width = "70px"
+    logoK.height = "70px";
+    logoK.top = "88%";
+    logoK.left = "26%";
+    logoK.thickness = 0;
+    logoK.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+    logoK.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+    guiLogo.addControl(logoK);
+
+    logoK.onPointerDownObservable.add(() => {
+      window.open("https://github.com/KseniaMV");
+    });
+
+    const logoA = Button.CreateImageWithCenterTextButton(
+      "A",
+      "",
+      "./assets/images/gui/logoA.png"
+    );
+    logoA.width = "70px"
+    logoA.height = "70px";
+    logoA.top = "88%";
+    logoA.left = "32%";
+    logoA.thickness = 0;
+    logoA.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+    logoA.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+    guiLogo.addControl(logoA);
+
+    logoA.onPointerDownObservable.add(() => {
+      window.open("https://github.com/archylex");
+    });
+
+    const rssLogo = Button.CreateImageWithCenterTextButton(
+      "rsslogo",
+      "",
+      "./assets/images/gui/rsslogo.png"
+    );
+    rssLogo.width = "175px"
+    rssLogo.height = "70px";
+    rssLogo.top = "88%";
+    rssLogo.left = "42%";
+    rssLogo.thickness = 0;
+    rssLogo.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+    rssLogo.verticalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
+    guiLogo.addControl(rssLogo);
+
+    rssLogo.onPointerDownObservable.add(() => {
+      window.open("https://rs.school/js/");
     });
   }
 

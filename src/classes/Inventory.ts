@@ -56,15 +56,19 @@ export default class Inventory {
             dropList.push({name : fruit, count : 1});
         }
         localStorage.setItem("cosmic-drop", JSON.stringify(dropList));
-        const popup = new Popup("New item is added to inventory");
-        popup.createPopup();
+        setTimeout(() => {
+            const popup = new Popup("New item is added to inventory");
+            popup.createPopup();
+        }, 2000);
     }
 
     public openInventory () {
         document.addEventListener("keydown", (event) => {
             if(event.keyCode == "73") {
-                this._createInventorConteiner();
-                this._getDropListFromLocalStorage();
+                if(!document.querySelector(".inventoryBG")) {
+                    this._createInventorConteiner();
+                    this._getDropListFromLocalStorage();
+                }
             }
         })
 
@@ -122,7 +126,6 @@ export default class Inventory {
         }).then((data)=> {
             const dropData = JSON.parse(localStorage.getItem("cosmic-drop"));
             dropData.forEach(element => {
-                console.log(element);
                 const image = data[element.name].image;
                 const count = element.count;
                 this._createItem(image, this._inventory, count, element.name );

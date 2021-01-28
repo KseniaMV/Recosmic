@@ -14,6 +14,7 @@ export class Battle {
   private _callback: Function;
   private _fadeLevel: number = 1.0;
   private _bullets: any;
+  private _bullet: Bullet;
   private _player: Player;
   private _playerModel: Mesh;
   private _infoGame: PlayerInfo;
@@ -28,9 +29,9 @@ export class Battle {
   private _PLAYER_SPEED: number = 20;
   private _PLAYER_DAMAGE: number = 5;
   private _ARENA_LENGTH: number = 1000;
-  isBattleOver: any;
+  private isBattleOver: any;
   private _playerKarma: number;
-  _weapon: any;
+  private _weapon: any;
 
   constructor(engine: Engine, canvas: HTMLCanvasElement, callback: Function) {
     this._callback = callback;
@@ -40,6 +41,9 @@ export class Battle {
     this._scene.collisionsEnabled = true;
     this._bullets = [];
     this._playerHealth = 100;
+    this._bullet = new Bullet();
+    this._bullet.setVelocity(this._BULLET_SPEED);
+    this._bullet.setBorderRadius(this.__ARENA_LENGTH);
 
     const glowStation = new GlowLayer("glowStation", this._scene, { mainTextureSamples: 2 });
 
@@ -86,16 +90,12 @@ export class Battle {
         if (this._weaponShootAnime) {
           sfxShoot.play();
           this._weaponShootAnime.start(false, 2.0, this._weaponShootAnime.from, this._weaponShootAnime.to, false);
-          this._fire();
+          this._bullet._createBullet(this._camera.getTarget(), this._camera.position, new Color3(0.3, 0.9, 1.0));
           this._isFireEnabled = false;
           setTimeout(this._bulletPrepare.bind(this), 500);
         }
       }
     });
-
-    /*setTimeout(() => {
-      this._startUpdate = true;
-    }, 6000);*/
   }
 
   public setInfoGame(info: PlayerInfo) {
@@ -104,17 +104,14 @@ export class Battle {
     this._playerKarma = Number.parseInt(info.getKarma());
     this._battleGUI.setHP(this._playerHealth);
 
-    this._enemy = new Enemy(info.getEnemyName());
+    const filename = info.getEnemyName().match(/\[(.*?)\]/)[1];
+    const name = info.getEnemyName().match(/\{(.*?)\}/)[1];
+    const weakSpot = info.getWeakSpots().includes(name)
+
+    this._enemy = new Enemy(filename, this._scene, weakSpot);
     this._enemy.runAfterLoaded(this._setEnemy.bind(this));
 
-    switch(info.getEnemyName()) {
-      case 'animal-1':
-        this._battleGUI.setEnemyName("Catoxeltis Colorful");
-        break;
-      case 'animal-2':
-        this._battleGUI.setEnemyName("Purple-brows Bat");
-        break;
-    }
+    this._battleGUI.setEnemyName(name);
   }
 
   private _bulletPrepare() {
@@ -147,11 +144,20 @@ export class Battle {
     animationGroups.forEach(animation => {
       animation.stop();
     });
+
+    this._battleGUI.showStartMessage();
+    setTimeout(() => {
+      this._battleGUI.hideStartMessage();
+    }, 4500);
   }
 
   private _setEnemy() {
     this._enemy.getMesh().getChildMeshes().forEach(mesh => {
       this._world.addShadow(mesh, true);
+      const name = this._infoGame.getEnemyName().match(/\{(.*?)\}/)[1];
+      if (mesh == 'active_place' && this._infoGame.getWeakSpots().includes(name)) {
+        mesh.isVisible = true;
+      }
     });
     this._startUpdate = true;
   }
@@ -175,56 +181,34 @@ export class Battle {
     this._camera.keysRight.push(68);
   }
 
-  private _fire() {
-    const bullet = Mesh.CreateSphere ("bullet", 12, 3, this._scene, false);
-    const direction = this._camera.getTarget().subtract(this._camera.position);
-    direction.normalize();
-    direction.scaleInPlace(this._BULLET_SPEED);
-    bullet.position = this._camera.position.add(direction);
-
-    const material = new StandardMaterial("bullet", this._scene);
-    material.emissiveColor = new Color3(0.3, 0.9, 1.0);
-
-    bullet.material = material;
-
-    const item = {
-      bullet: bullet,
-      direction: direction,
-      check: false
-    }
-
-    setTimeout(() => {
-      item.check = true;
-    }, 25);
-
-    this._bullets.push(item);
-  }
-
   private _update() {
     if (this._startUpdate && !this.isBattleOver) {
-      this._bullets.forEach(item => {
-        item.bullet.position = item.bullet.position.add(item.direction);
+      this._bullet.update();
 
-        if (item.check && this._enemy.checkIntersect(item.bullet)) {
-          console.log('got it!');
+      this._enemy.getMeshes().forEach(mesh => {
+        if (this._bullet.checkIntersect(mesh)) {
+          const name = this._infoGame.getEnemyName().match(/\{(.*?)\}/)[1];
+          if (mesh.name === 'active_place' && !this._infoGame.getWeakSpots().includes(name)) {
+            mesh.isVisible = true;
+            this._enemy.setHealth(this._enemy.getHealth() - 5);
+            this._battleGUI.showFoundWeakSpot();
+            setTimeout(() => {
+              this._battleGUI.hideFoundWeakSpot();
+            }, 2000);
+            this._infoGame.pushWeakSpots(name);
+          }
           this._enemy.setHealth(this._enemy.getHealth() - 5);
           this._battleGUI.setEnemyHealth(this._enemy.getHealth());
-          console.log(this._enemy.getHealth())
-          this._removeBullet(item);
-          //this._enemy.subtractHealth(this._PLAYER_DAMAGE);
           if (this._enemy.getHealth() <= 0) {
             this._enemy.runDeadAction();
             this.isBattleOver = true;
             this._infoGame.pushKilled(this._infoGame.getEnemyName());
+            this._infoGame.setKarma(this._infoGame.getKarma() + 5);
             this._battleGUI.showWin();
             setTimeout(() => {
               this.closeScene();
             }, 9000);
           }
-        }
-
-        if (item.bullet.position.length() > this._ARENA_LENGTH) {
-          this._removeBullet(item);
         }
       });
 
@@ -232,7 +216,6 @@ export class Battle {
         this._enemy.update(this._camera);
         this.raycastGrounded(this._enemy.getMesh());
       }
-
 
       this._playerModel.getChildMeshes().forEach(mesh => {
         if (this._enemy.getBullet().checkIntersect(mesh)) {
