@@ -211,7 +211,7 @@ export default class Tablet {
 
     public exitGame () {
       this._exitFunc();
-      this._closeTablet();
+      this.tabletBG.remove();
       const tabletBtn = document.querySelector('.openTabletButton');
       if (tabletBtn) {
           tabletBtn.remove();

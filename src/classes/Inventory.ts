@@ -79,6 +79,7 @@ export default class Inventory {
             inventoryBG.classList.add("inventoryBG");
         const conteiner = document.createElement("div");
             conteiner.classList.add("inventory-conteiner")
+            conteiner.style.backgroundImage = "url(../assets/images/backgrounds/inventory-bg.png)";
             inventoryBG.append(conteiner);
             document.body.append(inventoryBG);
             this._inventoryBG = inventoryBG;
@@ -125,13 +126,14 @@ export default class Inventory {
                 }
         }).then((data)=> {
             const dropData = JSON.parse(localStorage.getItem("cosmic-drop"));
-            dropData.forEach(element => {
-                const image = data[element.name].image;
-                const count = element.count;
-                this._createItem(image, this._inventory, count, element.name );
-            });
-
-        })
+            if(dropData != undefined) {
+                dropData.forEach(element => {
+                    const image = data[element.name].image;
+                    const count = element.count;
+                    this._createItem(image, this._inventory, count, element.name );
+                });
+            }
+        });
     }
 
 
