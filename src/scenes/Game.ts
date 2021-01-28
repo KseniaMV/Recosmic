@@ -283,9 +283,9 @@ export class Game {
 
     if (!this._choiseBox.getIsChose() && name.includes('active_tree')) {
       this._choiseBox.setShow(true, name);
-      this._environment.addMeshToHighlight(name);
+      this._environment.addMeshToHighlight(name.replace("treecollider", "_primitive0"));
     } else {
-      this._environment.removeMeshToHighlight(name);
+      this._environment.removeMeshToHighlight(name.replace("treecollider", "_primitive0"));
       this._choiseBox.setShow(false);
       if (this._choiseBox.getIsChose()) {
         setTimeout(() => {

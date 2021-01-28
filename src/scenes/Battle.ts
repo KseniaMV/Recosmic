@@ -104,10 +104,14 @@ export class Battle {
     this._playerKarma = Number.parseInt(info.getKarma());
     this._battleGUI.setHP(this._playerHealth);
 
-    this._enemy = new Enemy(info.getEnemyName().match(/\[(.*?)\]/)[1]);
+    const filename = info.getEnemyName().match(/\[(.*?)\]/)[1];
+    const name = info.getEnemyName().match(/\{(.*?)\}/)[1];
+    const weakSpot = info.getWeakSpots().includes(name)
+
+    this._enemy = new Enemy(filename, this._scene, weakSpot);
     this._enemy.runAfterLoaded(this._setEnemy.bind(this));
 
-    this._battleGUI.setEnemyName(info.getEnemyName().match(/\{(.*?)\}/)[1]);
+    this._battleGUI.setEnemyName(name);
   }
 
   private _bulletPrepare() {

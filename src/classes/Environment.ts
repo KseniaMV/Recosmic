@@ -227,7 +227,10 @@ export class Environment {
 
   public addMeshToHighlight(meshName) {
     const mesh = this._scene.getMeshByName(meshName);
-    this._highlightLayer.addMesh(mesh, Color3.Green());
+    console.log(mesh)
+    if (mesh) {
+      this._highlightLayer.addMesh(mesh, Color3.Green());
+    }
   }
 
   public removeMeshToHighlight(meshName) {

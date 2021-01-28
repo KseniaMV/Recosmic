@@ -34,10 +34,11 @@ export class Enemy {
   private _currentAnim: any;
   private _distance: number;
 
-  constructor(name: string, scene: Scene) {
+  constructor(name: string, scene: Scene, weakSpot: boolean = false) {
     this._scene = scene;
     this._health = 100;
     this._fallingAngle = 0;
+    this._isKnowTenderPlace = weakSpot;
 
     this._bullet = new Bullet();
     this._bullet.setVelocity(this._BULLET_SPEED);
