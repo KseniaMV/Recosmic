@@ -205,10 +205,6 @@ export default class Tablet {
 
     }
 
-    public saveGame () {
-
-    }
-
     public exitGame () {
       this._exitFunc();
       this.tabletBG.remove();
@@ -250,14 +246,6 @@ export default class Tablet {
                     questSection.append(description);
                 };
             });
-    }
-
-    closeQuestsionSection () {
-
-    }
-
-    setQuestStatus () {
-
     }
 
     private _playClickSound() {

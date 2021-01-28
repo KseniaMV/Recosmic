@@ -28,13 +28,11 @@ export class CharacterState {
 
     createHealth () {
         const health =  new Image("health", "../assets/sprites2/health_sprite.png");
-        health.width = "100px";
+        health.width = "110px";
         health.height = "100px";
         health.cellId = 0;
         health.cellHeight = 100;
-        //health.cellWidth = 90;
         health.cellWidth = 85;
-        //health.sourceWidth = 90;
         health.sourceWidth = 85;
         health.sourceHeight = 100;
         health.horizontalAlignment = 0;
@@ -52,13 +50,13 @@ export class CharacterState {
     }
 
     createKarma () {
-        const karma =  new Image("karma", "../assets/sprites2/carma_sprite_new.png");
+        const karma =  new Image("karma", "../assets/sprites2/carma_sprite.png");
         karma.width = "100px";
         karma.height = "100px";
         karma.cellId = 0;
         karma.cellHeight = 100;
-        karma.cellWidth = 78;
-        karma.sourceWidth = 78;
+        karma.cellWidth = 85;
+        karma.sourceWidth = 85;
         karma.sourceHeight = 100;
         karma.horizontalAlignment = 0;
         karma.verticalAlignment = 0;

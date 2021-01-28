@@ -1,5 +1,6 @@
 import { Engine, Scene, SceneLoader, Vector3, Mesh, Color3, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Animation, BezierCurveEase, CubeTexture, Texture, BackgroundMaterial} from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control} from "@babylonjs/gui";
+import MoveRools from "../classes/MoveRools";
 import { Planet } from "../classes/Planet";
 import { PlayerInfo } from "../classes/PlayerInfo";
 
@@ -9,6 +10,7 @@ export class CutScene {
   private _transition: boolean = false;
   private _callback;
   private _fadeLevel: number = 1.0;
+  private _moveRools: any;
 
   constructor(engine: Engine, callback) {
     this._callback = callback;
@@ -82,6 +84,8 @@ export class CutScene {
 
     setTimeout(() => {
       imageRectBg.addControl(playBtn);
+      this._moveRools = new MoveRools();
+      this._moveRools.createMoveRools();
     }, 5000);
 
     playBtn.onPointerDownObservable.add(() => {
@@ -96,21 +100,18 @@ export class CutScene {
     });
 
     this._scene.registerBeforeRender(() => {
-      planet._rotatePlanet();               //add planet rotation
+      planet._rotatePlanet();               
       if (this._transition) {
         this._fadeLevel -= .05;
         if (this._fadeLevel <= 0) {
           this._transition = false;
-          //this._callback();
 
           const inf = new PlayerInfo();
           inf.setHealth(100);
           inf.setKarma(0);
           inf.setLookAtAngle(0);
           inf.setPosition([1,2,0]);
-
           this._callback(inf);
-
         }
       }
     });

@@ -106,6 +106,7 @@ export class Game {
     this._transition = false;
 
     this._scene.registerBeforeRender(() => {
+      canvas.focus();
       if (this._transition) {
         this._fadeLevel -= .05;
         if (this._fadeLevel <= 0) {

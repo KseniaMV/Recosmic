@@ -62,7 +62,8 @@ video {
 }
 
 .tabletBG,
-.inventoryBG {
+.inventoryBG,
+.moveBG {
     width: 100vw;
     height: 100vh;
     position: absolute;
@@ -107,7 +108,8 @@ video {
 .tablet,
 .questSection,
 .settingSection,
-.catalogSection {
+.catalogSection,
+.roolsSection {
     width: 75%;
     height: 90%;
     margin: auto;
@@ -147,13 +149,15 @@ video {
 
 .questSection,
 .settingSection,
-.catalogSection {
+.catalogSection,
+.roolsSection {
     display: flex;
     flex-direction: column;
     flex-wrap: no-wrap;
 }
 
-.tablet_button{
+.tablet_button,
+.rools_button{
     width: 90px;
     height: 90px;
     margin: 50px;
@@ -172,7 +176,8 @@ video {
     }
 }
 
-.closeButton {
+.closeButton,
+.rools_button {
     position: absolute;
     top: -30px;
     right: 10px;
@@ -599,6 +604,42 @@ video {
 }
 .dropItem-name--show {
     visibility: visible;
+}
+
+/*------------------rools section--------------*/
+
+.roolsSection h2 {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    font-size: 36px;
+    color: rgb(255,255,255);
+    font-weight: bold;
+}
+
+.rools_section-move {
+    width: 100%;
+    height: 60%;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto;
+    
+}
+
+.rools_section-inventory {
+    width: 100%;
+    height: 150px;
+    margin: 10px 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
 }
 
 .unknown_planet,

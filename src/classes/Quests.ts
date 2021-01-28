@@ -1,9 +1,6 @@
-import { Scene } from "@babylonjs/core";
 import Popup from "./Popup";
 
 export default class Quests {
-    private _scene: Scene;
-    private _canvas: any;
     public questsList: Array<object>;
     public currentQuest: object;
     public questCount = 0;
@@ -162,10 +159,6 @@ export default class Quests {
     //-------------save quest to LocalStorage ------------//
 
     public saveQuests () {
-       /* if(localStorage.getItem("cosmic-quests")) {
-            //localStorage.clear();
-            localStorage.removeItem("cosmic-quests")
-        }*/
         const questForSave = JSON.stringify(this.questsList);
         localStorage.setItem("cosmic-quests", questForSave);
     }
