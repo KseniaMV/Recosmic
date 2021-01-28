@@ -1,3 +1,4 @@
+import { Color3, Color4 } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Image, TextBlock, Control } from "@babylonjs/gui";
 
 export class GameGUI {
@@ -17,7 +18,6 @@ export class GameGUI {
 
     this._createSave();
     this._createDemo();
-    this._createResearch();
   }
 
   private _createSave() {
@@ -89,21 +89,41 @@ export class GameGUI {
   }
 
   // research
-  private _createResearch() {
+  public createResearch(name: string) {
+    const filename = name.match(/\[(.*?)\]/)[1];
+    const animalName = name.match(/\{(.*?)\}/)[1];
+    let label;
+    let message;
+    let imgSrc;
+
+    switch (animalName) {
+      case "Catoxeltis colorful":
+        message = "Hey! You look like my friend Sam! He is kind and always gives me cookies. Do you have cookies?";
+        label = "It's a pity \nI don't have cookies";
+        imgSrc = "./assets/images/animals/Catoxeltis_colorful.png";
+        break;
+      case "Purple-brows bat":
+        message = "Hello. I've heard that you don't have cookies. How will they appear - come";
+        label = "I'll definitely come";
+        imgSrc = "./assets/images/animals/Purple-brows_bat.png";
+        break;
+    }
+
     this._researchRectangle = new Rectangle();
     this._researchRectangle.width = 0.5;
     this._researchRectangle.height = 0.57;
     this._researchRectangle.cornerRadius = 20;
-    this._researchRectangle.color = "White";
+    this._researchRectangle.color = "black";
     this._researchRectangle.thickness = 5;
-    this._researchRectangle.background = "blue";
+    this._researchRectangle.background = new Color3(0.7, 0.7, 0.7);
     this._researchRectangle.alpha = 0.5;
     this._gui.addControl(this._researchRectangle);
 
-    this._researchPic = new Image("logo", "./assets/images/gui/logo.png");
-    this._researchPic.width = 0.39;
-    this._researchPic.height = 0.22;
-    this._researchPic.top = "-15%";
+    this._researchPic = new Image("picAva", imgSrc);
+    //this._researchPic.width = 0.25;
+    this._researchPic.height = 0.3;
+    this._researchPic.fixedRatio = 1;
+    this._researchPic.top = "-13%";
     this._gui.addControl(this._researchPic);
 
     this._researchText = new TextBlock();
@@ -113,25 +133,27 @@ export class GameGUI {
     this._researchText.color = "white";
     this._researchText.shadowColor = "black";
     this._researchText.shadowBlur = 5;
-    this._researchText.shadowOffsetX = -2;
-    this._researchText.shadowOffsetY = 2;
-    this._researchText.text = "Sorry! This is the end of demo version. We need more donates.";
+    this._researchText.shadowOffsetX = 0;
+    this._researchText.shadowOffsetY = 0;
+    this._researchText.outlineColor = "black";
+    this._researchText.outlineWidth = 2;
+    this._researchText.text = message;
     this._researchText.resizeToFit = true;
     this._researchText.textWrapping = true;
-    this._researchText.height = 0.15;
-    this._researchText.width = 0.5;
-    this._researchText.top = "5%";
+    this._researchText.height = 0.25;
+    this._researchText.width = 0.45;
+    this._researchText.top = "6.5%";
     this._researchText.fontFamily = "Cabin";
     this._gui.addControl(this._researchText);
 
     this._researchButton = Button.CreateImageWithCenterTextButton(
       "research_ok",
-      "OK",
+      label,
       "./assets/images/gui/button2.png"
     );
     this._researchButton.fontFamily =  "Cabin";
-    this._researchButton.width = "250px"
-    this._researchButton.height = "70px";
+    this._researchButton.width = "255px"
+    this._researchButton.height = "75px";
     this._researchButton.color = "rgb(19, 55, 90)";
     this._researchButton.fontWeight = "bold";
     this._researchButton.top = "65%";
@@ -203,9 +225,7 @@ export class GameGUI {
   }
 
   public showResearch(name: string) {
-    const filename = name.match(/\[(.*?)\]/)[1];
-    const animalName = name.match(/\{(.*?)\}/)[1];
-    console.log(`name: ${animalName}\nfilename: ../${filename}.png`);
+    this.createResearch(name);
 
     this._isResearch = true;
     this._scalingAnimation(0, this._researchText);
@@ -220,6 +240,11 @@ export class GameGUI {
     this._scalingAnimationMinus(1, this._researchPic);
     this._scalingAnimationMinus(1, this._researchRectangle);
     this._scalingAnimationMinus(1, this._researchButton);
+
+    this._researchText.dispose();
+    this._researchPic.dispose();
+    this._researchRectangle.dispose();
+    this._researchButton.dispose();
   }
 
   public getIsResearch(): boolean {
