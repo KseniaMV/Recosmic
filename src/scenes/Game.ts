@@ -65,9 +65,7 @@ export class Game {
     const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
     sun.diffuse = new Color3(1, 1, 1);
     sun.specular = new Color3(1, 1, 1);
-    //sun.intensity = 10;
 
-    // shadow
     var light2 = new DirectionalLight("dir01", new Vector3(0, -7, -1), this._scene);
     light2.position = new Vector3(0, 50, 30);
 
@@ -153,15 +151,6 @@ export class Game {
     }
   }
 
-  private _funcForTablet(str: string) {
-    if (str === 'open') {
-      this._characterState.block(true);
-    } else {
-      this._characterState.block(false);
-    }
-    // console.log('This is from Tablet: ' + str);
-  }
-
   public setSavedGame(info: PlayerInfo) {
     if (Number.parseInt(info.getHealth()) > 0) {
       this._savedGame = info;
@@ -207,7 +196,6 @@ export class Game {
       this._animals.push(animal);
     });
 
-    // save start
     if (!LoadGame.load().getCheckpoint()) {
       const info = this._createInfo();
       info.setCheckpoint(false);
@@ -308,9 +296,7 @@ export class Game {
         this._currentEnemy = regName[1];
       }
       this._choiseBox2.setShow(true, name);
-      //this._environment.addMeshToHighlight(name);
-    } else {
-      //this._environment.removeMeshToHighlight(name);
+    } else {      
       this._choiseBox2.setShow(false);
       if (this._choiseBox2.getIsChose()) {
         setTimeout(() => {

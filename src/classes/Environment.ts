@@ -31,8 +31,6 @@ export class Environment {
     this._env = newMeshes[0];
     this._env.position.y = 0;
 
-
-    // test water
     var water = Mesh.CreateGround("water", 25, 25, 32, this._scene);
     this._waterMaterial = new WaterMaterial("water_material", this._scene);
     this._waterMaterial.bumpTexture = new Texture("../assets/textures/waterbump.png", this._scene);
@@ -47,20 +45,8 @@ export class Environment {
     water.material = this._waterMaterial;
     water.position = new Vector3(-2,0,-3);
 
-
-
-
-    /*const axis = new Vector3(0, 1, 0);
-    const angle = -Math.PI / 4;
-    const quaternion = new Quaternion.RotationAxis(axis, angle);
-    this._env.rotationQuaternion = quaternion;*/
-
-    //this._env.checkCollisions = true;
-
     this._allMeshes = this._env.getChildMeshes();
 
-    //this._env.checkCollisions = true;
-    //this._env.isPickable = true;
     this._env.receiveShadows = true;
 
     this._allMeshes.forEach(mesh => {
@@ -71,8 +57,9 @@ export class Environment {
       }
 
       if (mesh.name === 'player') {
-        mesh.isVisible = false;
         this._playerPoint = new Vector3(mesh.position.x, mesh.position.y, mesh.position.z);
+        mesh.isVisible = false;
+        mesh.dispose();
       }
 
       if (mesh.name.includes('tree')) {
@@ -174,45 +161,26 @@ export class Environment {
     return this._animals;
   }
 
-
-
   private _createSaveStationParticles(mesh) {
     this._saveParticleSystem = new ParticleSystem("save_particles", 2000, this._scene);
     this._saveParticleSystem.particleTexture = new Texture("../assets/textures/flare.png", this._scene);
     this._saveParticleSystem.emitter = mesh;
     this._saveParticleSystem.minEmitBox = new Vector3(-1, 0, 0);
     this._saveParticleSystem.maxEmitBox = new Vector3(1, 0, 0);
-
     this._saveParticleSystem.color1 = new Color4(0.7, 0.8, 1.0, 1.0);
     this._saveParticleSystem.color2 = new Color4(0.2, 0.5, 1.0, 1.0);
     this._saveParticleSystem.colorDead = new Color4(0, 0, 0.2, 0.0);
-
-    // Size of each particle (random between...
     this._saveParticleSystem.minSize = 0.1;
     this._saveParticleSystem.maxSize = 0.5;
-
-    // Life time of each particle (random between...
     this._saveParticleSystem.minLifeTime = 0.3;
     this._saveParticleSystem.maxLifeTime = 1.5;
-
-    // Emission rate
     this._saveParticleSystem.emitRate = 1500;
-
-    // Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
     this._saveParticleSystem.blendMode = ParticleSystem.BLENDMODE_ONEONE;
-
-    // Set the gravity of all particles
     this._saveParticleSystem.gravity = new Vector3(0, -9.81, 0);
-
-    // Direction of each particle after it has been emitted
     this._saveParticleSystem.direction1 = new Vector3(-7, 8, 3);
     this._saveParticleSystem.direction2 = new Vector3(7, 8, -3);
-
-    // Angular speed, in radians
     this._saveParticleSystem.minAngularSpeed = 0;
     this._saveParticleSystem.maxAngularSpeed = Math.PI;
-
-    // Speed
     this._saveParticleSystem.minEmitPower = 1;
     this._saveParticleSystem.maxEmitPower = 3;
     this._saveParticleSystem.updateSpeed = 0.005;
@@ -235,7 +203,6 @@ export class Environment {
   public removeMeshToHighlight(meshName) {
     this._highlightLayer.removeAllMeshes();
   }
-
 
   public addToWaterRender(mesh) {
     this._waterMaterial.addToRenderList(mesh);

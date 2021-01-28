@@ -11,9 +11,6 @@ export class PlayerInfo {
   private _killed: Array<string>;
   private _checkpoint: boolean;
   private _weakSpots: Array<string>
-  private _knewItems: Array<string>
-  private _gotQuests: Array<string>
-  private _completedQuests: Array<string>
 
   constructor() {
     this._health = 100;

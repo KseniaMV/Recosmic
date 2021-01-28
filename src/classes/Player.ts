@@ -119,10 +119,7 @@ export class Player {
   public update() {
     if (this._model) {
       if (this._horizontal !== 0 || this._vertical !== 0) {
-        //const axis = new Vector3(0, 1, 0);
         this._lookAtAngle = Math.atan2(-this._vertical, -this._horizontal);
-        //const quaternion = Quaternion.RotationAxis(axis, this._lookAtAngle);
-        //this._model.rotationQuaternion = quaternion;
 
         if (!this._isChangedAnim) {
           this._currentAnim.stop();

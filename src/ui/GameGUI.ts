@@ -120,7 +120,6 @@ export class GameGUI {
     this._gui.addControl(this._researchRectangle);
 
     this._researchPic = new Image("picAva", imgSrc);
-    //this._researchPic.width = 0.25;
     this._researchPic.height = 0.3;
     this._researchPic.fixedRatio = 1;
     this._researchPic.top = "-13%";

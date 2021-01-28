@@ -39,10 +39,6 @@ export class World {
 	  ground.material = terrainMaterial;
     ground.checkCollisions = true;
     ground.receiveShadows = true;
-
-    /*const wall = new Mesh.CreateTorus('torusWall', size, 10, 10, this._scene, false);
-    wall.scaling.y = 5;
-    wall.checkCollisions = true;*/
   }
 
   private _setMountains(newMeshes) {
