@@ -23,7 +23,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].bundle.js',
+        filename: 'js/[name].bundle.js',
     },
     resolve: {
         extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
@@ -107,11 +107,7 @@ module.exports = {
                 {
                     from: path.resolve(__dirname, 'src/assets'),
                     to: path.resolve(__dirname, 'dist/assets')
-                },
-                {
-                    from: path.resolve(__dirname, 'src/scenes'),
-                    to: path.resolve(__dirname, 'dist/scenes')
-                },
+                },                
             ]
         }),
         new ImageMinimizerPlugin({
