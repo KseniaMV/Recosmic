@@ -103,7 +103,7 @@ export class GameGUI {
         imgSrc = "./assets/images/animals/Catoxeltis_colorful.png";
         break;
       case "Purple-brows bat":
-        message = "Hello. I've heard that you don't have cookies. How will they appear - come";
+        message = "Hello. I've heard that you don't have cookies. When will they appear - come";
         label = "I'll definitely come";
         imgSrc = "./assets/images/animals/Purple-brows_bat.png";
         break;
