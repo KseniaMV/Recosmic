@@ -75,15 +75,15 @@ export class World {
   }
 
   private _createLight() {
-    const sun = new PointLight('Omni0', new Vector3(0, 50, -20), this._scene);
+    const sun = new PointLight('mOmni0', new Vector3(0, 50, -20), this._scene);
     sun.diffuse = new Color3(1, 1, 1);
     sun.specular = new Color3(1, 1, 1);
 
-    this._light = new DirectionalLight("dir01", new Vector3(0, -7, -1), this._scene);
-    this._light.position = new Vector3(0, 50, 30);
+    this._light = new DirectionalLight("mdir01", new Vector3(0, -7, -1), this._scene);
+    this._light.position = new Vector3(0, 500, 30);
     this._light.diffuse = new Color3(1, 1, 1);
 	  this._light.specular = new Color3(0.9, 0.7, 0.9);
-    this._light.intensity = 1.2;
+    this._light.intensity = 2;
   }
 
   private _createShadow() {

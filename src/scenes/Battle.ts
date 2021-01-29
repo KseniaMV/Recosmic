@@ -135,8 +135,8 @@ export class Battle {
 
   private _setPlayerModel(newMeshes, p, s, animationGroups) {
     newMeshes[0].scaling.scaleInPlace(7);
-    newMeshes[0].position = new Vector3(-10, 0, 50);
-    newMeshes[0].parent = this._weapon;
+    newMeshes[0].position = new Vector3(0, -10, -15);
+    newMeshes[0].parent = this._camera;
     newMeshes[0].getChildMeshes().forEach(mesh => {
       this._world.addShadow(mesh, true);
     });
@@ -152,11 +152,13 @@ export class Battle {
   }
 
   private _setEnemy() {
+    this._enemy.getMesh().receiveShadows = false;
     this._enemy.getMesh().getChildMeshes().forEach(mesh => {
       this._world.addShadow(mesh, true);
       const name = this._infoGame.getEnemyName().match(/\{(.*?)\}/)[1];
       if (mesh == 'active_place' && this._infoGame.getWeakSpots().includes(name)) {
         mesh.isVisible = true;
+        mesh.receiveShadows = false;
       }
     });
     this._startUpdate = true;
@@ -194,7 +196,7 @@ export class Battle {
             this._battleGUI.showFoundWeakSpot();
             setTimeout(() => {
               this._battleGUI.hideFoundWeakSpot();
-            }, 2000);
+            }, 1500);
             this._infoGame.pushWeakSpots(name);
           }
           this._enemy.setHealth(this._enemy.getHealth() - 5);

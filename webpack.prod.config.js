@@ -100,7 +100,7 @@ module.exports = {
         }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: 'src/styles/styles.css',
+            filename: 'styles/styles.css',
         }),
         new CopyWebpackPlugin({
             patterns: [

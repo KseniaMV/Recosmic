@@ -72,7 +72,7 @@ export class BattleGUI {
     this._wonText.shadowBlur = 5;
     this._wonText.shadowOffsetX = -2;
     this._wonText.shadowOffsetY = 2;
-    this._wonText.text = "ANIMAL IS DEAD\nYOU WIN";
+    this._wonText.text = "- WIN -\nANIMAL IS DEAD";
     this._wonText.textWrapping = true;
     this._wonText.resizeToFit = true;
     this._wonText.height = 0.1;
