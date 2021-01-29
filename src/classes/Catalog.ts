@@ -97,6 +97,8 @@ export default class Catalog {
     public openCurrentPlanetCatalog () {
         this.sliderConteiner.addEventListener("click", (e)=>{
             if(e.target.dataset.name && e.target.dataset.name === this.currentPlanet) {
+                const sound  = new Audio("../assets/sounds/effects/table_click.wav");
+                    sound.play();
                 const targetPlanetData =  this.planetData[e.target.dataset.name];
                 const dataConteiner = this._createDataConteiner(targetPlanetData.image);
 
@@ -146,6 +148,8 @@ export default class Catalog {
             closeDataButton.style.backgroundImage = "url(../assets/images/gui/close.png";
             conteiner.append(closeDataButton);
             closeDataButton.addEventListener("click", ()=>{
+                const sound  = new Audio("../assets/sounds/effects/table_click.wav");
+                    sound.play();
                 document.querySelector(".backButton").classList.remove("backButton--hide");
                 conteiner.remove();
                 this._hidePlanetSection();
