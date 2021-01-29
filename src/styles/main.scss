@@ -14,7 +14,7 @@ body {
     height: 100vh;
     user-select: none;
     overflow: hidden;
-    cursor: url(../assets/images/gui/cursor2.png), pointer;
+    cursor: url(/assets/images/gui/cursor2.png), pointer;
 }
 
 .renderCanvas{
@@ -43,7 +43,7 @@ video {
     right: 20px;
     text-align: center;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -89,7 +89,7 @@ video {
     color:  rgb(255,255,255);
     font-weight: bold;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -172,7 +172,7 @@ video {
     &:hover{
         box-shadow: none;
         border: 1px solid rgb(255,255,255);
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -211,7 +211,7 @@ video {
     &:hover {
         box-shadow: none;
         border: 1px solid rgb(7, 10, 19);
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -240,7 +240,7 @@ video {
         position: absolute;
         top: 0;
         right: 0;
-        background-image: url("../assets/images/gui/quest_done.png");
+        background-image: url("/assets/images/gui/quest_done.png");
         background-position: center;
         background-size: 60px;
         background-repeat: no-repeat;
@@ -328,7 +328,7 @@ video {
     background-repeat: no-repeat;
     background-size: 40px;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -355,7 +355,7 @@ video {
     &:hover {
         box-shadow: none;
         border: 1px solid rgb(7, 10, 19);
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -388,7 +388,7 @@ video {
     background-color: rgba(147, 160, 189, 0.5);
     transition: 0.3s;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
         transform: scale(1.05);
         box-shadow: 0 0 20px 2px (rgb(255,255,255));
     }
@@ -443,7 +443,7 @@ video {
     background-color: transparent;
     transition: 0.3s;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -489,7 +489,7 @@ video {
     background-size: 25px;
     background-color: transparent;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
@@ -504,7 +504,7 @@ video {
     background-repeat: no-repeat;
     background-size: contain;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
         transform: scale(1.05);
         box-shadow: 0 0 20px 2px (rgb(255,255,255));
     }
@@ -576,7 +576,7 @@ video {
     background-position: center;
     position: relative;
     &:hover {
-        cursor: url(../assets/images/gui/cursor_point.png), pointer;
+        cursor: url(/assets/images/gui/cursor_point.png), pointer;
     }
 }
 
