@@ -98,8 +98,8 @@ export class Player {
 
     this._scene.cameras[0].setTarget(this._model);
 
-    this._idleAnim = this._scene.getAnimationGroupByName("idle");
-    this._walkingAnim = this._scene.getAnimationGroupByName("walking");
+    this._idleAnim = animationGroups[1];
+    this._walkingAnim = animationGroups[2];
 
     this._currentAnim = this._idleAnim;
     this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
@@ -149,7 +149,7 @@ export class Player {
   }
 
   raycastCollisions() {
-    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('savestation') || mesh.name.includes('animal') || mesh.name.includes('laboratory');
+    const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('savestation') || mesh.name.includes('animal') || mesh.name.includes('trader') || mesh.name.includes('laboratory');
     const length = 1.5;
     let forward = new Vector3(0, 0, 1);
     //const stopWalking = (hit) => this._speed  = -this._VELOCITY;

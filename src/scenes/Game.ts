@@ -194,7 +194,7 @@ export class Game {
       const animal = new Animal(item.name, this._scene, this._shadowGenerator);
       animal.setInfo(item.position, item.mesh, item.isDead);
       this._animals.push(animal);
-    });
+    });    
 
     if (!LoadGame.load().getCheckpoint()) {
       const info = this._createInfo();
@@ -296,7 +296,7 @@ export class Game {
         this._currentEnemy = regName[1];
       }
       this._choiseBox2.setShow(true, name);
-    } else {      
+    } else {
       this._choiseBox2.setShow(false);
       if (this._choiseBox2.getIsChose()) {
         setTimeout(() => {
