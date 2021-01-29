@@ -146,6 +146,10 @@ export class Environment {
         this._shadowGenerator.getShadowMap().renderList.push(mesh);
         mesh.receiveShadows = false;
 
+        if (mesh.name.includes('savestation_collider')) {          
+          mesh.isVisible = false;
+        }
+
         if (mesh.name.includes('savestation')) {
           const glowStation = new GlowLayer("glowStation", this._scene, { mainTextureSamples: 2 });
           this._createSaveStationParticles(mesh);
