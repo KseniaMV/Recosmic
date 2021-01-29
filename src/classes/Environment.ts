@@ -13,6 +13,7 @@ export class Environment {
   private _highlightLayer;
   private _waterMaterial;
   private _animals;
+  public trader: any;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
@@ -21,6 +22,19 @@ export class Environment {
     this._animals = [];
 
     SceneLoader.ImportMesh("", "./assets/models/", "firstLevel.glb", this._scene, this._setEnvironment.bind(this));
+
+    SceneLoader.ImportMesh("", "./assets/models/", "trader.glb", this._scene, this._setTrader.bind(this));
+  }
+
+  private _setTrader(newMeshes, particleSystems, skeletons, animationGroups) {
+    this._trader = newMeshes[0];
+    this._trader.scaling.scaleInPlace(0.65);
+    const idle = animationGroups[0];
+    idle.start(true, 2.0, idle.from, idle.to, false);
+
+    if (this.trader) {
+      this._trader.position = this.trader.position;
+    }
   }
 
   public setActionAfterLoaded(func: Function) {
@@ -95,6 +109,21 @@ export class Environment {
           position: invertPosition,
           isDead: false
         });
+      }
+
+      if (mesh.name.includes('trader')) {
+        mesh.isVisible = false;
+        mesh.isPickable = true;
+        mesh.checkCollisions = true;
+        const invertPosition = new Vector3(-mesh.position.x, mesh.position.y, mesh.position.z);
+        this.trader = {
+          name: mesh.name,
+          mesh: mesh,
+          position: invertPosition
+        };
+        if (this._trader) {
+          this._trader.position = invertPosition;
+        }
       }
 
       if(mesh.name.includes("Cube")) {
