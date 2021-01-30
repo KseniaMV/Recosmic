@@ -1,4 +1,4 @@
-import { Engine, Scene, SceneLoader, Vector3, Mesh, Color3, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Animation, BezierCurveEase, CubeTexture, Texture, BackgroundMaterial} from "@babylonjs/core";
+import { Engine, Scene, SceneLoader, Vector3, Mesh, Color3, Color4, HemisphericLight, ArcRotateCamera, Sound, PostProcess, Animation, BezierCurveEase, CubeTexture, Texture, BackgroundMaterial } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Control} from "@babylonjs/gui";
 import MoveRools from "../classes/MoveRools";
 import { Planet } from "../classes/Planet";
@@ -68,6 +68,15 @@ export class CutScene {
     imageRectBg.thickness = 0;
     guiMenu.addControl(imageRectBg);
 
+    //sound
+    const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
+      volume: 0.3,
+      loop: true,
+      autoplay: true
+    });
+
+    const clickSfx = new Sound("clickSfx", "./assets/sounds/effects/click.wav", this._scene, null);
+
     const playBtn = Button.CreateImageWithCenterTextButton(
       "play",
       "PLAY",
@@ -89,18 +98,13 @@ export class CutScene {
     }, 5000);
 
     playBtn.onPointerDownObservable.add(() => {
+      clickSfx.play();
+      music.stop();
       this.closeScene();
     });
 
-    //sound
-    const music = new Sound("mainMenuMusic", "./assets/sounds/music/pulse.wav", this._scene, null, {
-      volume: 0.3,
-      loop: true,
-      autoplay: true
-    });
-
     this._scene.registerBeforeRender(() => {
-      planet._rotatePlanet();               
+      planet._rotatePlanet();
       if (this._transition) {
         this._fadeLevel -= .05;
         if (this._fadeLevel <= 0) {

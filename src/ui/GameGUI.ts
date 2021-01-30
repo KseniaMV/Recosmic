@@ -1,4 +1,4 @@
-import { Color3, Color4 } from "@babylonjs/core";
+import { Engine, Scene, Vector3, Color3, Color4, FreeCamera, Sound, PostProcess } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle, Image, TextBlock, Control } from "@babylonjs/gui";
 
 export class GameGUI {
@@ -12,9 +12,14 @@ export class GameGUI {
   private _researchText: Text;
   private _researchButton: Button;
   private _isResearch: boolean = false;
+  private _clickSfx;
+  private _scene: Scene;
 
-  constructor() {
+  constructor(scene: Scene) {
     this._gui = AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    this._scene = scene;
+    this._clickSfx = new Sound("clickBtnSfx", "./assets/sounds/effects/click.wav", this._scene, null);
 
     this._createSave();
     this._createDemo();
@@ -56,7 +61,7 @@ export class GameGUI {
 
   private _createDemo() {
     this._demoRectangle = new Rectangle();
-    this._demoRectangle.width = 0.5;
+    this._demoRectangle.width = 0.53;
     this._demoRectangle.height = 0.15;
     this._demoRectangle.cornerRadius = 20;
     this._demoRectangle.color = "White";
@@ -162,6 +167,7 @@ export class GameGUI {
     this._gui.addControl(this._researchButton);
 
     this._researchButton.onPointerDownObservable.add(() => {
+      this._clickSfx.play();
       this.hideResearch();
     });
 

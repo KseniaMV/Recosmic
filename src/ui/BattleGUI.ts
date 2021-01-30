@@ -8,7 +8,7 @@ export class BattleGUI {
   private _wonText: TextBlock;
   private _byeText: TextBlock;
   private _activePlaceRectangle;
-  private _activePlaceText;
+  private _activePlaceText;  
 
   constructor() {
     const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI");

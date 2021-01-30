@@ -32,6 +32,7 @@ export class Battle {
   private isBattleOver: any;
   private _playerKarma: number;
   private _weapon: any;
+  private _weakSpotSFX;
 
   constructor(engine: Engine, canvas: HTMLCanvasElement, callback: Function) {
     this._callback = callback;
@@ -56,6 +57,8 @@ export class Battle {
     this._battleGUI = new BattleGUI();
     this._battleGUI.setEnemyName("Catoxeltis Colorful");
     this._battleGUI.setHP(this._playerHealth);
+
+    this._weakSpotSFX = new Sound("weakSfx", "./assets/sounds/effects/weakspot.wav", this._scene, null);
 
     SceneLoader.ImportMesh("", "./assets/models/", "weapon.glb", this._scene, this._setWeaponModel.bind(this));
     SceneLoader.ImportMesh("", "./assets/models/", "doc.glb", this._scene, this._setPlayerModel.bind(this));
@@ -191,6 +194,9 @@ export class Battle {
         if (this._bullet.checkIntersect(mesh)) {
           const name = this._infoGame.getEnemyName().match(/\{(.*?)\}/)[1];
           if (mesh.name === 'active_place' && !this._infoGame.getWeakSpots().includes(name)) {
+            if (!mesh.isVisible) {
+              this._weakSpotSFX.play();
+            }
             mesh.isVisible = true;
             this._enemy.setHealth(this._enemy.getHealth() - 5);
             this._battleGUI.showFoundWeakSpot();

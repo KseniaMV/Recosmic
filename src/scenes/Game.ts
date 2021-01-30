@@ -43,6 +43,7 @@ export class Game {
   private _isEnd: boolean = false;
   private _gameGUI: GameGUI;
   private _isSaved: boolean;
+  private _saveSfx: Sound;
 
   constructor(engine: Engine, callback, canvas) {
     this._callback = callback;
@@ -58,7 +59,9 @@ export class Game {
     this._choiseBox = new ChoiseBoxTree(this._scene, this._actionAfterChose.bind(this));
     this._choiseBox2 = new ChoiseBox(this._scene, this._actionAfterChose2.bind(this));
 
-    this._gameGUI = new GameGUI();
+    this._saveSfx = new Sound("savesfx", "./assets/sounds/effects/save.wav", this._scene, null);
+
+    this._gameGUI = new GameGUI(this._scene);
 
     this._createSkyBox();
 
@@ -194,7 +197,7 @@ export class Game {
       const animal = new Animal(item.name, this._scene, this._shadowGenerator);
       animal.setInfo(item.position, item.mesh, item.isDead);
       this._animals.push(animal);
-    });    
+    });
 
     if (!LoadGame.load().getCheckpoint()) {
       const info = this._createInfo();
@@ -308,6 +311,7 @@ export class Game {
     if (name.includes('savestation')) {
       if (!this._isSaved) {
         this._isSaved = true;
+        this._saveSfx.play();
         this._environment.startSaveParticles();
 
         const info = new PlayerInfo();

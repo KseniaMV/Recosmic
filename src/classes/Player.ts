@@ -20,6 +20,8 @@ export class Player {
   private _collisionCallback: Function;
   private _health: number;
   private _karma: number;
+  private _walkSfx: Sound;
+  private _isWalkSFX: boolean = false;
 
   constructor(scene: Scene, shadow: ShadowGenerator) {
     this._scene = scene;
@@ -28,6 +30,11 @@ export class Player {
     this._health = 100;
     this._karma = 0;
 
+    this._walkSfx = new Sound("playerWalkSfx", "./assets/sounds/effects/walk.wav", this._scene, null, {
+      volume: 0.3,
+      loop: true,
+      autoplay: false
+    });
     SceneLoader.ImportMesh("", "./assets/models/", "doc.glb", this._scene, this._setTestModel.bind(this));
 
     this.setKeys();
@@ -119,6 +126,11 @@ export class Player {
   public update() {
     if (this._model) {
       if (this._horizontal !== 0 || this._vertical !== 0) {
+        if (!this._isWalkSFX) {
+          this._isWalkSFX = true;
+          this._walkSfx.play();
+        }
+
         this._lookAtAngle = Math.atan2(-this._vertical, -this._horizontal);
 
         if (!this._isChangedAnim) {
@@ -128,6 +140,8 @@ export class Player {
           this._isChangedAnim = true;
         }
       } else {
+        this._isWalkSFX = false;
+        this._walkSfx.stop();
         this._isChangedAnim = false;
         this._currentAnim.stop();
         this._currentAnim = this._idleAnim;
