@@ -48,7 +48,6 @@ export default class Quests {
         this.checkSavedQuests()
         .then(()=>{
             this.questsList.forEach((questObject) => {
-                console.log(questObject);
                 const questConteiner = document.createElement("div");
                     questConteiner.classList.add("questConsteiner");
                 const questTitle = document.createElement("h2");
