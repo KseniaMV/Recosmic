@@ -1,4 +1,4 @@
-import { Space, Ray, StandardMaterial, Texture, ShadowGenerator, PointLight, DirectionalLight, FreeCamera, Color3, Engine, Scene, Vector3, Mesh, Color4, ArcRotateCamera, Sound, PostProcess, SceneLoader } from "@babylonjs/core";
+import { Space, Ray, SpriteManager, Sprite, StandardMaterial, HemisphericLight, Texture, ShadowGenerator, PointLight, DirectionalLight, FreeCamera, Color3, Engine, Scene, Vector3, Mesh, Color4, ArcRotateCamera, Sound, PostProcess, SceneLoader } from "@babylonjs/core";
 import { WaterMaterial, SkyMaterial, TerrainMaterial } from "@babylonjs/materials";
 
 export class World {
@@ -14,6 +14,7 @@ export class World {
     this._createShadow();
     this._createSkyBox(size*2);
     this._createArena(size);
+    this._createGrass();
 
     SceneLoader.ImportMesh("", "./assets/models/", "mountain.glb", this._scene, this._setMountains.bind(this));
   }
@@ -41,6 +42,25 @@ export class World {
     ground.receiveShadows = true;
   }
 
+  private _createGrass() {
+    const spriteManagerTrees = new SpriteManager("treesManager", "/assets/textures/grass.png", 2000, {width: 2167, height: 1984}, this._scene);
+
+    for (let i = 0; i < 500; i++) {
+      const tree = new Sprite("tree", spriteManagerTrees);
+      tree.size = 9;
+      tree.position.x = Math.random() * -300;
+      tree.position.z = Math.random() * 300;
+      tree.position.y = 2;
+    }
+    for (let i = 0; i < 500; i++) {
+        const tree = new Sprite("tree", spriteManagerTrees);
+        tree.size = 9;
+        tree.position.x = Math.random() * 300;
+        tree.position.z = Math.random() * -300;
+        tree.position.y = 2;
+    }
+  }
+
   private _setMountains(newMeshes) {
     for (let i = 0; i <= 20; i++) {
       const mountain = newMeshes[0].clone();
@@ -48,11 +68,11 @@ export class World {
         mesh.checkCollisions = true;
       });
       mountain.checkCollisions = true;
-      const randSize = Math.random() * 50 + 100;
+      const randSize = Math.random() * 70 + 120;
       mountain.scaling.scaleInPlace(randSize);
       const randAngle = Math.random() * Math.PI;
       mountain.rotate(new Vector3(0, 1, 0), randAngle, Space.World);
-      mountain.position = new Vector3(500*Math.sin((18*i)/180*Math.PI), -7, 500*Math.cos((18*i)/180*Math.PI));
+      mountain.position = new Vector3(500*Math.sin((18*i)/180*Math.PI), -10, 500*Math.cos((18*i)/180*Math.PI));
     }
     newMeshes[0].checkCollisions = true;
     newMeshes[0].scaling.scaleInPlace(100);
@@ -75,9 +95,9 @@ export class World {
   }
 
   private _createLight() {
-    const sun = new PointLight('mOmni0', new Vector3(0, 50, -20), this._scene);
-    sun.diffuse = new Color3(1, 1, 1);
-    sun.specular = new Color3(1, 1, 1);
+    const light0 = new HemisphericLight("light0", new Vector3(0, 1, 0), this._scene);
+	  light0.intensity = 0.15;
+	  light0.specular = Color3.White();
 
     this._light = new DirectionalLight("mdir01", new Vector3(0, -7, -1), this._scene);
     this._light.position = new Vector3(0, 500, 30);
@@ -94,6 +114,12 @@ export class World {
     this._shadowGenerator.blurBoxOffset = 1;
     this._shadowGenerator.blurScale = 1.0;
     this._shadowGenerator.setDarkness(0.3);
+
+    const helper = this._scene.createDefaultEnvironment({
+      enableGroundShadow: true
+    });
+    helper.setMainColor(Color3.Gray());
+    helper.ground.position.y += 0.01;
   }
 
   public addShadow(mesh: Mesh, receive: boolean) {

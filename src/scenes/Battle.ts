@@ -1,4 +1,4 @@
-import { SceneLoader, GlowLayer, StandardMaterial, Space, Ray, ShadowGenerator, PointLight, DirectionalLight, FreeCamera, Color3, Engine, Scene, Vector3, Mesh, Color4, ArcRotateCamera, Sound, PostProcess } from "@babylonjs/core";
+import { SceneLoader, GlowLayer, PBRMaterial, CubeTexture, Texture, StandardMaterial, Space, Ray, ShadowGenerator, PointLight, DirectionalLight, FreeCamera, Color3, Engine, Scene, Vector3, Mesh, Color4, ArcRotateCamera, Sound, PostProcess } from "@babylonjs/core";
 import { World } from "../classes/World";
 import { Crosshair } from "../ui/Crosshair";
 import { BattleGUI } from "../ui/BattleGUI";
@@ -122,12 +122,23 @@ export class Battle {
   }
 
   private _setWeaponModel(newMeshes) {
+    var hdrTexture = CubeTexture.CreateFromPrefilteredData("/assets/textures/environment.dds", this._scene);
+    var metal = new PBRMaterial("metal", this._scene);
+    metal.reflectivityTexture = new Texture("/assets/textures/weapon.png", this._scene);
+    metal.useMicroSurfaceFromReflectivityMapAlpha = true;
+    metal.albedoColor = Color3.White();
+    metal.albedoTexture = new Texture("/assets/textures/weapon.png", this._scene);
+    metal.reflectionTexture = hdrTexture;
+    metal.microSurface = 0.96;
+    metal.reflectivityColor = new Color3(0.35, 0.35, 0.85);
+
     newMeshes[0].scaling.scaleInPlace(0.75);
     newMeshes[0].position = new Vector3(8, -5, 12);
     newMeshes[0].rotate(new Vector3(0, 1, 0), Math.PI, Space.WORLD);
     newMeshes[0].rotate(new Vector3(1, 0, 0), -Math.PI/20, Space.WORLD);
     newMeshes[0].parent = this._camera;
     newMeshes[0].getChildMeshes().forEach(mesh => {
+      mesh.material = metal;
       this._world.addShadow(mesh, true);
     });
 
