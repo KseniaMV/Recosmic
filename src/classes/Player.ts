@@ -1,4 +1,4 @@
-import { Ray, Quaternion, ShadowGenerator, Engine, Scene, Vector3, Mesh, Color4, Sound, SceneLoader, MeshBuilder, AssetsManager,ActionManager,ExecuteCodeAction } from "@babylonjs/core";
+import { Ray, Quaternion, ShadowGenerator, Engine, Scene, AnimationPropertiesOverride, Vector3, Mesh, Color4, Sound, SceneLoader, MeshBuilder, AssetsManager,ActionManager,ExecuteCodeAction } from "@babylonjs/core";
 
 
 export class Player {
@@ -9,7 +9,7 @@ export class Player {
   private _horizontal;
   private _vertical;
   private _shadowGenerator;
-  private _VELOCITY: number = 0.1;
+  private _VELOCITY: number = 0.07;
   private _lookAtAngle: number;
   private _idleAnim;
   private _walkingAnim;
@@ -65,19 +65,19 @@ export class Player {
       this._horizontal = 0;
       this._vertical = 0;
 
-      if (inputMap[KEY.RIGHT] || inputMap[KEY.D]) {    //  d
+      if (inputMap[KEY.RIGHT] || inputMap[KEY.D]) {
         this._horizontal = 1;
       }
 
-      if (inputMap[KEY.UP] || inputMap[KEY.W]) { //   w
+      if (inputMap[KEY.UP] || inputMap[KEY.W]) {
         this._vertical = -1;
       }
 
-      if (inputMap[KEY.LEFT] || inputMap[KEY.A]) {   //a
+      if (inputMap[KEY.LEFT] || inputMap[KEY.A]) {
         this._horizontal = -1;
       }
 
-      if (inputMap[KEY.DOWN] || inputMap[KEY.S]) {   //s
+      if (inputMap[KEY.DOWN] || inputMap[KEY.S]) {
         this._vertical = 1;
       }
     });
@@ -105,7 +105,7 @@ export class Player {
 
     this._scene.cameras[0].setTarget(this._model);
 
-    this._idleAnim = animationGroups[1];
+    this._idleAnim = animationGroups[0];
     this._walkingAnim = animationGroups[2];
 
     this._currentAnim = this._idleAnim;
@@ -134,16 +134,15 @@ export class Player {
         this._lookAtAngle = Math.atan2(-this._vertical, -this._horizontal);
 
         if (!this._isChangedAnim) {
-          this._currentAnim.stop();
           this._currentAnim = this._walkingAnim;
-          this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
+          this._currentAnim.start(true, 2.2, this._currentAnim.from, this._currentAnim.to, false);
           this._isChangedAnim = true;
         }
       } else {
         this._isWalkSFX = false;
         this._walkSfx.stop();
         this._isChangedAnim = false;
-        this._currentAnim.stop();
+        this._walkingAnim.stop();
         this._currentAnim = this._idleAnim;
         this._currentAnim.start(true, 1.0, this._currentAnim.from, this._currentAnim.to, false);
       }
@@ -165,8 +164,7 @@ export class Player {
   raycastCollisions() {
     const predicate = (mesh) => mesh.name.includes('wall') || mesh.name.includes('Cube') || mesh.name.includes('tree') || mesh.name.includes('savestation') || mesh.name.includes('animal') || mesh.name.includes('trader') || mesh.name.includes('laboratory');
     const length = 1.5;
-    let forward = new Vector3(0, 0, 1);
-    //const stopWalking = (hit) => this._speed  = -this._VELOCITY;
+    let forward = new Vector3(0, 0, 1);    
     const stopWalking = (hit) => this._speed = 0;
     this.createRaycast(forward, length, predicate, stopWalking);
   }

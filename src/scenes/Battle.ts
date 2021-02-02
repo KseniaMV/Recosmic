@@ -33,6 +33,7 @@ export class Battle {
   private _playerKarma: number;
   private _weapon: any;
   private _weakSpotSFX;
+  private _winSFX;
 
   constructor(engine: Engine, canvas: HTMLCanvasElement, callback: Function) {
     this._callback = callback;
@@ -59,6 +60,8 @@ export class Battle {
     this._battleGUI.setHP(this._playerHealth);
 
     this._weakSpotSFX = new Sound("weakSfx", "./assets/sounds/effects/weakspot.wav", this._scene, null);
+
+    this._winSFX = new Sound("winSfx", "./assets/sounds/effects/win.wav", this._scene, null);
 
     SceneLoader.ImportMesh("", "./assets/models/", "weapon.glb", this._scene, this._setWeaponModel.bind(this));
     SceneLoader.ImportMesh("", "./assets/models/", "doc.glb", this._scene, this._setPlayerModel.bind(this));
@@ -224,6 +227,7 @@ export class Battle {
             this._infoGame.pushKilled(this._infoGame.getEnemyName());
             this._infoGame.setKarma(this._infoGame.getKarma() + 5);
             this._battleGUI.showWin();
+            this._winSFX.play();
             setTimeout(() => {
               this.closeScene();
             }, 9000);
@@ -254,7 +258,9 @@ export class Battle {
     }
 
     if (this._startUpdate && this.isBattleOver) {
-      this._enemy.runDeadAction();
+      if (this._playerHealth > 0) {
+        this._enemy.runDeadAction();
+      }
     }
 
     if (this._playerHealth <= 30 && !this.isBattleChoise) {
@@ -264,6 +270,7 @@ export class Battle {
         this.isBattleOver = true;
         this._infoGame.pushKilled(this._infoGame.getEnemyName());
         this._battleGUI.showByeBye();
+        this._winSFX.play();
         setTimeout(() => {
           this.closeScene();
         }, 3000);
