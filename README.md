@@ -6,15 +6,17 @@
 ## Development stack
 + js/ts
 + html/scss
-+ babylon
 + js/ts
-+ html/scss
 + babylon
 + blender
-
 
 
 ## Developers
 + [kseniaMV](https://github.com/KseniaMV);
 + [archylex](https://github.com/archylex);
+
+##install
++ git clone
++ npm install
++ npm run dev
 
