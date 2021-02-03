@@ -1,4 +1,4 @@
-# 3d game 
+# 3d game "Recosmic"
 ## rs school
 ### task - rsclone
 [link to task description](https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md)
