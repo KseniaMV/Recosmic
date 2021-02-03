@@ -15,7 +15,7 @@
 + [kseniaMV](https://github.com/KseniaMV);
 + [archylex](https://github.com/archylex);
 
-##install
+## install game
 + git clone
 + npm install
 + npm run dev
