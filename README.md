@@ -1,8 +1,7 @@
 # 3d game "Recosmic"
-## rs school
-### task - rsclone
-[link to task description](https://github.com/rolling-scopes-school/tasks/blob/master/tasks/rsclone/rsclone.md)
+***This 3D game demo is one of the projects that my team developed while We were studying at the course of frontend development in RSSchool.***
 
+[Lets play!](https://rsclone-recosmic.netlify.app/)
 
 ## Development stack
 + html/scss
